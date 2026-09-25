@@ -34,6 +34,10 @@ def main() -> int:
         [py,'scripts/project_hygiene.py','--project-root','.','--mode','final'],
     ]
     for cmd in commands: run(cmd, root)
+
+    # The checkpoint hygiene gate may remove dist/, including a reports path
+    # located below it. Recreate the report directory after all hygiene gates.
+    reports.mkdir(parents=True, exist_ok=True)
     report={
         'status':'pass',
         'gates':[cmd[1] for cmd in commands],
