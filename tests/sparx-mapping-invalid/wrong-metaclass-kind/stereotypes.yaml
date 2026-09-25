@@ -1,0 +1,56 @@
+schema_version: 1
+stereotypes:
+- id: capability
+  name: Capability
+  canonical:
+    kind: element
+    id: capability
+  base_metaclass: uml_realization
+  tagged_value_sets:
+  - lifecycle
+  shape_script: capability_shape
+- id: application
+  name: Application
+  canonical:
+    kind: element
+    id: application
+  base_metaclass: uml_component
+  tagged_value_sets:
+  - lifecycle
+  shape_script: application_shape
+- id: platform
+  name: Platform
+  canonical:
+    kind: element
+    id: platform
+  base_metaclass: uml_node
+  tagged_value_sets:
+  - lifecycle
+  shape_script: platform_shape
+- id: business_process
+  name: Business Process
+  canonical:
+    kind: element
+    id: business_process
+  base_metaclass: uml_activity
+  tagged_value_sets:
+  - lifecycle
+  shape_script: business_process_shape
+- id: application_realizes_capability
+  name: Application realizes Capability
+  canonical:
+    kind: relationship
+    id: application_realizes_capability
+  base_metaclass: uml_realization
+- id: platform_supports_application
+  name: Platform supports Application
+  canonical:
+    kind: relationship
+    id: platform_supports_application
+  base_metaclass: uml_dependency
+- id: process_realizes_capability
+  name: Business Process realizes Capability
+  canonical:
+    kind: relationship
+    id: process_realizes_capability
+  base_metaclass: uml_realization

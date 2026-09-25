@@ -1,0 +1,12 @@
+schema_version: 1
+diagrams:
+- id: capability_map
+  name: Capability Map
+  viewpoint: missing_viewpoint
+  base_metaclass: uml_diagram
+  toolbox: capability_toolbox
+- id: application_platform
+  name: Application and Platform
+  viewpoint: application_platform
+  base_metaclass: uml_diagram
+  toolbox: application_platform_toolbox

@@ -1,0 +1,8 @@
+schema: version.schema.json
+document:
+  schema_version: 1
+  version:
+    current: v1
+    compatibility:
+      level: initial
+    changes: []

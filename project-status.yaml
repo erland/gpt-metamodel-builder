@@ -1,0 +1,62 @@
+schema_version: 1
+project:
+  id: metamodel-builder
+  name: Metamodel Builder
+plan:
+  path: docs/development-plan.md
+  total_steps: 17
+progress:
+  current_phase: maintenance
+  current_step: 17
+  last_completed_step: 17
+  completed_steps:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  skipped_steps: []
+  inserted_steps: []
+state:
+  overall: pass
+  blocking_issues: []
+  warnings:
+  - Constraint-validering v1 exekverar inte full OCL eller fri naturlig text.
+  - Manuell importverifiering i Sparx Enterprise Architect är definierad som testfixture
+    men kan inte köras i denna miljö; kör den inför release eller när EA finns tillgängligt.
+  - Importerad canonical semantik är ett granskningsbart utkast när MDG XML saknar
+    ursprunglig designintention.
+  - Toolbox-gruppering och exakt viewpoint-innehåll kan vara approximativa vid reverse
+    engineering från MDG XML.
+  - Custom GPT har funktionell kärnparitet men lokala validators/generatorer är inte
+    inbäddade exekverbara verktyg; Data Analysis används som runtime-fallback.
+  - Release pipeline is implemented and automatically validated; manual Sparx EA import
+    verification remains an explicit external release gate when EA is available.
+next_step:
+  recommended: manual-ea-verification-or-release
+  title: Manual Sparx EA verification / next release
+  reason: Steg 17 har lagt till canonical modelleringshandledning och export till
+    Markdown, Confluence markup och PDF. Nästa externa kontroll är fortsatt manuell
+    EA-importverifiering och därefter release.
+resume:
+  supported: true
+  required_files:
+  - gpt-project.yaml
+  - project-status.yaml
+  - docs/development-plan.md
+  - STATUS.md
+  - PROJECT.md
+  human_readable_status: Alla 17 steg är klara. Metamodellreferens, modelleringshandledning
+    och snabbguide kan exporteras till Markdown, Confluence markup och PDF.

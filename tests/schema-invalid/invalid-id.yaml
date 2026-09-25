@@ -1,0 +1,9 @@
+schema: metamodel.schema.json
+document:
+  schema_version: 1
+  metamodel:
+    id: Invalid ID
+    name: Bad
+    version: 1.0.0
+  elements: []
+  relationships: []

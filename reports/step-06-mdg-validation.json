@@ -1,0 +1,9 @@
+{
+  "result": "pass",
+  "summary": {
+    "errors": 0,
+    "findings": 0,
+    "shape_scripts_embedded": 4
+  },
+  "findings": []
+}

@@ -1,0 +1,7 @@
+schema_version: 1
+metamodel:
+  id: my_metamodel
+  name: My Metamodel
+  version: 0.1.0
+elements: []
+relationships: []

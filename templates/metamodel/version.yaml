@@ -1,0 +1,7 @@
+schema_version: 1
+version:
+  current: 0.1.0
+  compatibility:
+    level: initial
+    compatible_with: []
+  changes: []

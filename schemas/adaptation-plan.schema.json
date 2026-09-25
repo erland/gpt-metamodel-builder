@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://metamodel-builder.local/schemas/adaptation-plan.schema.json",
+  "title": "Source adaptation plan v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "target", "element_actions", "relationship_actions"],
+  "properties": {
+    "schema_version": {"type": "integer", "const": 1},
+    "status": {"enum": ["draft", "approved"]},
+    "target": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "name", "version"],
+      "properties": {
+        "id": {"$ref": "common-definitions.schema.json#/$defs/id"},
+        "name": {"$ref": "common-definitions.schema.json#/$defs/nonEmpty"},
+        "version": {"$ref": "common-definitions.schema.json#/$defs/semver"},
+        "description": {"type": "string"},
+        "namespace": {"type": "string"},
+        "default_language": {"type": "string"}
+      }
+    },
+    "element_actions": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["source_id", "action"],
+        "properties": {
+          "source_id": {"$ref": "common-definitions.schema.json#/$defs/id"},
+          "action": {"enum": ["keep", "rename", "specialize", "omit"]},
+          "target_id": {"$ref": "common-definitions.schema.json#/$defs/id"},
+          "target_name": {"type": "string"},
+          "description": {"type": "string"},
+          "kind": {"enum": ["element", "node", "artifact", "actor", "behavior", "structure", "motivation", "custom"]},
+          "rationale": {"type": "string"}
+        }
+      }
+    },
+    "relationship_actions": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["source_id", "action"],
+        "properties": {
+          "source_id": {"$ref": "common-definitions.schema.json#/$defs/id"},
+          "action": {"enum": ["keep", "rename", "specialize", "omit"]},
+          "target_id": {"$ref": "common-definitions.schema.json#/$defs/id"},
+          "target_name": {"type": "string"},
+          "description": {"type": "string"},
+          "kind": {"enum": ["association", "dependency", "flow", "structural", "influence", "realization", "specialization", "custom"]},
+          "rationale": {"type": "string"}
+        }
+      }
+    }
+  }
+}

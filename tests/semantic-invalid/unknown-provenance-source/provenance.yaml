@@ -1,0 +1,15 @@
+schema_version: 1
+sources:
+- id: user_design
+  name: Metamodel Builder reference design
+  kind: user_input
+  notes: Intern referensmodell utan extern standardtext.
+mappings:
+- target:
+    kind: element
+    id: capability
+  source:
+    source_id: missing_source
+    reference: Capability concept
+  relationship: derived_from
+  confidence: 1.0

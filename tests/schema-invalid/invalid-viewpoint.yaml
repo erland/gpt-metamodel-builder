@@ -1,0 +1,8 @@
+schema: viewpoints.schema.json
+document:
+  schema_version: 1
+  viewpoints:
+  - id: v
+    name: V
+    allowed_elements: not-a-list
+    allowed_relationships: []

@@ -1,0 +1,491 @@
+schema_version: 1
+project:
+  id: metamodel-builder
+  name: Metamodel Builder
+  description: Verktygsneutral GPT för att skapa, underhålla, validera och exportera
+    metamodeller, med Sparx EA MDG som första målplattform.
+  version_source: development
+profile:
+  reference: zip_first_advanced
+  rationale: Projektet kräver portabelt workspace, schemas, deterministisk validering,
+    filgenerering och flera runtime-adaptrar.
+analysis:
+  recommended_profile: zip_first_advanced
+  runtime:
+    strategy: peer_candidates
+    candidates:
+    - runtime_id: chatgpt_chat
+      suitability: equivalent
+      rationale: ZIP/workspace, filanalys och genererade artefakter passar kärnflödet.
+      activate_by_default: true
+    - runtime_id: chatgpt_custom
+      suitability: equivalent
+      rationale: Fungerar väl med filbaserat projektflöde och kompilerad instruktion,
+        med vissa plattformsgränser.
+      activate_by_default: true
+    - runtime_id: claude_project
+      suitability: reduced
+      rationale: Bra för analys men v1 saknar full paritet för lokal deterministisk
+        exekvering och workspaceverktyg.
+      activate_by_default: false
+    - runtime_id: opencode
+      suitability: equivalent
+      rationale: Mycket lämplig för lokalt workspace, valideringsscripts, generatorer
+        och Git.
+      activate_by_default: true
+    - runtime_id: openai_plugin
+      suitability: reduced
+      rationale: Skills kan återanvändas men persistent workspace och lokal generator-exekvering
+        gör v1 reducerad.
+      activate_by_default: false
+  capabilities:
+    web: recommended
+    data_analysis: recommended
+    image_generation: not_recommended
+    file_handling: required
+  project_features:
+    structured_knowledge: true
+    scripts: true
+    schemas: true
+    templates: true
+    deterministic_tests: true
+    evals: required
+  model_robustness:
+    level: stateful
+    rationale: Metamodeller förvaltas över många iterationer och kräver strukturerad
+      status, återupptagning, valideringsgates och deterministisk regenerering.
+    operational_core: true
+    explicit_workflow: true
+    deterministic_gates: true
+    model_compatibility_evals: true
+instructions:
+  canonical: assistant/instructions.md
+  core_contract:
+    enabled: true
+    required_markers:
+    - Canonical YAML är sanningskällan.
+    - Genererad MDG XML får aldrig bli canonical source.
+    - Validera före generering.
+    - Läs strukturerad projektstatus före nästa steg.
+    required_runtime_dependencies:
+    - assistant/policies/workflow.md
+    max_required_file_hops: 1
+    knowledge_may_not_be_required_for_core_behavior: true
+model_robustness:
+  level: stateful
+  separate_model_instructions: false
+  prefer_deterministic_validation: true
+  max_core_policy_hops: 1
+workflow:
+  mode: explicit_state_machine
+  policy: assistant/policies/workflow.md
+  operational_core:
+  - read_project_contract
+  - read_project_status
+  - select_one_state_or_bounded_goal
+  - load_only_relevant_policy
+  - execute_change
+  - validate_deterministically
+  - correct_before_completion_on_failure
+  - update_structured_status_after_pass
+  - rebuild_project_zip_when_required
+  - recommend_next_step_from_actual_state
+  states:
+    idea_analysis:
+      next:
+      - architecture
+    architecture:
+      next:
+      - planning
+    planning:
+      next:
+      - implementation
+    implementation:
+      next:
+      - validation
+    validation:
+      next:
+      - implementation
+      - packaging
+    packaging:
+      next:
+      - release
+    release:
+      next:
+      - maintenance
+    maintenance:
+      next:
+      - implementation
+      - validation
+    blocked:
+      next: []
+    paused:
+      next: []
+capabilities:
+  contract_version: 1
+  schema: schemas/capability-contract.schema.json
+  recommendation_mode: inferred_from_use_case
+  ask_user_only_when_business_choice_is_ambiguous: true
+  requirements:
+    web:
+      level: recommended
+      reason: Behövs för aktuell dokumentation om standarder och verktygsformat när
+        användaren vill analysera externa källor.
+    filesystem:
+      read: required
+      write: required
+    shell:
+      level: recommended
+      reason: Behövs i exekverbara runtimes för deterministiska validators och generatorer.
+    code_execution:
+      level: required
+      reason: Schema- och semantisk validering samt senare MDG-generering ska kunna
+        köras deterministiskt.
+    structured_data:
+      level: required
+      reason: Canonical metamodell och state lagras strukturerat i YAML/JSON.
+    persistent_state:
+      level: required
+      reason: Projekt ska kunna återupptas utan chatthistorik.
+    external_tools:
+      level: optional
+      reason: Sparx EA används för slutlig praktisk importverifiering när tillgängligt.
+      preferred_protocols:
+      - file_exchange
+    image_generation:
+      level: not_required
+      reason: Kärnuppgiften är strukturerad modellering och generering, inte bildskapande.
+artifacts:
+  contract_version: 1
+  schema: schemas/artifact-contract.schema.json
+  outputs:
+    project_package:
+      kind: package
+      format: zip
+      requirement: required
+      persistence: persistent
+      multiplicity: one
+      filename_pattern: metamodel-builder-project.zip
+      description: Komplett canonical projektpaket.
+    runtime_package:
+      kind: distribution
+      format: zip
+      requirement: conditional
+      condition: runtime_enabled
+      persistence: persistent
+      multiplicity: many
+      description: Runtime-specifik distribution härledd från canonical projekt.
+    canonical_metamodel:
+      kind: data
+      format: yaml
+      requirement: required
+      persistence: persistent
+      multiplicity: many
+      description: Verktygsneutral metamodell som är sanningskälla.
+    sparx_mdg:
+      kind: data
+      format: xml
+      requirement: conditional
+      condition: sparx_ea_export_requested
+      persistence: persistent
+      multiplicity: many
+      description: Genererad Sparx EA MDG Technology.
+    validation_report:
+      kind: report
+      format: structured
+      requirement: required
+      persistence: persistent
+      multiplicity: many
+    metamodel_reference:
+      kind: document
+      format: multi
+      requirement: conditional
+      condition: documentation_requested
+      persistence: persistent
+      multiplicity: many
+      description: Teknisk metamodellreferens i Markdown, Confluence markup eller
+        PDF.
+    modeling_guide:
+      kind: document
+      format: multi
+      requirement: conditional
+      condition: guidance_requested
+      persistence: persistent
+      multiplicity: many
+      description: Praktisk modelleringshandledning i Markdown, Confluence markup
+        eller PDF.
+    quick_reference:
+      kind: document
+      format: multi
+      requirement: conditional
+      condition: guidance_requested
+      persistence: persistent
+      multiplicity: many
+      description: Kort modelleringssnabbguide i Markdown, Confluence markup eller
+        PDF.
+workspace_state:
+  contract_version: 1
+  schema: schemas/workspace-state-contract.schema.json
+  workspace:
+    requirement: required
+    persistence: required
+    portable: true
+    separate_from_assistant: true
+    artifact: project_package
+    description: Workspace ska vara portabelt och återupptagningsbart från ZIP.
+  state:
+    requirement: required
+    persistence: required
+    authority: workspace_file
+    format: yaml
+    path: project-status.yaml
+    conversation_fallback: false
+    description: Strukturerad projektstatus är auktoritativ för progression.
+  runtime_preferences:
+    chatgpt_chat: conversation_or_file
+    chatgpt_custom: conversation_or_file
+    opencode: workspace_file
+    claude_project: conversation_or_file
+    openai_plugin: none
+tools:
+  contract_version: 1
+  schema: schemas/tool-contract.schema.json
+  tools:
+  - id: validate-canonical-schema
+    type: script
+    requirement: required
+    purpose: Validera canonical YAML mot schemas.
+    script: scripts/validate_canonical_schema.py
+    deterministic: true
+    mutates_workspace: false
+    runtime_fallback: manual
+  - id: validate-semantics
+    type: script
+    requirement: required
+    purpose: Validera semantiska referenser och regler.
+    script: scripts/validate_semantics.py
+    deterministic: true
+    mutates_workspace: false
+    runtime_fallback: manual
+  - id: validate-sparx-mapping
+    type: script
+    requirement: recommended
+    purpose: Validera Sparx EA-adaptern mot canonical modell.
+    script: scripts/validate_sparx_mapping.py
+    deterministic: true
+    mutates_workspace: false
+    runtime_fallback: manual
+  - id: generate-sparx-mdg
+    type: script
+    requirement: recommended
+    purpose: Generera Sparx EA MDG Technology XML.
+    script: scripts/generate_sparx_mdg.py
+    deterministic: true
+    mutates_workspace: true
+    runtime_fallback: manual
+  - id: validate-generated-mdg
+    type: script
+    requirement: recommended
+    purpose: Validera genererad MDG och Shape Script round-trip.
+    script: scripts/validate_generated_mdg.py
+    deterministic: true
+    mutates_workspace: false
+    runtime_fallback: manual
+  - id: generate-documentation
+    type: script
+    requirement: recommended
+    purpose: Generera Markdown-dokumentation från canonical modell.
+    script: scripts/generate_documentation.py
+    deterministic: true
+    mutates_workspace: true
+    runtime_fallback: manual
+  - id: export-documentation
+    type: script
+    requirement: recommended
+    purpose: Exportera metamodellreferens, modelleringshandledning och snabbguide
+      till Markdown, Confluence markup och PDF.
+    script: scripts/export_documentation.py
+    deterministic: true
+    mutates_workspace: true
+    runtime_fallback: manual
+  - id: import-sparx-mdg
+    type: script
+    requirement: recommended
+    purpose: Reverse-engineera Sparx EA MDG till canonical och adapter.
+    script: scripts/import_sparx_mdg.py
+    deterministic: true
+    mutates_workspace: true
+    runtime_fallback: manual
+  - id: diff-metamodel
+    type: script
+    requirement: recommended
+    purpose: Jämför två canonical versioner och generera versionsunderlag.
+    script: scripts/diff_metamodel.py
+    deterministic: true
+    mutates_workspace: true
+    runtime_fallback: manual
+  - id: adapt-source-model
+    type: script
+    requirement: recommended
+    purpose: Normalisera och applicera en godkänd källanpassningsplan.
+    script: scripts/adapt_source_model.py
+    deterministic: true
+    mutates_workspace: true
+    runtime_fallback: manual
+  - id: validate-workspace
+    type: script
+    requirement: required
+    purpose: Kontrollera att ett workspace kan återupptas.
+    script: scripts/validate_workspace.py
+    deterministic: true
+    mutates_workspace: false
+    runtime_fallback: manual
+  - id: validate-runtime-parity
+    type: script
+    requirement: required
+    purpose: Verifiera semantisk och kontraktsmässig paritet mellan aktiverade runtimes.
+    script: scripts/validate_runtime_parity.py
+    deterministic: true
+    mutates_workspace: false
+    runtime_fallback: manual
+runtime:
+  primary: none
+  chat_zip:
+    enabled: true
+  custom_gpt:
+    enabled: true
+    role: peer_distribution
+    instruction:
+      mode: compiled
+      max_characters: 8000
+    knowledge:
+      strategy: prioritize
+      max_files: 20
+      sources:
+      - docs/canonical-metamodel-v1.md
+      - docs/semantic-validation-v1.md
+      - docs/sparx-ea-mapping-v1.md
+      - docs/sparx-ea-mdg-generator-v1.md
+      - docs/sparx-ea-mdg-import-v1.md
+      - docs/modeling-guidance-v1.md
+      - examples/architecture-lite/*.yaml
+      - examples/architecture-lite/platforms/sparx-ea/*.yaml
+      priority:
+      - docs/canonical-metamodel-v1.md
+      - docs/semantic-validation-v1.md
+      - docs/sparx-ea-mapping-v1.md
+      - docs/sparx-ea-mdg-generator-v1.md
+      - docs/sparx-ea-mdg-import-v1.md
+      - docs/modeling-guidance-v1.md
+      - examples/architecture-lite/*.yaml
+      - examples/architecture-lite/platforms/sparx-ea/*.yaml
+    builder:
+      instructions: builder/instructions.md
+      conversation_starters: builder/conversation-starters.md
+      capabilities: builder/capabilities.md
+      knowledge_package: builder/knowledge-package
+      runtime_contract: builder/runtime-contract.json
+    compatibility:
+      report_required: true
+      parity_symbols:
+        equivalent: ✅
+        reduced: ⚠️
+        missing: ❌
+    validation:
+      block_on_instruction_limit: true
+      block_on_knowledge_limit: true
+      block_on_misleading_core_functionality: true
+  claude:
+    enabled: false
+  opencode:
+    enabled: true
+    role: peer_distribution
+    project_instruction: AGENTS.md
+    default_agent: metamodel-builder
+    agent_file: .opencode/agents/metamodel-builder.md
+    skills:
+    - .opencode/skills/metamodel-validation/SKILL.md
+    - .opencode/skills/sparx-mdg/SKILL.md
+    execution:
+      python_scripts: embedded
+      shell: local
+      git: workspace_optional
+  plugin:
+    enabled: false
+runtime_parity:
+  registered_runtimes:
+  - chatgpt_chat
+  - chatgpt_custom
+  - claude_project
+  - opencode
+  - openai_plugin
+  active_runtimes:
+  - chatgpt_chat
+  - chatgpt_custom
+  - opencode
+  policy: docs/runtime-parity-v1.md
+  validator: scripts/validate_runtime_parity.py
+  required_equal_contracts:
+  - capabilities
+  - artifacts
+  - workspace_state
+  - tools
+  allowed_execution_differences: true
+build:
+  build_chat_zip: true
+  build_custom_gpt_zip: true
+  build_claude_zip: false
+  build_opencode_zip: true
+  build_plugin_zip: false
+build_system:
+  targets:
+  - project
+  - chat
+  - custom-gpt
+  - opencode
+  runtime_targets:
+    chat:
+      runtime_id: chatgpt_chat
+      runtime_key: chat_zip
+      builder: chat
+      artifact_type: chat_zip
+      filename_pattern: <project-id>-chat-<version>.zip
+    custom-gpt:
+      runtime_id: chatgpt_custom
+      runtime_key: custom_gpt
+      builder: custom_gpt
+      artifact_type: custom_gpt_zip
+      filename_pattern: <project-id>-custom-gpt-<version>.zip
+    opencode:
+      runtime_id: opencode
+      runtime_key: opencode
+      builder: opencode
+      artifact_type: opencode_zip
+      filename_pattern: <project-id>-opencode-<version>.zip
+testing:
+  model_compatibility_dir: evals/model-compatibility
+ci:
+  enabled: true
+  workflow: .github/workflows/ci.yml
+  runner: ubuntu-latest
+  python: '3.12'
+  validation_script: scripts/run_ci.py
+  release_build_script: scripts/build_release.py
+  artifact_directory: dist
+release:
+  github:
+    enabled: true
+    workflow: .github/workflows/release.yml
+    tag_pattern: v*
+    version_source: git_tag_without_v_prefix
+    manual_build_supported: true
+    required_artifacts:
+    - project_package
+    - chat_zip
+    - custom_gpt_zip
+    - opencode_zip
+    - runtime_parity_report
+    - release_manifest
+    - sha256sums
+    manual_gate: Sparx EA import fixture must be executed when an EA environment is
+      available; automation must not claim it passed otherwise.

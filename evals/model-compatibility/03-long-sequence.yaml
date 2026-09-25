@@ -1,0 +1,9 @@
+id: long-sequence-state-retention
+goal: Behåll korrekt projektstatus över många ändringssteg.
+given:
+- persistent strukturerad status
+- flera tidigare genomförda steg
+expect:
+- chatthistorik används inte som enda sanningskälla
+- endast ett avgränsat mål exekveras åt gången
+- projektpaket kan byggas om

@@ -1,0 +1,22 @@
+{
+  "status": "pass",
+  "runtimes": [
+    "chatgpt_chat",
+    "chatgpt_custom",
+    "opencode"
+  ],
+  "core_markers": 4,
+  "contract_sections_verified": [
+    "capabilities",
+    "artifacts",
+    "workspace_state",
+    "tools"
+  ],
+  "allowed_differences": {
+    "chatgpt_chat": "Embedded scripts and file-based workspace in Chat runtime.",
+    "chatgpt_custom": "Local scripts are not executable runtime tools; Data Analysis/code execution is fallback and deterministic gates must not be claimed unless executed.",
+    "opencode": "Embedded Python scripts, local shell and optional Git workspace integration."
+  },
+  "errors": [],
+  "warnings": []
+}

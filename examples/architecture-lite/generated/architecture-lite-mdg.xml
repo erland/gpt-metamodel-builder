@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='utf-8'?>
+<MDG.Technology version="1.0">
+  <Documentation id="architecture_lite" name="Architecture Lite" version="1.0.0" notes="Sparx EA MDG-mappning för referensmetamodellen." />
+  <UMLProfiles>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="D71FAAD0-7" name="architecture_lite_profile" alias="Architecture Lite Profile" version="1.0.0" notes="Sparx EA MDG-mappning för referensmetamodellen." />
+      <Content>
+        <Stereotypes>
+          <Stereotype name="Capability" metatype="Capability" notes="En förmåga organisationen behöver ha." cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Class">
+                <Property name="isActive" value="" />
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="status" type="enum" description="" unit="" values="planned,active,retired" default="active" />
+              <Tag name="owner" type="char" description="" unit="" values="" default="" />
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Application" metatype="Application" notes="En applikation som stödjer verksamheten." cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0">
+            <stereotypedrelationships>
+              <stereotypedrelationship constraint="architecture_lite_profile::Capability" stereotype="architecture_lite_profile::Application realizes Capability" />
+            </stereotypedrelationships>
+            <AppliesTo>
+              <Apply type="Component">
+                <Property name="isActive" value="" />
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="status" type="enum" description="" unit="" values="planned,active,retired" default="active" />
+              <Tag name="owner" type="char" description="" unit="" values="" default="" />
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Platform" metatype="Platform" notes="Teknisk plattform för applikationer." cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0">
+            <stereotypedrelationships>
+              <stereotypedrelationship constraint="architecture_lite_profile::Application" stereotype="architecture_lite_profile::Platform supports Application" />
+            </stereotypedrelationships>
+            <AppliesTo>
+              <Apply type="Node">
+                <Property name="isActive" value="" />
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="status" type="enum" description="" unit="" values="planned,active,retired" default="active" />
+              <Tag name="owner" type="char" description="" unit="" values="" default="" />
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Business Process" metatype="Business Process" notes="Verksamhetsprocess." cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0">
+            <stereotypedrelationships>
+              <stereotypedrelationship constraint="architecture_lite_profile::Capability" stereotype="architecture_lite_profile::Business Process realizes Capability" />
+            </stereotypedrelationships>
+            <AppliesTo>
+              <Apply type="Activity">
+                <Property name="isActive" value="" />
+              </Apply>
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="status" type="enum" description="" unit="" values="planned,active,retired" default="active" />
+              <Tag name="owner" type="char" description="" unit="" values="" default="" />
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Application realizes Capability" metatype="Application realizes Capability" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Realization">
+                <Property name="direction" value="Source -&gt; Destination" />
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Platform supports Application" metatype="Platform supports Application" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Dependency">
+                <Property name="direction" value="Source -&gt; Destination" />
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Business Process realizes Capability" metatype="Business Process realizes Capability" notes="" cx="90" cy="70" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Realization">
+                <Property name="direction" value="Source -&gt; Destination" />
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes />
+        <ViewDefinitions />
+        <Metamodel />
+      </Content>
+    </UMLProfile>
+  </UMLProfiles>
+  <TaggedValueTypes>
+    <RefData version="1.0" exporter="MetamodelBuilder" />
+  </TaggedValueTypes>
+  <DiagramProfile>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="20BEA246-D" name="architecture_lite_profile_diagrams" version="1.0.0" notes="Generated diagram profile" />
+      <Content>
+        <Stereotypes>
+          <Stereotype name="Application and Platform" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="Application and Platform" />
+                <Property name="diagramID" value="application_platform" />
+                <Property name="toolbox" value="architecture_lite_profile_application_platform_toolbox" />
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+          <Stereotype name="Capability Map" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="Diagram_Logical">
+                <Property name="alias" value="Capability Map" />
+                <Property name="diagramID" value="capability_map" />
+                <Property name="toolbox" value="architecture_lite_profile_capability_toolbox" />
+              </Apply>
+            </AppliesTo>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes />
+        <ViewDefinitions />
+        <Metamodel />
+      </Content>
+    </UMLProfile>
+  </DiagramProfile>
+  <UIToolboxes>
+    <UMLProfile profiletype="uml2">
+      <Documentation id="4E07F58D-2" name="architecture_lite_profile_toolboxes" version="1.0.0" notes="Generated toolbox profile" />
+      <Content>
+        <Stereotypes>
+          <Stereotype name="Application and Platform Toolbox - Elements" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="ToolboxPage" />
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="isCollapsed" type="bool" description="" unit="" values="true,false" default="true" />
+              <Tag name="architecture_lite_profile::Application(UML::Component)" type="" description="" unit="" values="" default="Application" />
+              <Tag name="architecture_lite_profile::Platform(UML::Node)" type="" description="" unit="" values="" default="Platform" />
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Application and Platform Toolbox - Relationships" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="ToolboxPage" />
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="isCollapsed" type="bool" description="" unit="" values="true,false" default="true" />
+              <Tag name="architecture_lite_profile::Platform supports Application(UML::Dependency)" type="" description="" unit="" values="" default="Platform supports Application" />
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Capability Toolbox - Elements" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="ToolboxPage" />
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="isCollapsed" type="bool" description="" unit="" values="true,false" default="true" />
+              <Tag name="architecture_lite_profile::Capability(UML::Class)" type="" description="" unit="" values="" default="Capability" />
+              <Tag name="architecture_lite_profile::Application(UML::Component)" type="" description="" unit="" values="" default="Application" />
+              <Tag name="architecture_lite_profile::Business Process(UML::Activity)" type="" description="" unit="" values="" default="Business Process" />
+            </TaggedValues>
+          </Stereotype>
+          <Stereotype name="Capability Toolbox - Relationships" notes="" cx="0" cy="0" bgcolor="-1" fontcolor="-1" bordercolor="-1" borderwidth="-1" hideicon="0">
+            <AppliesTo>
+              <Apply type="ToolboxPage" />
+            </AppliesTo>
+            <TaggedValues>
+              <Tag name="isCollapsed" type="bool" description="" unit="" values="true,false" default="true" />
+              <Tag name="architecture_lite_profile::Application realizes Capability(UML::Realization)" type="" description="" unit="" values="" default="Application realizes Capability" />
+              <Tag name="architecture_lite_profile::Business Process realizes Capability(UML::Realization)" type="" description="" unit="" values="" default="Business Process realizes Capability" />
+            </TaggedValues>
+          </Stereotype>
+        </Stereotypes>
+        <TaggedValueTypes />
+        <ViewDefinitions />
+        <Metamodel />
+      </Content>
+    </UMLProfile>
+  </UIToolboxes>
+  <MetamodelBuilder>
+    <Generator name="Metamodel Builder" formatVersion="1" />
+    <Source canonical="architecture-lite" adapter="sparx-ea" />
+    <Coverage shapeScripts="deferred-to-step-6" quickLinker="stereotypedrelationships" />
+  </MetamodelBuilder>
+</MDG.Technology>

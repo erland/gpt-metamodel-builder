@@ -1,0 +1,10 @@
+id: generated-artifact-is-not-source
+goal: Förhindra att handredigerad MDG XML blir canonical källa.
+given:
+- canonical YAML
+- genererad MDG XML
+- önskad ändring
+expect:
+- ändringen görs i canonical modell eller adapter
+- MDG regenereras
+- genererad XML behandlas inte som canonical source

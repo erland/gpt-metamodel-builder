@@ -1,0 +1,22 @@
+schema_version: 1
+scripts:
+- id: capability_shape
+  canonical:
+    kind: element
+    id: capability
+  file: shapescripts/capability.shape
+- id: application_shape
+  canonical:
+    kind: element
+    id: application
+  file: shapescripts/application.shape
+- id: platform_shape
+  canonical:
+    kind: element
+    id: platform
+  file: shapescripts/platform.shape
+- id: business_process_shape
+  canonical:
+    kind: element
+    id: business_process
+  file: shapescripts/business-process.shape

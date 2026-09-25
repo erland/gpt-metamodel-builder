@@ -1,0 +1,12 @@
+schema_version: 1
+version:
+  current: 1.0.0
+  compatibility:
+    level: initial
+    compatible_with: []
+  changes:
+  - type: add
+    target: metamodel
+    summary: Initial source-based adaptation from Sample Architecture Source.
+    breaking: false
+  release_notes: Initial source-based adaptation.

@@ -1,0 +1,36 @@
+schema_version: 1
+toolboxes:
+- id: capability_toolbox
+  name: Capability Toolbox
+  pages:
+  - id: elements
+    name: Elements
+    items:
+    - kind: stereotype
+      ref: capability
+    - kind: stereotype
+      ref: application
+    - kind: stereotype
+      ref: business_process
+  - id: relationships
+    name: Relationships
+    items:
+    - kind: relationship
+      ref: application_realizes_capability
+    - kind: relationship
+      ref: process_realizes_capability
+- id: application_platform_toolbox
+  name: Application and Platform Toolbox
+  pages:
+  - id: elements
+    name: Elements
+    items:
+    - kind: stereotype
+      ref: application
+    - kind: stereotype
+      ref: platform
+  - id: relationships
+    name: Relationships
+    items:
+    - kind: relationship
+      ref: platform_supports_application

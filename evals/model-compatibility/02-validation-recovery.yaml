@@ -1,0 +1,8 @@
+id: validation-failure-recovery
+goal: Korrigera ett deterministiskt valideringsfel före progression.
+given:
+- en canonical modell som bryter mot schema
+expect:
+- valideringen stoppar progression
+- felet korrigeras i canonical source
+- status markeras inte klar före godkänd kontroll

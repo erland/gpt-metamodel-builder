@@ -1,0 +1,11 @@
+{
+  "validator": "metamodel-builder-semantic-v1",
+  "model_dir": "examples/architecture-lite",
+  "status": "pass",
+  "summary": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "errors": [],
+  "warnings": []
+}

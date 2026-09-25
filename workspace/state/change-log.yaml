@@ -1,0 +1,6 @@
+schema_version: 1
+changes:
+  - sequence: 1
+    type: workspace_initialized
+    summary: Stateful workspace initialized for portable maintenance.
+    status: applied

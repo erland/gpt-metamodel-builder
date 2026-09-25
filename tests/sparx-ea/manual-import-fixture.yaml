@@ -1,0 +1,44 @@
+schema_version: 1
+fixture:
+  id: architecture-lite-ea-manual-import
+  target: Sparx Enterprise Architect 17.x
+  artifact: generated/architecture-lite-mdg.xml
+preconditions:
+- Use a disposable EA project or test repository
+- Ensure no older Architecture Lite technology with the same id is enabled
+checks:
+- id: technology-visible
+  action: Deploy or add the generated MDG Technology XML and enable Architecture Lite
+  expect: Architecture Lite is listed and can be enabled without a duplicate profile/id
+    warning
+- id: diagram-types
+  action: Create both custom diagram types
+  expect: Capability Map and Application and Platform are available
+- id: toolbox
+  action: Open each custom diagram
+  expect: The corresponding custom toolbox opens and exposes configured elements/connectors
+- id: shape-scripts
+  action: Create Capability, Application, Platform and Business Process elements from
+    the toolbox
+  expect: Each element renders with its generated Shape Script rather than only the
+    native UML shape
+- id: tagged-values
+  action: Select an element with lifecycle Tagged Values
+  expect: status and owner are present; status offers configured enumeration values
+- id: quick-linker
+  action: Use Quick Linker from Application to Capability, Platform to Application
+    and Business Process to Capability
+  expect: Only the configured stereotyped relationship is offered for each tested
+    combination
+- id: direction
+  action: Create the three configured directed relationship types
+  expect: Connector direction follows Source -> Destination
+evidence_to_record:
+- EA exact version/build
+- operating system
+- MDG load method
+- result per check
+- screenshots only when a check fails
+- System Output warnings/errors
+pass_rule: All checks pass and EA reports no load/profile errors attributable to the
+  generated technology.

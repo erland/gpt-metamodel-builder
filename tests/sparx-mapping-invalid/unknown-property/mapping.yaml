@@ -1,0 +1,40 @@
+schema_version: 1
+technology:
+  id: architecture_lite
+  name: Architecture Lite
+  version: 1.0.0
+  description: Sparx EA MDG-mappning för referensmetamodellen.
+  namespace: org.example.archlite
+profile:
+  id: architecture_lite_profile
+  name: Architecture Lite Profile
+  package_name: ArchitectureLite
+files:
+  stereotypes: stereotypes.yaml
+  tagged_values: tagged-values.yaml
+  diagrams: diagrams.yaml
+  toolboxes: toolboxes.yaml
+  quick_linker: quick-linker.yaml
+  shapescripts: shapescripts.yaml
+metaclasses:
+- id: uml_class
+  uml_type: Class
+  kind: element
+- id: uml_component
+  uml_type: Component
+  kind: element
+- id: uml_node
+  uml_type: Node
+  kind: element
+- id: uml_activity
+  uml_type: Activity
+  kind: element
+- id: uml_realization
+  uml_type: Realization
+  kind: connector
+- id: uml_dependency
+  uml_type: Dependency
+  kind: connector
+- id: uml_diagram
+  uml_type: Diagram
+  kind: diagram

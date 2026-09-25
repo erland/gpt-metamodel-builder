@@ -1,0 +1,185 @@
+schema_version: 1
+guide:
+  title: Architecture Lite – modelleringshandledning
+  introduction: Handledningen förklarar hur Architecture Lite används konsekvent i
+    praktisk arkitekturmodellering.
+  principles:
+  - Modellera varför och vad innan teknisk implementation detaljeras.
+  - Använd den mest specifika objekttyp som motsvarar det du faktiskt vill beskriva.
+  - Skapa bara relationer som har en tydlig semantisk innebörd för läsaren.
+  naming_conventions:
+  - Använd verksamhetsnära och stabila namn.
+  - Undvik tekniska produktnamn för Capability.
+  - Använd singular för objekt där det är naturligt.
+elements:
+- type: capability
+  purpose: Beskriver vad organisationen behöver kunna göra, oberoende av hur förmågan
+    realiseras.
+  use_when:
+  - Du vill beskriva en stabil verksamhetsförmåga.
+  - Du vill analysera vilka processer eller applikationer som realiserar en förmåga.
+  do_not_use_when:
+  - Du beskriver ett konkret arbetsflöde.
+  - Du beskriver ett IT-system eller en teknisk plattform.
+  naming:
+    recommendation: Använd ett kort verksamhetsbegrepp som uttrycker förmågan.
+    good_examples:
+    - Riskhantering
+    - Tullklarering
+    - Kundhantering
+    bad_examples:
+    - SAP
+    - Handlägg faktura
+    - Ekonomiavdelningen
+  examples:
+  - Tullklarering
+  - Riskhantering
+  common_mistakes:
+  - Att blanda ihop en förmåga med den process som realiserar den.
+  recommended_relationships:
+  - application_realizes_capability
+  - process_realizes_capability
+- type: business_process
+  purpose: Beskriver hur verksamheten utför ett sammanhängande arbete för att skapa
+    ett resultat.
+  use_when:
+  - Du vill beskriva arbetsflöde eller verksamhetsbeteende.
+  do_not_use_when:
+  - Du beskriver vad organisationen måste kunna göra på en stabil och lösningsoberoende
+    nivå.
+  naming:
+    recommendation: Använd ett verbbaserat namn som beskriver arbetet.
+    good_examples:
+    - Klarera varor
+    - Hantera risk
+    bad_examples:
+    - Tullklareringsförmåga
+  examples:
+  - Klarera varor
+  common_mistakes:
+  - Att använda processer som ersättning för Capability.
+  recommended_relationships:
+  - process_realizes_capability
+- type: application
+  purpose: Beskriver en logisk eller fysisk applikation som tillhandahåller funktionalitet.
+  use_when:
+  - Du vill visa vilket IT-stöd som realiserar en verksamhetsförmåga.
+  do_not_use_when:
+  - Du beskriver teknisk körmiljö eller verksamhetsarbete.
+  naming:
+    recommendation: Använd applikationens vedertagna namn.
+    good_examples:
+    - Tullsystem
+    - Ärendehantering
+    bad_examples:
+    - Linux-kluster
+  examples:
+  - Tullsystem
+  common_mistakes:
+  - Att modellera plattformar som applikationer.
+  recommended_relationships:
+  - application_realizes_capability
+- type: platform
+  purpose: Beskriver en teknisk plattform eller körmiljö som stödjer applikationer.
+  use_when:
+  - Du vill analysera tekniska beroenden under applikationer.
+  do_not_use_when:
+  - Du beskriver en verksamhetsförmåga eller verksamhetsprocess.
+  naming:
+    recommendation: Använd plattformens vedertagna tekniska namn.
+    good_examples:
+    - Containerplattform
+    - Integrationsplattform
+    bad_examples:
+    - Riskhantering
+  examples:
+  - Containerplattform
+  common_mistakes:
+  - Att blanda plattform och applikation.
+  recommended_relationships:
+  - platform_supports_application
+relationships:
+- type: application_realizes_capability
+  meaning: Anger att en applikation bidrar till att realisera en verksamhetsförmåga.
+  use_when:
+  - Applikationen tillhandahåller funktionalitet som behövs för förmågan.
+  avoid_when:
+  - Sambandet endast är ett tekniskt integrationsberoende.
+  examples:
+  - source: Tullsystem
+    target: Tullklarering
+    explanation: Tullsystemet tillhandahåller funktionalitet som behövs för tullklarering.
+  common_mistakes:
+  - Att använda relationen för rent tekniska beroenden.
+- type: process_realizes_capability
+  meaning: Anger att en verksamhetsprocess operationaliserar en förmåga.
+  use_when:
+  - Processen är ett konkret sätt som förmågan genomförs på.
+  avoid_when:
+  - Objektet egentligen beskriver organisation eller teknik.
+  examples:
+  - source: Klarera varor
+    target: Tullklarering
+  common_mistakes: []
+- type: platform_supports_application
+  meaning: Anger att en plattform ger tekniskt stöd eller körmiljö åt en applikation.
+  use_when:
+  - Applikationen är beroende av plattformen för drift eller central teknisk funktion.
+  avoid_when:
+  - Sambandet beskriver verksamhetsmässig realisering.
+  examples:
+  - source: Containerplattform
+    target: Tullsystem
+  common_mistakes: []
+viewpoints:
+- viewpoint: capability_map
+  use_when:
+  - Du vill förstå hur verksamhetsförmågor realiseras av processer och applikationer.
+  steps:
+  - Placera relevanta Capability-objekt.
+  - Lägg till de processer och applikationer som realiserar dem.
+  - Skapa endast realiseringsrelationer som kan motiveras.
+  questions_answered:
+  - Vilka processer realiserar en förmåga?
+  - Vilka applikationer stödjer realiseringen av en förmåga?
+- viewpoint: application_platform
+  use_when:
+  - Du vill analysera tekniska plattformsberoenden.
+  steps:
+  - Placera applikationer.
+  - Lägg till de plattformar de faktiskt är beroende av.
+  questions_answered:
+  - Vilken plattform stödjer vilken applikation?
+patterns:
+- id: capability_realization
+  name: Förmågerealisering
+  description: Koppla en Capability till processer och applikationer som realiserar
+    den.
+  when_to_use:
+  - Vid förmågeanalys och konsekvensanalys.
+  elements:
+  - capability
+  - business_process
+  - application
+  relationships:
+  - process_realizes_capability
+  - application_realizes_capability
+anti_patterns:
+- id: technology_as_capability
+  name: Teknik som förmåga
+  description: En produkt eller teknisk lösning modelleras som Capability i stället
+    för som Application eller Platform.
+  when_to_use:
+  - Använd som kontrollfråga vid modellgranskning.
+  elements:
+  - capability
+  - application
+  - platform
+  relationships: []
+faq:
+- question: Vad är skillnaden mellan Capability och Business Process?
+  answer: Capability beskriver vad organisationen behöver kunna göra; Business Process
+    beskriver hur arbetet utförs.
+- question: När använder jag Platform i stället för Application?
+  answer: Använd Platform för den tekniska miljö eller gemensamma tekniska förmåga
+    som applikationer är beroende av.

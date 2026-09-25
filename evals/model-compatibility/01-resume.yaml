@@ -1,0 +1,10 @@
+id: resume-from-project-package
+goal: Återuppta projekt från ZIP utan tidigare chatthistorik.
+given:
+- gpt-project.yaml
+- project-status.yaml
+- docs/development-plan.md
+expect:
+- status läses före ändring
+- nästa steg härleds från faktisk status
+- ingen projekthistorik behöver återberättas

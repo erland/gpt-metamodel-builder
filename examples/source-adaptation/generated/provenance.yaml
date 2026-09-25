@@ -1,0 +1,36 @@
+schema_version: 1
+sources:
+- id: sample_architecture_source
+  name: Sample Architecture Source
+  kind: model
+  version: '1.0'
+  license_note: Synthetic test source; no third-party standard text.
+  notes: Minimal normalized source used to test source-based adaptation.
+mappings:
+- target:
+    kind: element
+    id: capability
+  source:
+    source_id: sample_architecture_source
+    reference: source:model#capability
+  relationship: derived_from
+  confidence: 1.0
+  notes: Use organization terminology.
+- target:
+    kind: element
+    id: application
+  source:
+    source_id: sample_architecture_source
+    reference: source:model#application
+  relationship: specializes
+  confidence: 1.0
+  notes: Specialize source concept for local architecture usage.
+- target:
+    kind: relationship
+    id: application_supports_capability
+  source:
+    source_id: sample_architecture_source
+    reference: source:model#application-supports-capability
+  relationship: derived_from
+  confidence: 1.0
+  notes: Use local terminology.
