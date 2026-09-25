@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://metamodel-builder.local/schemas/source-catalog.schema.json",
+  "title": "Normalized source metamodel catalog v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "source", "elements", "relationships"],
+  "properties": {
+    "schema_version": {"type": "integer", "const": 1},
+    "source": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "name", "kind"],
+      "properties": {
+        "id": {"$ref": "common-definitions.schema.json#/$defs/id"},
+        "name": {"$ref": "common-definitions.schema.json#/$defs/nonEmpty"},
+        "kind": {"enum": ["standard", "mdg", "document", "model", "website", "user_input", "other"]},
+        "version": {"type": "string"},
+        "uri": {"type": "string"},
+        "license_note": {"type": "string"},
+        "notes": {"type": "string"}
+      }
+    },
+    "elements": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "name", "reference"],
+        "properties": {
+          "id": {"$ref": "common-definitions.schema.json#/$defs/id"},
+          "name": {"$ref": "common-definitions.schema.json#/$defs/nonEmpty"},
+          "description": {"type": "string"},
+          "kind": {"enum": ["element", "node", "artifact", "actor", "behavior", "structure", "motivation", "custom"]},
+          "reference": {"type": "string", "minLength": 1},
+          "property_sets": {"$ref": "common-definitions.schema.json#/$defs/refList"}
+        }
+      }
+    },
+    "relationships": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "name", "source_types", "target_types", "reference"],
+        "properties": {
+          "id": {"$ref": "common-definitions.schema.json#/$defs/id"},
+          "name": {"$ref": "common-definitions.schema.json#/$defs/nonEmpty"},
+          "description": {"type": "string"},
+          "kind": {"enum": ["association", "dependency", "flow", "structural", "influence", "realization", "specialization", "custom"]},
+          "directed": {"type": "boolean"},
+          "source_types": {"$ref": "common-definitions.schema.json#/$defs/refList"},
+          "target_types": {"$ref": "common-definitions.schema.json#/$defs/refList"},
+          "reference": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

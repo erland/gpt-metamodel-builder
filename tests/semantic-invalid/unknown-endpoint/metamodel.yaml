@@ -1,0 +1,70 @@
+schema_version: 1
+metamodel:
+  id: architecture_lite
+  name: Architecture Lite
+  version: 1.0.0
+  description: Liten referensmetamodell för end-to-end-test.
+  namespace: org.example.archlite
+  default_language: sv
+elements:
+- id: capability
+  name: Capability
+  description: En förmåga organisationen behöver ha.
+  kind: structure
+  property_sets:
+  - lifecycle
+- id: application
+  name: Application
+  description: En applikation som stödjer verksamheten.
+  kind: artifact
+  property_sets:
+  - lifecycle
+- id: platform
+  name: Platform
+  description: Teknisk plattform för applikationer.
+  kind: structure
+  property_sets:
+  - lifecycle
+- id: business_process
+  name: Business Process
+  description: Verksamhetsprocess.
+  kind: behavior
+  property_sets:
+  - lifecycle
+relationships:
+- id: application_realizes_capability
+  name: Application realizes Capability
+  kind: realization
+  directed: true
+  source:
+    types:
+    - application
+    cardinality: 0..*
+  target:
+    types:
+    - missing_type
+    cardinality: 0..*
+- id: platform_supports_application
+  name: Platform supports Application
+  kind: dependency
+  directed: true
+  source:
+    types:
+    - platform
+    cardinality: 0..*
+  target:
+    types:
+    - application
+    cardinality: 0..*
+- id: process_realizes_capability
+  name: Business Process realizes Capability
+  kind: realization
+  directed: true
+  source:
+    types:
+    - business_process
+    cardinality: 0..*
+  target:
+    types:
+    - capability
+    cardinality: 0..*

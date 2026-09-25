@@ -1,0 +1,29 @@
+schema_version: 1
+styles:
+- id: capability_style
+  applies_to:
+    kind: element
+    type: capability
+  shape: rounded_rectangle
+  label:
+    show_name: true
+    show_stereotype: false
+    show_properties:
+    - status
+  visual_hints:
+    semantic_role: business
+- id: application_style
+  applies_to:
+    kind: element
+    type: application
+  shape: rectangle
+  label:
+    show_name: true
+    show_stereotype: false
+- id: platform_support_style
+  applies_to:
+    kind: relationship
+    type: platform_supports_application
+  shape: line
+  label:
+    show_name: false

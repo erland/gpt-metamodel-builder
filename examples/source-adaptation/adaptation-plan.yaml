@@ -1,0 +1,35 @@
+schema_version: 1
+status: approved
+target:
+  id: tailored_architecture
+  name: Tailored Architecture
+  version: 1.0.0
+  description: Anpassad metamodell härledd från Sample Architecture Source.
+  default_language: sv
+element_actions:
+- source_id: source_capability
+  action: rename
+  target_id: capability
+  target_name: Capability
+  rationale: Use organization terminology.
+- source_id: source_application
+  action: specialize
+  target_id: application
+  target_name: Application
+  rationale: Specialize source concept for local architecture usage.
+- source_id: source_platform
+  action: omit
+  target_id: source_platform
+  target_name: Source Platform
+  rationale: Outside current scope.
+relationship_actions:
+- source_id: source_application_supports_capability
+  action: rename
+  target_id: application_supports_capability
+  target_name: Application supports Capability
+  rationale: Use local terminology.
+- source_id: source_platform_hosts_application
+  action: omit
+  target_id: source_platform_hosts_application
+  target_name: Source Platform hosts Application
+  rationale: Endpoint is intentionally omitted.

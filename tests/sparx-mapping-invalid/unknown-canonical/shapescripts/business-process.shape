@@ -1,0 +1,2 @@
+shape main { roundrect(0,0,100,100,20,20); addsubshape("name",100,100); }
+shape name { h_align="center"; v_align="center"; print("#NAME#"); }

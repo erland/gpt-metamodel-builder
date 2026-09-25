@@ -1,0 +1,35 @@
+schema_version: 1
+workspace:
+  id: architecture-lite
+  name: Architecture Lite
+  format_version: 1
+  status: active
+project:
+  generator: metamodel-builder
+  project_version: development
+canonical:
+  metamodel_root: metamodel
+  platform_root: platforms
+  source_root: sources
+  generated_root: generated
+progress:
+  lifecycle_state: maintenance
+  last_successful_action: step_11_workspace_initialized
+  pending_action: none
+validation:
+  overall: pass
+  last_validated_at: null
+  gates:
+    schema: pass
+    semantics: pass
+    sparx_mapping: pass
+history:
+  change_log: state/change-log.yaml
+resume:
+  portable: true
+  conversation_required: false
+  required_paths:
+    - state/workspace-state.yaml
+    - state/change-log.yaml
+    - metamodel
+    - platforms

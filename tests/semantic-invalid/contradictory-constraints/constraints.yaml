@@ -1,0 +1,24 @@
+schema_version: 1
+constraints:
+- id: capability_has_owner
+  name: Capability should have owner
+  severity: warning
+  applies_to:
+    kind: element
+    types:
+    - capability
+  rule:
+    language: declarative
+    expression: property(owner) is not empty
+  message: Capability bör ha en angiven ägare.
+- id: capability_has_no_owner
+  name: Capability should not have owner
+  severity: error
+  applies_to:
+    kind: element
+    types:
+    - capability
+  rule:
+    language: declarative
+    expression: property(owner) is empty
+  message: Test contradiction

@@ -1,0 +1,20 @@
+schema_version: 1
+rules:
+- id: application_to_capability
+  source: application
+  target: capability
+  relationship: application_realizes_capability
+  direction: source_to_target
+  label: realizes
+- id: platform_to_application
+  source: platform
+  target: application
+  relationship: platform_supports_application
+  direction: source_to_target
+  label: supports
+- id: process_to_capability
+  source: business_process
+  target: capability
+  relationship: process_realizes_capability
+  direction: source_to_target
+  label: realizes

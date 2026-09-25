@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sparx EA toolbox mappings",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "toolboxes"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "toolboxes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "pages"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "pages": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "items"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_-]*$"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "kind",
+                      "ref"
+                    ],
+                    "properties": {
+                      "kind": {
+                        "enum": [
+                          "stereotype",
+                          "relationship"
+                        ]
+                      },
+                      "ref": {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9_-]*$"
+                      },
+                      "label": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

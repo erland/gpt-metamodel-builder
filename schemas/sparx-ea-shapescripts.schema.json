@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sparx EA Shape Script index",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "scripts"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "scripts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "canonical",
+          "file"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$"
+          },
+          "canonical": {
+            "type": "object",
+            "required": [
+              "kind",
+              "id"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "element",
+                  "relationship"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_-]*$"
+              }
+            },
+            "additionalProperties": false
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,11 @@
+schema_version: 1
+tagged_value_sets:
+- id: lifecycle
+  name: Lifecycle
+  tags:
+  - property: missing_property
+    tag_name: status
+    render_as: enum
+  - property: owner
+    tag_name: owner
+    render_as: text

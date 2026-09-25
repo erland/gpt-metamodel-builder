@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Sparx EA stereotypes",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "stereotypes"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "stereotypes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "canonical",
+          "base_metaclass"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "canonical": {
+            "type": "object",
+            "required": [
+              "kind",
+              "id"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "element",
+                  "relationship"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_-]*$"
+              }
+            },
+            "additionalProperties": false
+          },
+          "base_metaclass": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$"
+          },
+          "extends_stereotype": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tagged_value_sets": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_-]*$"
+            },
+            "uniqueItems": true
+          },
+          "shape_script": {
+            "type": "string",
+            "minLength": 1
+          },
+          "abstract": {
+            "type": "boolean"
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

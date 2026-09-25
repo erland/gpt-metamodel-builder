@@ -1,0 +1,39 @@
+schema_version: 1
+source:
+  id: sample_architecture_source
+  name: Sample Architecture Source
+  kind: model
+  version: "1.0"
+  license_note: Synthetic test source; no third-party standard text.
+  notes: Minimal normalized source used to test source-based adaptation.
+elements:
+- id: source_capability
+  name: Source Capability
+  description: A capability concept in the source model.
+  kind: structure
+  reference: source:model#capability
+- id: source_application
+  name: Source Application
+  description: An application concept in the source model.
+  kind: artifact
+  reference: source:model#application
+- id: source_platform
+  name: Source Platform
+  description: A platform concept intentionally omitted in the adapted model.
+  kind: structure
+  reference: source:model#platform
+relationships:
+- id: source_application_supports_capability
+  name: Source Application supports Capability
+  kind: dependency
+  directed: true
+  source_types: [source_application]
+  target_types: [source_capability]
+  reference: source:model#application-supports-capability
+- id: source_platform_hosts_application
+  name: Source Platform hosts Application
+  kind: dependency
+  directed: true
+  source_types: [source_platform]
+  target_types: [source_application]
+  reference: source:model#platform-hosts-application

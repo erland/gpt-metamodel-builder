@@ -1,0 +1,10 @@
+{
+  "output": "/mnt/data/mmg_work/metamodel-builder/examples/architecture-lite/generated/architecture-lite-mdg.xml",
+  "technology": "architecture_lite",
+  "version": "1.0.0",
+  "stereotypes": 7,
+  "diagrams": 2,
+  "toolboxes": 2,
+  "quick_linker_rules": 3,
+  "shape_scripts_embedded": 0
+}

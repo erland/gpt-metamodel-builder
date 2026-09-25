@@ -1,0 +1,13 @@
+schema_version: 1
+constraints:
+- id: capability_has_owner
+  name: Capability should have owner
+  severity: warning
+  applies_to:
+    kind: element
+    types:
+    - capability
+  rule:
+    language: declarative
+    expression: property(owner) is not empty
+  message: Capability bör ha en angiven ägare.

@@ -1,0 +1,12 @@
+schema: properties.schema.json
+document:
+  schema_version: 1
+  data_types: []
+  enumerations: []
+  property_definitions:
+  - id: x
+    name: X
+    type:
+      builtin: string
+      enumeration: e
+  property_sets: []

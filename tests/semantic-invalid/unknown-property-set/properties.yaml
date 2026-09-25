@@ -1,0 +1,32 @@
+schema_version: 1
+data_types: []
+enumerations:
+- id: lifecycle_status
+  name: Lifecycle status
+  values:
+  - id: planned
+    name: Planned
+  - id: active
+    name: Active
+  - id: retired
+    name: Retired
+property_definitions:
+- id: status
+  name: Status
+  type:
+    enumeration: lifecycle_status
+  cardinality: '1'
+  required: true
+  default: active
+- id: owner
+  name: Owner
+  type:
+    builtin: string
+  cardinality: 0..1
+  required: false
+property_sets:
+- id: lifecycle
+  name: Lifecycle
+  properties:
+  - status
+  - owner

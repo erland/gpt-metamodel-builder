@@ -1,0 +1,31 @@
+schema_version: 1
+metamodel:
+  id: tailored_architecture
+  name: Tailored Architecture
+  version: 1.0.0
+  description: Anpassad metamodell härledd från Sample Architecture Source.
+  namespace: org.example.tailored_architecture
+  default_language: sv
+elements:
+- id: capability
+  name: Capability
+  description: A capability concept in the source model.
+  kind: structure
+- id: application
+  name: Application
+  description: An application concept in the source model.
+  kind: artifact
+relationships:
+- id: application_supports_capability
+  name: Application supports Capability
+  description: ''
+  kind: dependency
+  directed: true
+  source:
+    types:
+    - application
+    cardinality: 0..*
+  target:
+    types:
+    - capability
+    cardinality: 0..*

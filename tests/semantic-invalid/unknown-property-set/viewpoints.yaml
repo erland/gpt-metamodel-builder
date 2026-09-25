@@ -1,0 +1,25 @@
+schema_version: 1
+viewpoints:
+- id: capability_map
+  name: Capability Map
+  description: Visar förmågor och realiserande verksamhets-/applikationsstruktur.
+  purpose: Förmågeanalys
+  stakeholders:
+  - business architect
+  - enterprise architect
+  allowed_elements:
+  - capability
+  - application
+  - business_process
+  allowed_relationships:
+  - application_realizes_capability
+  - process_realizes_capability
+  required_elements:
+  - capability
+- id: application_platform
+  name: Application and Platform
+  allowed_elements:
+  - application
+  - platform
+  allowed_relationships:
+  - platform_supports_application

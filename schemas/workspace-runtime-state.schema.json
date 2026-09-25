@@ -1,0 +1,12 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Metamodel Builder Workspace Runtime State",
+  "type":"object",
+  "required":["schema_version","workspace","project","canonical","progress","validation","history","resume"],
+  "properties":{
+    "schema_version":{"const":1},
+    "workspace":{"type":"object","required":["id","name","format_version","status"],"properties":{"id":{"type":"string","minLength":1},"name":{"type":"string","minLength":1},"format_version":{"type":"integer","minimum":1},"status":{"enum":["active","paused","blocked","archived"]}},"additionalProperties":true},
+    "project":{"type":"object"},"canonical":{"type":"object"},"progress":{"type":"object"},"validation":{"type":"object"},"history":{"type":"object"},
+    "resume":{"type":"object","required":["portable","conversation_required","required_paths"],"properties":{"portable":{"const":true},"conversation_required":{"const":false},"required_paths":{"type":"array","minItems":2,"items":{"type":"string"}}},"additionalProperties":true}
+  },"additionalProperties":true
+}
