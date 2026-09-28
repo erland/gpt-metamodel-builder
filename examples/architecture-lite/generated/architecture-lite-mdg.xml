@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <MDG.Technology version="1.0">
-  <Documentation id="architecture_lite" name="Architecture Lite" version="1.0.0" notes="Sparx EA MDG-mappning för referensmetamodellen." />
+  <Documentation id="archlite" name="Architecture Lite" version="1.0.0" notes="Sparx EA MDG-mappning för referensmetamodellen." />
   <UMLProfiles>
     <UMLProfile profiletype="uml2">
       <Documentation id="D71FAAD0-7" name="architecture_lite_profile" alias="Architecture Lite Profile" version="1.0.0" notes="Sparx EA MDG-mappning för referensmetamodellen." />
