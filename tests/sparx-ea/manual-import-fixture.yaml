@@ -6,6 +6,7 @@ fixture:
 preconditions:
 - Use a disposable EA project or test repository
 - Ensure no older Architecture Lite technology with the same id is enabled
+- Confirm the generated root Technology Documentation id is `archlite` (12 characters or fewer)
 checks:
 - id: technology-visible
   action: Deploy or add the generated MDG Technology XML and enable Architecture Lite
