@@ -11,7 +11,7 @@ The automated validator decodes every `_image` payload and requires exact round-
 ## Structural MDG checks
 The validator now checks:
 - only expected top-level MDG sections are emitted;
-- technology id/version;
+- technology id/version och Sparx-gränsen på högst 12 tecken för Technology-ID;
 - profile stereotype count and names;
 - metaclass `AppliesTo` mappings;
 - Shape Script payload and source equality;

@@ -24,7 +24,8 @@
       "properties": {
         "id": {
           "type": "string",
-          "pattern": "^[a-z][a-z0-9_-]*$"
+          "pattern": "^[a-z][a-z0-9_-]*$",
+          "maxLength": 12
         },
         "name": {
           "type": "string",

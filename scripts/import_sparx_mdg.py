@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse, base64, io, json, re, zipfile
+import argparse, base64, hashlib, io, json, re, zipfile
 from pathlib import Path
 import xml.etree.ElementTree as ET
 import yaml
@@ -10,6 +10,13 @@ CONNECTOR_TYPES={'Association','Aggregation','Composition','Dependency','Realiza
 def slug(s):
     x=re.sub(r'[^a-z0-9]+','_',s.lower()).strip('_')
     return x or 'unnamed'
+
+def sparx_technology_id(value):
+    candidate=slug(value)
+    if len(candidate) <= 12:
+        return candidate
+    digest=hashlib.sha1(candidate.encode('utf-8')).hexdigest()[:4]
+    return f"{candidate[:7]}_{digest}"
 
 def dump(path,obj):
     path.parent.mkdir(parents=True,exist_ok=True)
@@ -124,7 +131,7 @@ def project(inter,out:Path):
     for d in inter['diagrams']:
         key=(d['metaclass'],'diagram')
         if key not in mcmap: mid=f"uml_{slug(d['metaclass'])}"; mcmap[key]=mid; metaclasses.append({'id':mid,'uml_type':d['metaclass'],'kind':'diagram'})
-    mapping={'schema_version':1,'technology':{'id':slug(tech.get('id') or tech.get('name','imported')),'name':tech.get('name') or 'Imported MDG','version':version,'description':tech.get('notes',''),'namespace':f"imported.{slug(tech.get('id') or 'mdg')}"},'profile':{'id':profile['id'],'name':profile['name'],'package_name':re.sub(r'\W+','',profile['name']) or 'ImportedProfile'},'files':{'stereotypes':'stereotypes.yaml','tagged_values':'tagged-values.yaml','diagrams':'diagrams.yaml','toolboxes':'toolboxes.yaml','quick_linker':'quick-linker.yaml','shapescripts':'shapescripts.yaml'},'metaclasses':metaclasses}
+    mapping={'schema_version':1,'technology':{'id':sparx_technology_id(tech.get('id') or tech.get('name','imported')),'name':tech.get('name') or 'Imported MDG','version':version,'description':tech.get('notes',''),'namespace':f"imported.{slug(tech.get('id') or 'mdg')}"},'profile':{'id':profile['id'],'name':profile['name'],'package_name':re.sub(r'\W+','',profile['name']) or 'ImportedProfile'},'files':{'stereotypes':'stereotypes.yaml','tagged_values':'tagged-values.yaml','diagrams':'diagrams.yaml','toolboxes':'toolboxes.yaml','quick_linker':'quick-linker.yaml','shapescripts':'shapescripts.yaml'},'metaclasses':metaclasses}
     stereotypes=[]; shape_specs=[]
     for s in sts:
         z={'id':s['id'],'name':s['name'],'canonical':{'kind':s['kind'],'id':s['id']},'base_metaclass':mcmap[(s['metaclass'],'connector' if s['kind']=='relationship' else 'element')]}

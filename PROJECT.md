@@ -15,4 +15,4 @@ Skapa och förvalta verktygsneutrala metamodeller med canonical YAML som sanning
 - ChatGPT Chat, ChatGPT Custom och OpenCode är aktiverade mål-runtimes i v1.
 
 ## Nuvarande fas
-Alla 16 planerade utvecklingssteg är genomförda. Projektet är release-ready ur automatiserat CI-perspektiv; manuell Sparx EA-importverifiering kvarstår som extern gate.
+Alla 18 utvecklingssteg är genomförda ur automatiserat projektperspektiv. Senaste maintenance-steget korrigerar Sparx MDG Technology-ID till högst 12 tecken efter praktisk importfeedback. Manuell Sparx EA-importverifiering ska köras om som extern gate.

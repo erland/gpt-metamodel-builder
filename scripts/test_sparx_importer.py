@@ -18,6 +18,8 @@ def main():
         if errs: raise RuntimeError('\n'.join(errs))
         run('python3','scripts/validate_semantics.py',str(out/'canonical'))
         run('python3','scripts/validate_sparx_mapping.py','--canonical',str(out/'canonical'),'--adapter',str(out/'platforms/sparx-ea'))
+        imported_mapping=yaml.safe_load((out/'platforms/sparx-ea/mapping.yaml').read_text(encoding='utf-8'))
+        assert len(imported_mapping['technology']['id']) <= 12
         rep=yaml.safe_load((out/'intermediate/mdg-import.yaml').read_text(encoding='utf-8'))
         c=rep['counts']
         assert c['stereotypes']==7 and c['elements']==4 and c['relationships']==3

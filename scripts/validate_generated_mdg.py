@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 import yaml
 
 DT='{urn:schemas-microsoft-com:datatypes}dt'
+MAX_TECHNOLOGY_ID_LENGTH=12
 
 def load(p): return yaml.safe_load(p.read_text(encoding='utf-8'))
 
@@ -48,6 +49,8 @@ def validate(xml_path, canonical, adapter):
     doc=root.find('Documentation'); mp=load(Path(adapter)/'mapping.yaml'); st=load(Path(adapter)/'stereotypes.yaml')['stereotypes']; d=load(Path(adapter)/'diagrams.yaml')['diagrams']; tb=load(Path(adapter)/'toolboxes.yaml')['toolboxes']; tvsets=load(Path(adapter)/'tagged-values.yaml')['tagged_value_sets']; ql=load(Path(adapter)/'quick-linker.yaml')['rules']; shapes=load(Path(adapter)/'shapescripts.yaml')['scripts']
     tech=mp['technology']; profile=mp['profile']
     if doc is None or doc.get('id')!=tech['id'] or doc.get('version')!=tech['version']: f.append({'code':'MDG003','severity':'error','message':'Technology Documentation mismatch'})
+    if doc is not None and len(doc.get('id','')) > MAX_TECHNOLOGY_ID_LENGTH:
+        f.append({'code':'MDG005','severity':'error','message':f'Technology id exceeds Sparx EA {MAX_TECHNOLOGY_ID_LENGTH}-character limit'})
     allowed_root={'Documentation','UMLProfiles','TaggedValueTypes','DiagramProfile','UIToolboxes'}
     extra=[x.tag for x in root if x.tag not in allowed_root]
     if extra: f.append({'code':'MDG004','severity':'error','message':f'Unexpected MDG root sections: {extra}'})

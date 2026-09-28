@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from pathlib import Path
-import subprocess, sys
+import shutil, subprocess, sys, tempfile
+import yaml
 ROOT=Path(__file__).resolve().parents[1]
 V=ROOT/'scripts/validate_sparx_mapping.py'
 CAN=ROOT/'examples/architecture-lite'
@@ -11,6 +12,15 @@ def run(adapter):
 r=run(GOOD)
 if r.returncode!=0:
     print('Reference adapter should pass'); print(r.stdout); print(r.stderr); raise SystemExit(1)
+with tempfile.TemporaryDirectory() as td:
+    bad_id=Path(td)/'bad-id'
+    shutil.copytree(GOOD,bad_id)
+    mapping=yaml.safe_load((bad_id/'mapping.yaml').read_text(encoding='utf-8'))
+    mapping['technology']['id']='technology_id_too_long'
+    (bad_id/'mapping.yaml').write_text(yaml.safe_dump(mapping,sort_keys=False,allow_unicode=True),encoding='utf-8')
+    rr=run(bad_id)
+    if rr.returncode==0:
+        print('Adapter with overlong technology id unexpectedly passed'); raise SystemExit(1)
 failed=[]
 for case in sorted(p for p in BAD.iterdir() if p.is_dir()):
     rr=run(case)

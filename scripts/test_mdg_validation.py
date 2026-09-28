@@ -15,4 +15,6 @@ with tempfile.TemporaryDirectory() as td:
     run([sys.executable,'scripts/validate_generated_mdg.py','--xml',str(bad),'--canonical',str(CAN),'--adapter',str(AD)],expect=1)
     tree=ET.parse(good); root=tree.getroot(); prop=root.find("DiagramProfile/UMLProfile/Content/Stereotypes/Stereotype/AppliesTo/Apply/Property[@name='toolbox']"); prop.set('value','does_not_exist'); bad2=Path(td)/'bad-toolbox.xml'; tree.write(bad2,encoding='utf-8',xml_declaration=True)
     run([sys.executable,'scripts/validate_generated_mdg.py','--xml',str(bad2),'--canonical',str(CAN),'--adapter',str(AD)],expect=1)
+    tree=ET.parse(good); root=tree.getroot(); root.find('Documentation').set('id','technology_id_too_long'); bad3=Path(td)/'long-technology-id.xml'; tree.write(bad3,encoding='utf-8',xml_declaration=True)
+    run([sys.executable,'scripts/validate_generated_mdg.py','--xml',str(bad3),'--canonical',str(CAN),'--adapter',str(AD)],expect=1)
 print('MDG validation regression tests: PASS')

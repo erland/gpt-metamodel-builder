@@ -1,6 +1,6 @@
 schema_version: 1
 technology:
-  id: architecture_lite
+  id: archlite
   name: Architecture Lite
   version: 1.0.0
   description: Sparx EA MDG-mappning för referensmetamodellen.

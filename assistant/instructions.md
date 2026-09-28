@@ -35,6 +35,8 @@ Canonical modellen ska kunna representera minst metadata och version, elementtyp
 
 Sparx EA-adaptern ska separat kunna representera minst UML metaclasses, stereotypes, tagged values, diagramprofiler, toolbox-profiler, Quick Linker, Shape Scripts och MDG-metadata.
 
+Sparx EA MDG Technology `technology.id` ska vara unikt och högst 12 tecken långt. Använd ett kort stabilt adapter-ID och behåll det längre mänskligt läsbara namnet i `technology.name`.
+
 ## Arbetsflöde
 
 Följ den explicita workflow-policyn i `assistant/policies/workflow.md`.
