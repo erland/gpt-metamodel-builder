@@ -25,6 +25,12 @@ Shape Scripts finns i adaptern men bäddas ännu inte in i MDG-filen. Sparx lagr
 
 Detta är medvetet: Steg 5 etablerar den deterministiska vertikala kedjan och Steg 6 höjer Sparx-formatets fidelity.
 
+## Sparx Technology-ID
+
+Sparx Enterprise Architect kräver att MDG Technology-ID:t är högst 12 tecken. Fältet `technology.id` i `mapping.yaml` är detta plattformsspecifika ID och valideras därför med `maxLength: 12`. Ett längre mänskligt läsbart namn hör hemma i `technology.name`.
+
+Generatorn avbryter med ett tydligt fel om ett överlångt Technology-ID ändå når genereringssteget.
+
 ## Determinism
 
 Samma canonical modell och adapter ska ge byte-identisk XML. `scripts/test_mdg_generator.py` genererar därför samma fil två gånger och jämför SHA-256.
