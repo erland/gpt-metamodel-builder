@@ -401,3 +401,25 @@ Definition of done:
 - 3 dokumenttyper × 3 format genereras
 - PDF renderas och verifieras
 - runtimepaketen innehåller schema, exporter och relevant kunskap
+
+
+### Steg 18 – Sparx MDG Technology-ID kompatibilitet
+
+Korrigera MDG-exporten efter praktisk importverifiering i Sparx Enterprise Architect.
+
+Bakgrund:
+- Sparx kräver att MDG Technology-ID är högst 12 tecken.
+- referensexemplet använde tidigare `architecture_lite`, vilket överskred gränsen.
+
+Ändringar:
+- begränsa `technology.id` i Sparx mapping-schema till högst 12 tecken,
+- avvisa överlånga ID:n både före och efter generering,
+- använd ett giltigt kort ID i referensexemplet,
+- lägg till regressionstester och dokumentera regeln i canonical instruktion.
+
+Definition of done:
+- referensadaptern använder ett Technology-ID på högst 12 tecken,
+- överlånga Technology-ID:n avvisas deterministiskt,
+- genererad referens-MDG innehåller samma giltiga Technology-ID,
+- CI passerar,
+- manuell EA-import körs om som extern verifiering.
