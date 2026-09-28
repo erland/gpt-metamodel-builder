@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 import yaml
 
 DT_NS='urn:schemas-microsoft-com:datatypes'
+MAX_TECHNOLOGY_ID_LENGTH=12
 
 
 def load_yaml(p: Path):
@@ -61,6 +62,8 @@ def generate(project_root: Path, canonical: Path, adapter: Path, output: Path):
     shapes=load_yaml(adapter/'shapescripts.yaml')['scripts']
 
     technology=mp['technology']; profile=mp['profile']
+    if len(technology['id']) > MAX_TECHNOLOGY_ID_LENGTH:
+        raise ValueError(f"Sparx EA MDG Technology id must be at most {MAX_TECHNOLOGY_ID_LENGTH} characters: {technology['id']}")
     metaclasses={x['id']:x for x in mp['metaclasses']}
     prop_defs={x['id']:x for x in props.get('property_definitions',[])}
     enums={x['id']:x for x in props.get('enumerations',[])}
