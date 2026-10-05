@@ -2,11 +2,13 @@
 
 **Övergripande status:** PASS
 
-Alla 18 utvecklingssteg, inklusive två senare maintenance-steg, är genomförda. Projektet har nu canonical metamodell, Sparx EA-adapter och MDG-flöde, reverse engineering, versionsdiff, källanpassning, stateful workspace, tre runtime-distributioner, runtime parity samt en reproducerbar CI/releasepipeline.
+Alla 19 utvecklingssteg, inklusive Plugin-steget och tidigare maintenance-steg, är genomförda. Projektet har nu canonical metamodell, Sparx EA-adapter och MDG-flöde, reverse engineering, versionsdiff, källanpassning, stateful workspace, fyra runtime-distributioner, runtime parity samt en reproducerbar CI/releasepipeline.
 
 ## Release readiness
 
-Automatiska gates byggs och körs via `scripts/run_ci.py` och `.github/workflows/ci.yml`. `scripts/build_release.py` bygger och validerar canonical projektpaket, ChatGPT Chat, ChatGPT Custom och OpenCode samt skapar parityrapport, manifest och SHA-256 checksummor. Git-taggar `v*` kan publiceras via `.github/workflows/release.yml`.
+Automatiska gates byggs och körs via `scripts/run_ci.py` och `.github/workflows/ci.yml`. `scripts/build_release.py` bygger och validerar canonical projektpaket, ChatGPT Chat, ChatGPT Custom, OpenCode och OpenAI Plugin samt skapar parityrapport, manifest och SHA-256 checksummor. Git-taggar `v*` kan publiceras via `.github/workflows/release.yml`.
+
+OpenAI Plugin är verifierad som `equivalent_runtime_dependent`: den paketerar de 11 verkliga modell-/generatorverktygen utan MCP-wrapper, medan persistent workspace och code execution kommer från hosten.
 
 ## Senaste korrigering
 
