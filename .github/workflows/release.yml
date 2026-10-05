@@ -57,6 +57,7 @@ jobs:
             dist/metamodel-builder-chat-${{ steps.version.outputs.version }}.zip \
             dist/metamodel-builder-custom-gpt-${{ steps.version.outputs.version }}.zip \
             dist/metamodel-builder-opencode-${{ steps.version.outputs.version }}.zip \
+            dist/metamodel-builder-plugin-${{ steps.version.outputs.version }}.zip \
             dist/release-manifest.json \
             dist/runtime-parity.json \
             dist/SHA256SUMS.txt \

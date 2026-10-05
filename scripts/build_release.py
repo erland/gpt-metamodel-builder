@@ -36,22 +36,25 @@ def main() -> int:
     chat=out/f'{pid}-chat-{a.version}.zip'
     custom=out/f'{pid}-custom-gpt-{a.version}.zip'
     opencode=out/f'{pid}-opencode-{a.version}.zip'
+    plugin=out/f'{pid}-plugin-{a.version}.zip'
     project=out/f'{pid}-project-{a.version}.zip'
     run([py,'scripts/build_chat_runtime.py','--project-root','.','--output',chat,'--version',a.version], root)
     run([py,'scripts/build_custom_gpt_runtime.py','--project-root','.','--output',custom,'--version',a.version], root)
     run([py,'scripts/build_opencode_runtime.py','--project-root','.','--output',opencode,'--version',a.version], root)
+    run([py,'scripts/build_plugin_runtime.py','--project-root','.','--output',plugin,'--version',a.version], root)
     run([py,'scripts/validate_chat_runtime.py','--zip',chat], root)
     run([py,'scripts/validate_custom_gpt_runtime.py','--project-root','.','--zip',custom], root)
     run([py,'scripts/validate_opencode_runtime.py',opencode], root)
+    run([py,'scripts/validate_plugin_runtime.py',plugin], root)
     parity=out/'runtime-parity.json'
-    run([py,'scripts/validate_runtime_parity.py','--project-root','.','--chat',chat,'--custom',custom,'--opencode',opencode,'--json-out',parity], root)
+    run([py,'scripts/validate_runtime_parity.py','--project-root','.','--chat',chat,'--custom',custom,'--opencode',opencode,'--plugin',plugin,'--json-out',parity], root)
     zip_project(root, project)
-    artifacts=[project,chat,custom,opencode,parity]
+    artifacts=[project,chat,custom,opencode,plugin,parity]
     manifest={'project_id':pid,'version':a.version,'artifacts':[]}
     for p in artifacts:
         manifest['artifacts'].append({'name':p.name,'sha256':digest(p),'size':p.stat().st_size})
     manifest_path=out/'release-manifest.json'; manifest_path.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-    sums=out/'SHA256SUMS.txt'; sums.write_text(''.join(f'{digest(p)}  {p.name}\n' for p in [project,chat,custom,opencode,parity,manifest_path]),encoding='utf-8')
+    sums=out/'SHA256SUMS.txt'; sums.write_text(''.join(f'{digest(p)}  {p.name}\n' for p in [project,chat,custom,opencode,plugin,parity,manifest_path]),encoding='utf-8')
     print(f'Release build PASS: {a.version}')
     return 0
 
