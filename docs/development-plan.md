@@ -423,3 +423,24 @@ Definition of done:
 - genererad referens-MDG innehåller samma giltiga Technology-ID,
 - CI passerar,
 - manuell EA-import körs om som extern verifiering.
+
+
+### Steg 19 – OpenAI Plugin peer-distribution
+
+Aktivera OpenAI Plugin som skills-first `equivalent_runtime_dependent` peer runtime utan att försvaga Metamodel Builders canonical state-, validerings- eller generatorregler.
+
+Leverabler:
+- `plugin.json`, `runtime-contract.json`, README, VERSION och manifest i Plugin-ZIP,
+- canonical instruktion i `skills/metamodel-builder/SKILL.md`,
+- workflow-policy, schemas, canonical modell, Sparx-adapter, docs/examples, templates och workspace som skill-resurser,
+- de 11 verkliga produktverktygen paketerade som Python-resurser,
+- `validate-runtime-parity` borttagen ur produktens canonical tool-kontrakt och kvar i CI/release-lagret,
+- Plugin inkluderad i runtime parity, release manifest, checksums, CI och GitHub Release.
+
+Definition of done:
+- fyra aktiva runtimepaket byggs och valideras,
+- Plugin har samma capability-, artifact-, workspace/state- och tool-kontrakt som övriga peer runtimes,
+- script-resurser kräver ingen MCP-wrapper,
+- saknad code execution får aldrig ge falsk PASS för deterministiska gates,
+- faktisk Sparx EA-import får aldrig påstås verifierad utan en verklig EA-miljö,
+- full CI/releasekedja passerar.
