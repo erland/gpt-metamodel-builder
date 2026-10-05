@@ -24,37 +24,47 @@ def main():
     ap.add_argument('--chat', required=True)
     ap.add_argument('--custom', required=True)
     ap.add_argument('--opencode', required=True)
+    ap.add_argument('--plugin', required=True)
     ap.add_argument('--json-out')
     a=ap.parse_args()
     root=Path(a.project_root).resolve(); cfg=yaml.safe_load((root/'gpt-project.yaml').read_text(encoding='utf-8'))
-    paths={'chatgpt_chat':Path(a.chat),'chatgpt_custom':Path(a.custom),'opencode':Path(a.opencode)}
+    paths={'chatgpt_chat':Path(a.chat),'chatgpt_custom':Path(a.custom),'opencode':Path(a.opencode),'openai_plugin':Path(a.plugin)}
     contracts={
       'chatgpt_chat':read_json_from_zip(paths['chatgpt_chat'],'assistant/runtime-contract.json'),
       'chatgpt_custom':read_json_from_zip(paths['chatgpt_custom'],'builder/runtime-contract.json'),
-      'opencode':read_json_from_zip(paths['opencode'],'runtime-contract.json')
+      'opencode':read_json_from_zip(paths['opencode'],'runtime-contract.json'),
+      'openai_plugin':read_json_from_zip(paths['openai_plugin'],'runtime-contract.json')
     }
     errors=[]; warnings=[]
     markers=cfg['instructions']['core_contract']['required_markers']
     instructions={
       'chatgpt_chat':read_text_from_zip(paths['chatgpt_chat'],'assistant/instructions.md'),
       'chatgpt_custom':read_text_from_zip(paths['chatgpt_custom'],'builder/instructions.md'),
-      'opencode':read_text_from_zip(paths['opencode'],'AGENTS.md')
+      'opencode':read_text_from_zip(paths['opencode'],'AGENTS.md'),
+      'openai_plugin':read_text_from_zip(paths['openai_plugin'],'skills/metamodel-builder/SKILL.md')
     }
     for rid,txt in instructions.items():
         for m in markers:
             if m not in txt: errors.append(f'{rid}: missing core marker: {m}')
     for key in CORE_KEYS:
         baseline=contracts['chatgpt_chat'].get(key)
-        for rid in ['chatgpt_custom','opencode']:
+        for rid in ['chatgpt_custom','opencode','openai_plugin']:
             if contracts[rid].get(key)!=baseline: errors.append(f'{rid}: {key} contract drift')
     base_tools=normalize_tools(contracts['chatgpt_chat'])
-    for rid in ['chatgpt_custom','opencode']:
+    for rid in ['chatgpt_custom','opencode','openai_plugin']:
         if normalize_tools(contracts[rid])!=base_tools: errors.append(f'{rid}: tool contract drift')
     # Explicitly allowed execution differences.
     custom_states={t['id']:t.get('runtime_state') for t in contracts['chatgpt_custom']['tools']['tools']}
     if any(v!='reduced' for v in custom_states.values()): warnings.append('Custom GPT contains non-reduced local tool state; review manually.')
     oc_adapter=contracts['opencode'].get('adapter',{})
     if oc_adapter.get('python_scripts')!='embedded': errors.append('opencode: embedded python scripts expected')
+    plugin_adapter=contracts['openai_plugin'].get('adapter',{})
+    if plugin_adapter.get('skills_first') is not True: errors.append('openai_plugin: skills-first adapter expected')
+    if plugin_adapter.get('workspace_first') is not True: errors.append('openai_plugin: workspace-first adapter expected')
+    if plugin_adapter.get('script_resources',{}).get('mcp_required_for_resource_use') is not False:
+        errors.append('openai_plugin: packaged scripts must not require MCP')
+    if contracts['openai_plugin'].get('compatibility')!='equivalent_runtime_dependent':
+        errors.append('openai_plugin: equivalent_runtime_dependent compatibility expected')
     report={
       'status':'pass' if not errors else 'fail',
       'runtimes':list(paths),
@@ -63,7 +73,8 @@ def main():
       'allowed_differences':{
         'chatgpt_chat':'Embedded scripts and file-based workspace in Chat runtime.',
         'chatgpt_custom':'Local scripts are not executable runtime tools; Data Analysis/code execution is fallback and deterministic gates must not be claimed unless executed.',
-        'opencode':'Embedded Python scripts, local shell and optional Git workspace integration.'
+        'opencode':'Embedded Python scripts, local shell and optional Git workspace integration.',
+        'openai_plugin':'Skills-first runtime with packaged deterministic scripts; execution depends on host workspace/code capabilities.'
       },
       'errors':errors,'warnings':warnings
     }
