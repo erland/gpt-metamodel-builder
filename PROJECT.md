@@ -17,4 +17,4 @@ Skapa och förvalta verktygsneutrala metamodeller med canonical YAML som sanning
 - Claude Projects är fortsatt reducerad/inaktiv.
 
 ## Nuvarande fas
-Alla 18 utvecklingssteg är genomförda ur automatiserat projektperspektiv. Senaste maintenance-steget korrigerar Sparx MDG Technology-ID till högst 12 tecken efter praktisk importfeedback. Manuell Sparx EA-importverifiering ska köras om som extern gate.
+Alla 19 utvecklingssteg är genomförda ur automatiserat projektperspektiv. OpenAI Plugin ingår nu som verifierad runtime-dependent peer distribution. Senaste maintenance-steget korrigerar Sparx MDG Technology-ID till högst 12 tecken efter praktisk importfeedback. Manuell Sparx EA-importverifiering ska köras om som extern gate.
