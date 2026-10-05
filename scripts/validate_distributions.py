@@ -21,17 +21,19 @@ def main() -> int:
     chat=out/f'{pid}-chat-{a.version}.zip'
     custom=out/f'{pid}-custom-gpt-{a.version}.zip'
     opencode=out/f'{pid}-opencode-{a.version}.zip'
-    for p in [project,chat,custom,opencode,out/'release-manifest.json',out/'runtime-parity.json',out/'SHA256SUMS.txt']:
+    plugin=out/f'{pid}-plugin-{a.version}.zip'
+    for p in [project,chat,custom,opencode,plugin,out/'release-manifest.json',out/'runtime-parity.json',out/'SHA256SUMS.txt']:
         if not p.is_file(): raise SystemExit(f'Missing release artifact: {p}')
     run([py,'scripts/validate_chat_runtime.py','--zip',chat], root)
     run([py,'scripts/validate_custom_gpt_runtime.py','--project-root','.','--zip',custom], root)
     run([py,'scripts/validate_opencode_runtime.py',opencode], root)
+    run([py,'scripts/validate_plugin_runtime.py',plugin], root)
     parity_check=out/'runtime-parity-validation.json'
-    run([py,'scripts/validate_runtime_parity.py','--project-root','.','--chat',chat,'--custom',custom,'--opencode',opencode,'--json-out',parity_check], root)
+    run([py,'scripts/validate_runtime_parity.py','--project-root','.','--chat',chat,'--custom',custom,'--opencode',opencode,'--plugin',plugin,'--json-out',parity_check], root)
     manifest=json.loads((out/'release-manifest.json').read_text(encoding='utf-8'))
     if manifest.get('version') != a.version: raise SystemExit('Release manifest version mismatch')
     declared={x['name']:x for x in manifest.get('artifacts',[])}
-    for p in [project,chat,custom,opencode,out/'runtime-parity.json']:
+    for p in [project,chat,custom,opencode,plugin,out/'runtime-parity.json']:
         item=declared.get(p.name)
         if not item: raise SystemExit(f'Manifest missing artifact: {p.name}')
         if item.get('sha256') != sha(p): raise SystemExit(f'Manifest checksum mismatch: {p.name}')
