@@ -26,3 +26,8 @@ Den genererade MDG:n valideras deterministiskt. För faktisk produktverifiering 
 ## Modelleringshandledning och dokumentexport
 
 Canonical `guidance.yaml` beskriver när element, relationer och viewpoints ska användas. `scripts/export_documentation.py` kan generera Metamodel Reference, Modeling Guide och Quick Reference i Markdown, Confluence markup och PDF.
+
+
+## OpenAI Plugin
+
+OpenAI Plugin distribueras som en skills-first `equivalent_runtime_dependent` peer runtime. Canonical instruktion, workflow-policy, schemas, metamodell, Sparx-adapter, templates, workspace och de 11 verkliga modell-/generatorverktygen följer med som skill-resurser. Pluginen skapar ingen MCP-wrapper enbart för scriptkörning. Full deterministisk parity kräver persistent writable workspace och kompatibel Python/code execution; faktisk Sparx EA-import förblir en extern manuell verifieringsgate.
