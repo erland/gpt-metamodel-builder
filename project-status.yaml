@@ -48,8 +48,7 @@ state:
     inbäddade exekverbara verktyg; Data Analysis används som runtime-fallback.
   - Release pipeline is implemented and automatically validated; manual Sparx EA import
     verification remains an explicit external release gate when EA is available.
-  - OpenAI Plugin är equivalent_runtime_dependent: full deterministisk parity kräver
-    persistent writable workspace och kompatibel code execution från hosten.
+  - "OpenAI Plugin är equivalent_runtime_dependent: full deterministisk parity kräver persistent writable workspace och kompatibel code execution från hosten."
 next_step:
   recommended: repeat-manual-ea-import
   title: Repeat manual Sparx EA import
