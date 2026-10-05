@@ -34,10 +34,9 @@ analysis:
         och Git.
       activate_by_default: true
     - runtime_id: openai_plugin
-      suitability: reduced
-      rationale: Skills kan återanvändas men persistent workspace och lokal generator-exekvering
-        gör v1 reducerad.
-      activate_by_default: false
+      suitability: equivalent_runtime_dependent
+      rationale: Skills-first runtime kan bära canonical modell, state och deterministiska verktygsresurser när hosten erbjuder persistent writable workspace och kompatibel code execution.
+      activate_by_default: true
   capabilities:
     web: recommended
     data_analysis: recommended
@@ -246,7 +245,7 @@ workspace_state:
     chatgpt_custom: conversation_or_file
     opencode: workspace_file
     claude_project: conversation_or_file
-    openai_plugin: none
+    openai_plugin: workspace_file
 tools:
   contract_version: 1
   schema: schemas/tool-contract.schema.json
@@ -340,14 +339,6 @@ tools:
     deterministic: true
     mutates_workspace: false
     runtime_fallback: manual
-  - id: validate-runtime-parity
-    type: script
-    requirement: required
-    purpose: Verifiera semantisk och kontraktsmässig paritet mellan aktiverade runtimes.
-    script: scripts/validate_runtime_parity.py
-    deterministic: true
-    mutates_workspace: false
-    runtime_fallback: manual
 runtime:
   primary: none
   chat_zip:
@@ -411,7 +402,20 @@ runtime:
       shell: local
       git: workspace_optional
   plugin:
-    enabled: false
+    enabled: true
+    role: peer_distribution
+    mode: skills_first
+    skill_id: metamodel-builder
+    state_authority: workspace_file
+    state_path: project-status.yaml
+    compatibility:
+      parity: equivalent_runtime_dependent
+      writable_workspace: required
+      persistent_state: required
+      code_execution: required_for_full_parity
+      shell: recommended
+      sparx_ea: external_manual_verification
+      mcp_required_for_script_resources: false
 runtime_parity:
   registered_runtimes:
   - chatgpt_chat
@@ -423,6 +427,7 @@ runtime_parity:
   - chatgpt_chat
   - chatgpt_custom
   - opencode
+  - openai_plugin
   policy: docs/runtime-parity-v1.md
   validator: scripts/validate_runtime_parity.py
   required_equal_contracts:
@@ -436,13 +441,14 @@ build:
   build_custom_gpt_zip: true
   build_claude_zip: false
   build_opencode_zip: true
-  build_plugin_zip: false
+  build_plugin_zip: true
 build_system:
   targets:
   - project
   - chat
   - custom-gpt
   - opencode
+  - plugin
   runtime_targets:
     chat:
       runtime_id: chatgpt_chat
@@ -462,6 +468,12 @@ build_system:
       builder: opencode
       artifact_type: opencode_zip
       filename_pattern: <project-id>-opencode-<version>.zip
+    plugin:
+      runtime_id: openai_plugin
+      runtime_key: plugin
+      builder: plugin
+      artifact_type: plugin_zip
+      filename_pattern: <project-id>-plugin-<version>.zip
 testing:
   model_compatibility_dir: evals/model-compatibility
 ci:
@@ -484,6 +496,7 @@ release:
     - chat_zip
     - custom_gpt_zip
     - opencode_zip
+    - plugin_zip
     - runtime_parity_report
     - release_manifest
     - sha256sums
