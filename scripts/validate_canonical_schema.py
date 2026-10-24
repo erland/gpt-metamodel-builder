@@ -6,7 +6,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 from referencing import Registry, Resource
 
 ROOT=Path(__file__).resolve().parents[1]
-SCHEMAS=ROOT/'schemas'
+SCHEMAS=ROOT/'schemas' if (ROOT/'schemas').is_dir() else ROOT/'assets'/'schemas'
 MAPPING={
  'metamodel.yaml':'metamodel.schema.json','properties.yaml':'properties.schema.json','constraints.yaml':'constraints.schema.json',
  'viewpoints.yaml':'viewpoints.schema.json','guidance.yaml':'guidance.schema.json','notation.yaml':'notation.schema.json','provenance.yaml':'provenance.schema.json','version.yaml':'version.schema.json'}
