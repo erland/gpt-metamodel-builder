@@ -72,6 +72,7 @@ jobs:
           python -m zipfile -e dist/metamodel-builder-engine-*.zip "$RUNNER_TEMP/metamodel-domain-engine"
           python "$RUNNER_TEMP/metamodel-domain-engine/scripts/selftest_metamodel_engine.py" --json-out "$RUNNER_TEMP/metamodel-engine-selftest.json"
           python scripts/test_runtime_archive_parity.py --dist dist
+          python scripts/test_mmp_distribution_archives.py --dist dist
           python - <<'PY'
           import shutil, subprocess, sys, tempfile
           from pathlib import Path
