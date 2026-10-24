@@ -181,6 +181,7 @@ engine:
   - platforms
   - metamodel
   - docs
+  - interop
   - gpt-project.yaml
   - project-status.yaml
 model_robustness:

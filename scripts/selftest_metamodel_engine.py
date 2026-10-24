@@ -18,6 +18,12 @@ CASES = [
     ["scripts/test_mdg_generator.py"],
     ["scripts/test_mdg_validation.py"],
     ["scripts/test_workspace_resume.py"],
+    ["scripts/test_mmp_manifest_contract.py"],
+    ["scripts/test_mmp_export.py"],
+    ["scripts/test_mmp_import.py"],
+    ["scripts/test_mmp_interop.py"],
+    ["scripts/test_mmp_consumer_security.py"],
+    ["scripts/test_mmp_consumer_semantics.py"],
 ]
 
 def main() -> int:
