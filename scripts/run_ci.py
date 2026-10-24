@@ -25,6 +25,7 @@ def main() -> int:
         [py,'scripts/test_mmp_interop.py'],
         [py,'scripts/test_mmp_consumer_security.py'],
         [py,'scripts/test_mmp_consumer_semantics.py'],
+        [py,'scripts/test_mmp_identity_evolution.py'],
         [py,'scripts/test_semantic_validator.py'],
         [py,'scripts/test_sparx_mapping.py'],
         [py,'scripts/test_mdg_generator.py'],

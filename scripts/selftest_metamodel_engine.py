@@ -24,6 +24,7 @@ CASES = [
     ["scripts/test_mmp_interop.py"],
     ["scripts/test_mmp_consumer_security.py"],
     ["scripts/test_mmp_consumer_semantics.py"],
+    ["scripts/test_mmp_identity_evolution.py"],
 ]
 
 def main() -> int:
