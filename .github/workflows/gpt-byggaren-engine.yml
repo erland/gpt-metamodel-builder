@@ -44,6 +44,7 @@ jobs:
           python scripts/lint_gpt_project.py --project-root .
           python scripts/build_distributions.py --project-root . --version "0.1.0-ci.${GITHUB_RUN_NUMBER}"
           python scripts/validate_distributions.py --project-root .
+          python scripts/test_runtime_archive_parity.py --dist dist
       - name: Upload candidate distributions
         if: always()
         uses: actions/upload-artifact@v4
