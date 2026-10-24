@@ -59,6 +59,25 @@ function graph(items:Obj[],available:Set<string>):void {
 }
 function sha(bytes:Uint8Array):string{return createHash("sha256").update(bytes).digest("hex");}
 
+export function parseCardinality(value:string):{min:number;max:number|null} {
+  if(value==="*")return {min:0,max:null};
+  const number="(?:0|[1-9][0-9]*)";
+  if(new RegExp("^"+number+"$").test(value)){
+    const n=Number(value);ensure(Number.isSafeInteger(n),"Cardinality exceeds safe integer");return {min:n,max:n};
+  }
+  const match=new RegExp("^("+number+")[.][.]("+number+"|[*])$").exec(value);
+  ensure(match,"Invalid cardinality syntax");
+  const min=Number(match[1]),max=match[2]==="*"?null:Number(match[2]);
+  ensure(Number.isSafeInteger(min)&&(max===null||Number.isSafeInteger(max)),"Cardinality exceeds safe integer");
+  ensure(max===null||min<=max,"Inverted cardinality interval");
+  return {min,max};
+}
+export function requiredProfile(required:boolean,cardinality:string|null):"accept"|"undecided" {
+  if(cardinality===null)return "accept";
+  const b=parseCardinality(cardinality);
+  return required===true&&b.min===0?"undecided":"accept";
+}
+
 export function effectiveProperties(elements:Obj[],relationships:Obj[],propertySets:Obj[],propertyDefinitions:Obj[]):Obj {
   const sets=new Map<string,string[]>(propertySets.map(x=>[x.id,x.properties]));
   const known=new Set<string>(propertyDefinitions.map(x=>x.id));

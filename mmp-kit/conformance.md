@@ -25,3 +25,7 @@ This suite is a **baseline subset** of Core behavior. It does not yet establish 
 ## Semantic interoperability golden vector
 
 `conformance/effective-properties-v1.json` defines multiple inheritance (including diamond inheritance), repeated inherited property-set and property IDs, and distinct property IDs sharing the same display name. Both Python and TypeScript consumers calculate sorted effective set/property IDs and compare against the independently declared expected JSON. This verifies a semantic Core subset; it is **not** full 1.1 profile certification.
+
+## Cardinality vectors
+
+`conformance/cardinality-v1.json` exercises interval parsing and explicit undecided `required` conflicts in Python and TypeScript. This is opt-in analysis, **not** additional rejection by an MMP 1.0.0 consumer.
