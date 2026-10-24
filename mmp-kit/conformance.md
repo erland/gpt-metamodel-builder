@@ -37,3 +37,7 @@ This suite is a **baseline subset** of Core behavior. It does not yet establish 
 ## Relationship semantics vectors
 
 `conformance/relationship-semantics-v1.json` tests subtype-compatible endpoint roles, direction and navigability across Python and TypeScript. Relationship-type endpoint inheritance narrowing remains unspecified; this is a partial Core test profile only.
+
+## Evolution and extension policy vectors
+
+`conformance/version-extension-v1.json` tests a conservative type-ID change classifier and separately negotiated extension criticality across Python and TypeScript. This is *not* a complete package compatibility classifier; unrecognized extension semantics are not executed.

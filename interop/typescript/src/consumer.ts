@@ -139,6 +139,27 @@ export function relationshipSemantics(elements:Obj[],relationships:Obj[]){
   return {summary,allowed};
 }
 
+
+export function classifyModelChange(before:Obj,after:Obj):"breaking"|"compatible"|"needs_review" {
+  if(before.namespace!==after.namespace)return "breaking";
+  let uncertain=false;
+  for(const group of ["elements","relationships"]){
+    const old=new Map<string,Obj>((before[group]??[]).map((x:Obj)=>[x.id,x]));
+    const next=new Map<string,Obj>((after[group]??[]).map((x:Obj)=>[x.id,x]));
+    for(const [id,item] of old){
+      if(!next.has(id))return "breaking";
+      const normalize=(v:Obj)=>JSON.stringify(Object.fromEntries(Object.entries(v).filter(([k])=>!["name","description"].includes(k)).sort(([a],[b])=>a.localeCompare(b))));
+      if(normalize(item)!==normalize(next.get(id)!))uncertain=true;
+    }
+  }
+  return uncertain?"needs_review":"compatible";
+}
+export function extensionSupport(extensions:Obj,recognized:string[],critical:string[]):"not_supported"|"preserved_uninterpreted"|"supported"{
+  const unknown=Object.keys(extensions).filter(x=>!recognized.includes(x));
+  if(unknown.some(x=>critical.includes(x)))return "not_supported";
+  return unknown.length?"preserved_uninterpreted":"supported";
+}
+
 export function effectiveProperties(elements:Obj[],relationships:Obj[],propertySets:Obj[],propertyDefinitions:Obj[]):Obj {
   const sets=new Map<string,string[]>(propertySets.map(x=>[x.id,x.properties]));
   const known=new Set<string>(propertyDefinitions.map(x=>x.id));
