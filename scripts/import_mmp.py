@@ -15,7 +15,7 @@ from referencing import Registry, Resource
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMAS = ROOT / "schemas" if (ROOT / "schemas").is_dir() else ROOT / "assets" / "schemas"
-GUIDANCE = ROOT / "templates/metamodel/guidance.yaml" if (ROOT / "templates/metamodel/guidance.yaml").is_file() else ROOT / "assets/metamodel/guidance.yaml"
+GUIDANCE = ROOT / "templates/metamodel/guidance.yaml" if (ROOT / "templates/metamodel/guidance.yaml").is_file() else ROOT / "assets/guidance.yaml"
 REQUIRED = ("metamodel", "properties", "constraints", "viewpoints", "notation", "provenance", "version")
 LIMIT_FILES = 300
 LIMIT_TOTAL = 32 * 1024 * 1024
