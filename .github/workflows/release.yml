@@ -74,6 +74,8 @@ jobs:
           python scripts/test_runtime_archive_parity.py --dist dist
           python scripts/test_mmp_distribution_archives.py --dist dist
           python scripts/test_mmp_skill_direct_execution.py --dist dist
+          python scripts/build_mmp_specification.py --output dist/mmp-specification-1.0.0.zip
+          python scripts/test_mmp_specification_kit.py --archive dist/mmp-specification-1.0.0.zip
           python - <<'PY'
           import shutil, subprocess, sys, tempfile
           from pathlib import Path
@@ -90,6 +92,7 @@ jobs:
           for runtime in project chat claude-project claude-skills opencode plugin; do
             test -s "dist/metamodel-builder-${runtime}-${VERSION}.zip"
           done
+          test -s dist/mmp-specification-1.0.0.zip
           test -s dist/DELIVERY-MANIFEST.json
           (cd dist && sha256sum --check SHA256SUMS.txt)
       - name: Upload six archives and manifest
@@ -98,6 +101,7 @@ jobs:
           name: metamodel-builder-${{ steps.version.outputs.version }}
           path: |
             dist/metamodel-builder-*.zip
+            dist/mmp-specification-*.zip
             dist/DELIVERY-MANIFEST.json
             dist/SHA256SUMS.txt
           if-no-files-found: error
@@ -109,4 +113,4 @@ jobs:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
           set -euo pipefail
-          gh release upload "$RELEASE_TAG" dist/metamodel-builder-*.zip dist/DELIVERY-MANIFEST.json dist/SHA256SUMS.txt --clobber
+          gh release upload "$RELEASE_TAG" dist/metamodel-builder-*.zip dist/mmp-specification-*.zip dist/DELIVERY-MANIFEST.json dist/SHA256SUMS.txt --clobber
