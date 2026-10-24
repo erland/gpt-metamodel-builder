@@ -34,6 +34,8 @@ def package(output:Path):
             "examples/architecture-example.mmp.zip":example.read_bytes(),
             "conformance/effective-properties-v1.json":(ROOT/"interop/effective-properties-v1.json").read_bytes(),
             "conformance/cardinality-v1.json":(ROOT/"interop/cardinality-v1.json").read_bytes(),
+            "conformance/default-values-v1.json":(ROOT/"interop/default-values-v1.json").read_bytes(),
+            "specification/default-value-semantics-proposal.md":(ROOT/"docs/mmp-default-value-semantics.md").read_bytes(),
             "specification/cardinality-semantics-proposal.md":(ROOT/"docs/mmp-cardinality-semantics.md").read_bytes(),
         }
         entries.update(conformance_bundle(example.read_bytes()))
