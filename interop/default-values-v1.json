@@ -1,0 +1,141 @@
+{
+  "cases": [
+    {
+      "type": "string",
+      "value": "abc",
+      "valid": true
+    },
+    {
+      "type": "string",
+      "value": 4,
+      "valid": false
+    },
+    {
+      "type": "integer",
+      "value": 4,
+      "valid": true
+    },
+    {
+      "type": "integer",
+      "value": 4.2,
+      "valid": false
+    },
+    {
+      "type": "integer",
+      "value": true,
+      "valid": false
+    },
+    {
+      "type": "decimal",
+      "value": 4.25,
+      "valid": true
+    },
+    {
+      "type": "decimal",
+      "value": "4.25",
+      "valid": false
+    },
+    {
+      "type": "boolean",
+      "value": false,
+      "valid": true
+    },
+    {
+      "type": "boolean",
+      "value": 0,
+      "valid": false
+    },
+    {
+      "type": "date",
+      "value": "2026-10-24",
+      "valid": true
+    },
+    {
+      "type": "date",
+      "value": "2026-02-30",
+      "valid": false
+    },
+    {
+      "type": "datetime",
+      "value": "2026-10-24T12:30:00Z",
+      "valid": true
+    },
+    {
+      "type": "datetime",
+      "value": "2026-10-24",
+      "valid": false
+    },
+    {
+      "type": "uri",
+      "value": "https://example.org/x",
+      "valid": true
+    },
+    {
+      "type": "uri",
+      "value": "not a uri",
+      "valid": false
+    },
+    {
+      "type": "identifier",
+      "value": "node-1",
+      "valid": true
+    },
+    {
+      "type": "identifier",
+      "value": "",
+      "valid": false
+    },
+    {
+      "type": "enumeration",
+      "value": "active",
+      "values": [
+        "active",
+        "retired"
+      ],
+      "valid": true
+    },
+    {
+      "type": "enumeration",
+      "value": "unknown",
+      "values": [
+        "active",
+        "retired"
+      ],
+      "valid": false
+    },
+    {
+      "type": "integer",
+      "value": [
+        1,
+        2
+      ],
+      "cardinality": "1..2",
+      "valid": true
+    },
+    {
+      "type": "integer",
+      "value": [
+        1,
+        2,
+        3
+      ],
+      "cardinality": "1..2",
+      "valid": false
+    },
+    {
+      "type": "string",
+      "value": "hello",
+      "cardinality": "2..3",
+      "valid": false
+    },
+    {
+      "type": "string",
+      "value": [
+        "a",
+        "b"
+      ],
+      "cardinality": "2..3",
+      "valid": true
+    }
+  ]
+}
