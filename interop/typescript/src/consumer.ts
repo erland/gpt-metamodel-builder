@@ -75,8 +75,8 @@ export function consume(bytes:Uint8Array):Obj {
     schemas.set(schema.$id,schema);
   }}
   // Offline-only schema references. No fetch or network resolver.
-  const ajv=new Ajv({strict:false,allErrors:true,validateFormats:true});
-  addFormats(ajv);
+  const ajv=new (Ajv as any)({strict:false,allErrors:true,validateFormats:true});
+  (addFormats as any)(ajv);
   for(const schema of schemas.values())ajv.addSchema(schema);
   const docs:Obj={};
   for(const key of required){const path=manifest.entrypoints[key];ensure(typeof path==="string"&&validPath(path)&&files[path],"Missing entrypoint: "+key);
