@@ -57,6 +57,37 @@ def read(source: Path):
 
 
 
+def parse_cardinality(value: str):
+    """Parse candidate Core cardinality semantics without changing MMP 1.0.0 admission."""
+    if not isinstance(value, str):
+        raise ValueError("Cardinality must be text")
+    import re
+    part = r"(?:0|[1-9][0-9]*)"
+    if value == "*":
+        return {"min": 0, "max": None}
+    if re.fullmatch(part, value):
+        n = int(value)
+        return {"min": n, "max": n}
+    match = re.fullmatch(rf"({part})\\.\\.({part}|\\*)", value)
+    if not match:
+        raise ValueError("Invalid cardinality syntax")
+    minimum = int(match.group(1))
+    maximum = None if match.group(2) == "*" else int(match.group(2))
+    if maximum is not None and minimum > maximum:
+        raise ValueError("Inverted cardinality interval")
+    return {"min": minimum, "max": maximum}
+
+
+def required_profile(required: bool, cardinality: str | None):
+    """Return accept or undecided; never silently settle conflicting 1.0.0 semantics."""
+    if cardinality is None:
+        return "accept"
+    bounds = parse_cardinality(cardinality)
+    if required is True and bounds["min"] == 0:
+        return "undecided"
+    return "accept"
+
+
 def effective_properties(elements, relationships, property_sets, property_definitions):
     """Deterministic ID-based transitive property union (Core draft)."""
     known_sets = {x["id"]: x["properties"] for x in property_sets}
