@@ -51,6 +51,8 @@ jobs:
           python scripts/test_runtime_archive_parity.py --dist dist
           python scripts/test_mmp_distribution_archives.py --dist dist
           python scripts/test_mmp_skill_direct_execution.py --dist dist
+          python scripts/build_mmp_specification.py --output dist/mmp-specification-1.0.0.zip
+          python scripts/test_mmp_specification_kit.py --archive dist/mmp-specification-1.0.0.zip
           python - <<'PY'
           import shutil, subprocess, sys, tempfile
           from pathlib import Path
