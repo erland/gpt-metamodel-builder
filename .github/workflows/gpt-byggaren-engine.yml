@@ -36,6 +36,21 @@ jobs:
           python /tmp/gpt-byggaren-engine/scripts/selftest_distribution_engine.py \
             --source /tmp/gpt-byggaren-engine \
             --output "$RUNNER_TEMP/engine-selftest.json"
+      - name: Install original engine and build migrated project
+        shell: bash
+        run: |
+          set -euo pipefail
+          python /tmp/gpt-byggaren-engine/scripts/install_distribution_engine.py --source /tmp/gpt-byggaren-engine --project-root .
+          python scripts/distribution-engine/scripts/lint_gpt_project.py --project-root .
+          python scripts/distribution-engine/scripts/build_distributions.py --project-root . --version "0.1.0-ci.${GITHUB_RUN_NUMBER}"
+          python scripts/distribution-engine/scripts/validate_distributions.py --project-root . --version "0.1.0-ci.${GITHUB_RUN_NUMBER}"
+      - name: Upload candidate distributions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: metamodel-builder-engine-1.6.31-candidates
+          path: dist/
+          if-no-files-found: warn
       - name: Upload engine preflight evidence
         if: always()
         uses: actions/upload-artifact@v4
