@@ -132,6 +132,41 @@ def validate_default_value(type_name, value, *, values=None, cardinality=None):
     return True
 
 
+
+def relationship_semantics(elements, relationships):
+    """Opt-in role/subtype interpretation. Does not change 1.0 admission."""
+    by_element = {x["id"]: x for x in elements}
+    by_relation = {x["id"]: x for x in relationships}
+    def descendants(element, ancestor):
+        seen = set()
+        todo = [element]
+        while todo:
+            current = todo.pop()
+            if current == ancestor:
+                return True
+            if current in seen or current not in by_element:
+                continue
+            seen.add(current)
+            todo.extend(by_element[current].get("extends", []))
+        return False
+    result = {}
+    for identifier, rel in sorted(by_relation.items()):
+        result[identifier] = {
+            "directed": rel.get("directed", True),
+            "source_types": sorted(rel["source"]["types"]),
+            "target_types": sorted(rel["target"]["types"]),
+            "source_navigable": rel["source"].get("navigable"),
+            "target_navigable": rel["target"].get("navigable"),
+        }
+    def allowed(relation, source, target):
+        if relation not in by_relation or source not in by_element or target not in by_element:
+            return False
+        spec = by_relation[relation]
+        return (any(descendants(source, x) for x in spec["source"]["types"])
+                and any(descendants(target, x) for x in spec["target"]["types"]))
+    return result, allowed
+
+
 def effective_properties(elements, relationships, property_sets, property_definitions):
     """Deterministic ID-based transitive property union (Core draft)."""
     known_sets = {x["id"]: x["properties"] for x in property_sets}
