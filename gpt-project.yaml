@@ -155,6 +155,32 @@ skills:
     - scripts/generate_documentation.py
     - scripts/export_documentation.py
     assets: []
+engine:
+  enabled: true
+  release_repository: erland/gpt-metamodel-builder
+  selftest: scripts/selftest_metamodel_engine.py
+  python_dependencies:
+  - PyYAML
+  - jsonschema
+  - reportlab
+  required_files:
+  - scripts/selftest_metamodel_engine.py
+  - scripts/validate_canonical_schema.py
+  - scripts/validate_semantics.py
+  - scripts/validate_workspace.py
+  - scripts/generate_sparx_mdg.py
+  resources:
+  - scripts
+  - schemas
+  - templates
+  - examples
+  - tests
+  - workspace
+  - platforms
+  - metamodel
+  - docs
+  - gpt-project.yaml
+  - project-status.yaml
 model_robustness:
   level: stateful
   separate_model_instructions: false

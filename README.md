@@ -39,3 +39,9 @@ Canonical beteende finns i `canonical/core.md` och fyra avgränsade `canonical/s
 Originalmotorn GPT Byggaren 1.6.31 skapar ett projektpaket och fem distributioner: Chat, OpenAI Plugin, Claude Projects, Claude Skills och OpenCode. CI kör domänregressionstesterna separat; `.github/workflows/gpt-byggaren-engine.yml` verifierar engine-build, medan `.github/workflows/release.yml` använder samma versionslåsta motor för release. Custom GPT byggs inte längre.
 
 Releasepaketens integritet styrks av `DELIVERY-MANIFEST.json` och `SHA256SUMS.txt`. Runtimeparitet kräver fortfarande separat funktionell verifiering i respektive värdmiljö. Manuell Sparx EA-import är inte automatiskt verifierad.
+
+## Separat domänmotor (Engine ZIP)
+
+Utöver projekt-ZIP och fem runtimepaket byggs `metamodel-builder-engine-<version>.zip`. **Skripten finns kvar i runtimedistributionernas Skills.** Kör dem direkt när värdmiljön erbjuder kompatibel Python och tillhörande projektresurser. I ChatGPT Plugins chattläge, där direkt exekvering av Skill-skript inte är tillgänglig, kan användaren i stället bifoga den versionsmatchade Engine ZIP-filen från samma GitHub Release.
+
+Engine ZIP innehåller domänskript, schemas, mallar, exempelfiler, tester och workspace-underlag och har en maskinläsbar `engine-package.json` med SHA-256 per fil. Efter uppackning kan dess verkliga självtest köras med `python scripts/selftest_metamodel_engine.py` (kräver Python med PyYAML, jsonschema och reportlab). Självtestet omfattar canonical schema, semantik, Sparx mappning/MDG och workspace-återupptagning. Ingen lokal Sparx Enterprise Architect-installation ingår; en verklig EA-import förblir manuell.
