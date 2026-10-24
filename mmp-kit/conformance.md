@@ -29,3 +29,7 @@ This suite is a **baseline subset** of Core behavior. It does not yet establish 
 ## Cardinality vectors
 
 `conformance/cardinality-v1.json` exercises interval parsing and explicit undecided `required` conflicts in Python and TypeScript. This is opt-in analysis, **not** additional rejection by an MMP 1.0.0 consumer.
+
+## Default value vectors
+
+`conformance/default-values-v1.json` contains datatype, enumeration, and cardinality-sensitive default value cases. Python and TypeScript implementations run the same cases without changing MMP 1.0.0 admission semantics. This subset does not establish full Core conformance.
