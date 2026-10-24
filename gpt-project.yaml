@@ -5,6 +5,40 @@ project:
   description: Verktygsneutral GPT för att skapa, underhålla, validera och exportera
     metamodeller, med Sparx EA MDG som första målplattform.
   version_source: development
+structure:
+  canonical_root: canonical
+  instructions:
+    path: canonical
+    required: true
+  conversation_starters:
+    path: assistant/conversation-starters
+    required: false
+  runtime_policy:
+    path: assistant/policies
+    required: false
+  schemas:
+    path: schemas
+    required: true
+  templates:
+    path: templates
+    required: false
+  scripts:
+    path: scripts
+    required: true
+  tests:
+    path: tests
+    required: false
+  evals:
+    path: evals
+    required: false
+  build:
+    path: build
+    generated: true
+  dist:
+    path: dist
+    generated: true
+knowledge_architecture:
+  canonical_root: knowledge
 profile:
   reference: zip_first_advanced
   rationale: Projektet kräver portabelt workspace, schemas, deterministisk validering,
@@ -393,6 +427,7 @@ runtime:
   primary: none
   chat_zip:
     enabled: true
+    start_here_template: templates/START-HERE.chat.md.tpl
   custom_gpt:
     enabled: false
   claude:
