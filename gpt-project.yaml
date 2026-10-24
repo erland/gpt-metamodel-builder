@@ -456,8 +456,8 @@ runtime:
     default_agent: metamodel-builder
     agent_file: .opencode/agents/metamodel-builder.md
     skills:
-    - .opencode/skills/metamodel-validation/SKILL.md
-    - .opencode/skills/sparx-mdg/SKILL.md
+      enabled: true
+      directory: .opencode/skills
     execution:
       python_scripts: embedded
       shell: local
