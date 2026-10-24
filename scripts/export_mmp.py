@@ -18,7 +18,7 @@ import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parents[1]
-SCHEMAS = ROOT / "schemas" if (ROOT / "schemas").is_dir() else ROOT / "assets" / "schemas"
+SCHEMAS = ROOT / "schemas" if (ROOT / "schemas").is_dir() else ROOT / "assets"
 CORE = ("metamodel", "properties", "constraints", "viewpoints",
         "notation", "provenance", "version")
 ALL = (*CORE, "guidance")
