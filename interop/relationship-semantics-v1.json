@@ -1,0 +1,153 @@
+{
+  "elements": [
+    {
+      "id": "thing",
+      "abstract": true
+    },
+    {
+      "id": "app",
+      "extends": [
+        "thing"
+      ]
+    },
+    {
+      "id": "service",
+      "extends": [
+        "app"
+      ]
+    },
+    {
+      "id": "team"
+    },
+    {
+      "id": "other"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "link",
+      "directed": true,
+      "source": {
+        "types": [
+          "thing"
+        ],
+        "navigable": true
+      },
+      "target": {
+        "types": [
+          "team"
+        ],
+        "navigable": false
+      }
+    },
+    {
+      "id": "association",
+      "directed": false,
+      "source": {
+        "types": [
+          "app"
+        ]
+      },
+      "target": {
+        "types": [
+          "team"
+        ]
+      }
+    },
+    {
+      "id": "special-link",
+      "extends": [
+        "link"
+      ],
+      "source": {
+        "types": [
+          "service"
+        ]
+      },
+      "target": {
+        "types": [
+          "team"
+        ]
+      }
+    }
+  ],
+  "cases": [
+    {
+      "relationship": "link",
+      "source": "app",
+      "target": "team",
+      "allowed": true
+    },
+    {
+      "relationship": "link",
+      "source": "service",
+      "target": "team",
+      "allowed": true
+    },
+    {
+      "relationship": "link",
+      "source": "team",
+      "target": "app",
+      "allowed": false
+    },
+    {
+      "relationship": "association",
+      "source": "service",
+      "target": "team",
+      "allowed": true
+    },
+    {
+      "relationship": "association",
+      "source": "team",
+      "target": "service",
+      "allowed": false
+    },
+    {
+      "relationship": "special-link",
+      "source": "service",
+      "target": "team",
+      "allowed": true
+    },
+    {
+      "relationship": "special-link",
+      "source": "app",
+      "target": "team",
+      "allowed": false
+    }
+  ],
+  "expected": {
+    "link": {
+      "directed": true,
+      "source_types": [
+        "thing"
+      ],
+      "target_types": [
+        "team"
+      ],
+      "source_navigable": true,
+      "target_navigable": false
+    },
+    "association": {
+      "directed": false,
+      "source_types": [
+        "app"
+      ],
+      "target_types": [
+        "team"
+      ],
+      "source_navigable": null,
+      "target_navigable": null
+    },
+    "special-link": {
+      "directed": true,
+      "source_types": [
+        "service"
+      ],
+      "target_types": [
+        "team"
+      ],
+      "source_navigable": null,
+      "target_navigable": null
+    }
+  }
+}
