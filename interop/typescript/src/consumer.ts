@@ -78,6 +78,38 @@ export function requiredProfile(required:boolean,cardinality:string|null):"accep
   return required===true&&b.min===0?"undecided":"accept";
 }
 
+
+export function validateDefaultValue(typeName:string,value:any,opts:{values?:string[];cardinality?:string}={}):boolean {
+  if(opts.cardinality!==undefined){
+    const b=parseCardinality(opts.cardinality);
+    const count=Array.isArray(value)?value.length:1;
+    if(count<b.min||(b.max!==null&&count>b.max))return false;
+  }else if(Array.isArray(value))return false;
+  const items=Array.isArray(value)?value:[value];
+  return items.every(item=>{
+    switch(typeName){
+      case "string":return typeof item==="string";
+      case "identifier":return typeof item==="string"&&item.length>0;
+      case "integer":return typeof item==="number"&&Number.isSafeInteger(item);
+      case "decimal":return typeof item==="number"&&Number.isFinite(item);
+      case "boolean":return typeof item==="boolean";
+      case "date":{
+        if(typeof item!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(item))return false;
+        const [y,m,d]=item.split("-").map(Number);
+        const dt=new Date(Date.UTC(y,m-1,d));
+        return dt.getUTCFullYear()===y&&dt.getUTCMonth()+1===m&&dt.getUTCDate()===d;
+      }
+      case "datetime":{
+        if(typeof item!=="string"||!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})$/.test(item))return false;
+        return !Number.isNaN(Date.parse(item));
+      }
+      case "uri":return typeof item==="string"&&/^[A-Za-z][A-Za-z0-9+.-]*:/.test(item)&&!/[\s]/.test(item);
+      case "enumeration":return typeof item==="string"&&Array.isArray(opts.values)&&opts.values.includes(item);
+      default:return false;
+    }
+  });
+}
+
 export function effectiveProperties(elements:Obj[],relationships:Obj[],propertySets:Obj[],propertyDefinitions:Obj[]):Obj {
   const sets=new Map<string,string[]>(propertySets.map(x=>[x.id,x.properties]));
   const known=new Set<string>(propertyDefinitions.map(x=>x.id));

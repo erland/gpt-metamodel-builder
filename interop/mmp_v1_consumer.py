@@ -88,6 +88,50 @@ def required_profile(required: bool, cardinality: str | None):
     return "accept"
 
 
+
+def validate_default_value(type_name, value, *, values=None, cardinality=None):
+    """Opt-in prospective Core value semantics; not used for 1.0.0 admission."""
+    from datetime import date, datetime
+    import math
+    import re
+    if cardinality is not None:
+        bounds = parse_cardinality(cardinality)
+        count = len(value) if isinstance(value, list) else 1
+        if count < bounds["min"] or (bounds["max"] is not None and count > bounds["max"]):
+            return False
+    elif isinstance(value, list):
+        return False
+    items = value if isinstance(value, list) else [value]
+    for item in items:
+        if type_name in ("string", "identifier"):
+            valid = isinstance(item, str) and (type_name != "identifier" or bool(item))
+        elif type_name == "integer":
+            valid = type(item) is int
+        elif type_name == "decimal":
+            valid = type(item) in (int, float) and math.isfinite(item)
+        elif type_name == "boolean":
+            valid = type(item) is bool
+        elif type_name == "date":
+            valid = isinstance(item, str) and re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", item) is not None
+            if valid:
+                try: date.fromisoformat(item)
+                except ValueError: valid = False
+        elif type_name == "datetime":
+            valid = isinstance(item, str) and re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:Z|[+-][0-9]{2}:[0-9]{2})", item) is not None
+            if valid:
+                try: datetime.fromisoformat(item.replace("Z", "+00:00"))
+                except ValueError: valid = False
+        elif type_name == "uri":
+            valid = isinstance(item, str) and bool(re.match(r"^[A-Za-z][A-Za-z0-9+.-]*:", item)) and not any(c.isspace() for c in item)
+        elif type_name == "enumeration":
+            valid = isinstance(item, str) and isinstance(values, list) and item in values
+        else:
+            valid = False
+        if not valid:
+            return False
+    return True
+
+
 def effective_properties(elements, relationships, property_sets, property_definitions):
     """Deterministic ID-based transitive property union (Core draft)."""
     known_sets = {x["id"]: x["properties"] for x in property_sets}
