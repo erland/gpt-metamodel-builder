@@ -61,13 +61,15 @@ def consume(source: Path):
     m = yaml.safe_load(files["manifest.yaml"])
     if m.get("package_format") != "mmp" or m.get("package_format_version") != "1.0.0":
         raise ValueError("Unsupported MMP format")
+    if not isinstance(m, dict) or not isinstance(m.get("files"), list) or not isinstance(m.get("entrypoints"), dict):
+        raise ValueError("Invalid MMP manifest structure")
     declared = m["files"]
     names = [item["path"] for item in declared]
     if len(names) != len(set(names)) or set(names) != set(files) - {"manifest.yaml"}:
         raise ValueError("Invalid manifest inventory")
     for item in declared:
         name = item["path"]
-        if not valid_path(name) or hashlib.sha256(files[name]).hexdigest() != item["sha256"]:
+        if not valid_path(name) or name not in files or hashlib.sha256(files[name]).hexdigest() != item["sha256"]:
             raise ValueError(f"Invalid path or SHA-256: {name}")
     schema_by_id = {}
     for name, content in files.items():
@@ -75,6 +77,19 @@ def consume(source: Path):
             schema = json.loads(content)
             Draft202012Validator.check_schema(schema)
             schema_by_id[schema["$id"]] = schema
+    # Reject unresolved remote schema references before invoking a resolver.
+    for name, schema in ((n, json.loads(raw)) for n, raw in files.items() if n.startswith("schemas/") and n.endswith(".schema.json")):
+        def check_refs(node):
+            if isinstance(node, dict):
+                ref = node.get("$ref")
+                if isinstance(ref, str) and not ref.startswith("#"):
+                    target = ref.split("#", 1)[0]
+                    if target and (target.startswith("https:") or target.startswith("http:") or target.startswith("/") or "/" in target or ".." in target or f"schemas/{target}" not in files):
+                        raise ValueError(f"Nonlocal or unresolved schema reference: {ref}")
+                for value in node.values(): check_refs(value)
+            elif isinstance(node, list):
+                for value in node: check_refs(value)
+        check_refs(schema)
     registry = Registry()
     for ident, schema in schema_by_id.items():
         registry = registry.with_resource(ident, Resource.from_contents(schema))
