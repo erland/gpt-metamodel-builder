@@ -41,6 +41,8 @@ def package(output:Path):
             "specification/mmp-1-1-readiness-review.md":(ROOT/"docs/mmp-1-1-readiness-review.md").read_bytes(),
             "conformance/mmp-1-1-readiness.json":(ROOT/"conformance/mmp-1-1-readiness.json").read_bytes(),
             "conformance/relationship-inheritance-v1.json":(ROOT/"interop/relationship-inheritance-v1.json").read_bytes(),
+            "conformance/required-policy-v1.json":(ROOT/"interop/required-policy-v1.json").read_bytes(),
+            "specification/required-minimum-policy.md":(ROOT/"docs/mmp-required-minimum-policy.md").read_bytes(),
             "specification/relation-inheritance-policy.md":(ROOT/"docs/mmp-relation-inheritance-policy.md").read_bytes(),
             "specification/relationship-semantics-proposal.md":(ROOT/"docs/mmp-relationship-semantics.md").read_bytes(),
             "specification/default-value-semantics-proposal.md":(ROOT/"docs/mmp-default-value-semantics.md").read_bytes(),
