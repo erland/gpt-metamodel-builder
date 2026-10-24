@@ -28,6 +28,7 @@ def main() -> int:
         [py,'scripts/test_mmp_identity_evolution.py'],
         [py,'scripts/test_mmp_conformance_declaration.py'],
         [py,'scripts/test_mmp_core_compatibility_review.py'],
+        [py,'scripts/test_mmp_effective_properties.py'],
         [py,'scripts/test_semantic_validator.py'],
         [py,'scripts/test_sparx_mapping.py'],
         [py,'scripts/test_mdg_generator.py'],
