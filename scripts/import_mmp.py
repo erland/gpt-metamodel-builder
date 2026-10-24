@@ -14,6 +14,8 @@ from jsonschema import Draft202012Validator, FormatChecker
 from referencing import Registry, Resource
 
 ROOT = Path(__file__).resolve().parents[1]
+SCHEMAS = ROOT / "schemas" if (ROOT / "schemas").is_dir() else ROOT / "assets"
+GUIDANCE = ROOT / "templates/metamodel/guidance.yaml" if (ROOT / "templates/metamodel/guidance.yaml").is_file() else ROOT / "assets/guidance.yaml"
 REQUIRED = ("metamodel", "properties", "constraints", "viewpoints", "notation", "provenance", "version")
 LIMIT_FILES = 300
 LIMIT_TOTAL = 32 * 1024 * 1024
@@ -81,7 +83,7 @@ def load_manifest(files: dict[str, bytes]) -> dict:
     if "manifest.yaml" not in files:
         raise ValueError("manifest.yaml missing")
     manifest = yaml.safe_load(files["manifest.yaml"])
-    schema = json.loads((ROOT / "schemas/mmp-manifest-v1.schema.json").read_text(encoding="utf-8"))
+    schema = json.loads((SCHEMAS / "mmp-manifest-v1.schema.json").read_text(encoding="utf-8"))
     Draft202012Validator(schema, format_checker=FormatChecker()).validate(manifest)
     if manifest["package_format_version"] != "1.0.0":
         raise ValueError("Unsupported MMP minor or major version")
@@ -167,7 +169,7 @@ def validate_contents(files: dict[str, bytes], manifest: dict) -> dict:
         for key, path in manifest["entrypoints"].items():
             (model_dir / f"{key}.yaml").write_bytes(files[path])
         if "guidance" not in manifest["entrypoints"]:
-            template = ROOT / "templates/metamodel/guidance.yaml"
+            template = GUIDANCE
             if not template.is_file():
                 raise ValueError("Missing local guidance template for canonical validator")
             (model_dir / "guidance.yaml").write_bytes(template.read_bytes())
@@ -200,7 +202,7 @@ def execute(source: Path, mode: str, destination: Path | None = None) -> dict:
                 (destination / f"{key}.yaml").write_bytes(files[path])
             if "guidance" not in manifest["entrypoints"]:
                 (destination / "guidance.yaml").write_bytes(
-                    (ROOT / "templates/metamodel/guidance.yaml").read_bytes())
+                    (GUIDANCE).read_bytes())
         except Exception:
             import shutil
             shutil.rmtree(destination)
