@@ -7,7 +7,7 @@ import yaml
 
 ROOT=Path(__file__).resolve().parents[1]
 FORMAT_VERSION="1.0.0"
-SCHEMAS=("mmp-manifest-v1","metamodel","properties","constraints","viewpoints","notation","provenance","version","guidance","common-definitions")
+SCHEMAS=("mmp-manifest-v1","metamodel","properties","constraints","viewpoints","notation","provenance","version","guidance","common-definitions","mmp-conformance-declaration-v1")
 ZIP_DATE=(1980,1,1,0,0,0)
 
 def package(output:Path):
@@ -27,6 +27,8 @@ def package(output:Path):
             "specification/mmp-v1.md":(ROOT/"docs/mmp-v1-contract.md").read_bytes(),
             "specification/implementation-guide.md":(ROOT/"mmp-kit/implementation-guide.md").read_bytes(),
             "specification/conformance.md":(ROOT/"mmp-kit/conformance.md").read_bytes(),
+            "specification/conformance-profiles-proposal.md":(ROOT/"docs/mmp-conformance-profiles-proposal.md").read_bytes(),
+            "examples/mmp-consumer-conformance.json":(ROOT/"examples/mmp-consumer-conformance.json").read_bytes(),
             "reference-implementation/mmp_v1_consumer.py":(ROOT/"interop/mmp_v1_consumer.py").read_bytes(),
             "examples/architecture-example.mmp.zip":example.read_bytes(),
         }

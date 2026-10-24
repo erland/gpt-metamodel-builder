@@ -1,0 +1,29 @@
+{
+  "declaration_version": "1.0.0",
+  "implementation": {
+    "name": "MMP Python Reference Consumer",
+    "version": "0.1.0",
+    "role": "consumer"
+  },
+  "package_format_versions": [
+    "1.0.0"
+  ],
+  "profiles": {
+    "mmp-core": {
+      "status": "partial",
+      "limitations": [
+        "Coverage does not yet validate all inheritance/endpoint cardinality semantics."
+      ]
+    },
+    "mmp-rules": {
+      "status": "unsupported"
+    },
+    "mmp-notation": {
+      "status": "unsupported"
+    },
+    "mmp-viewpoints": {
+      "status": "unsupported"
+    }
+  },
+  "rule_languages": []
+}

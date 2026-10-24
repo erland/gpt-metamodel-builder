@@ -42,3 +42,7 @@ Ingen instansdata, Excel-kolumnmappning, Sparx-adapter, exekverbar kod eller hem
 4. Skill-, runtime- och Engine-integrering; inbyggda skript körs i första hand, Engine ZIP bara när exekveringsmiljö saknas.
 
 Ett MMP-paket är **inte** Metamodel Builders Engine ZIP: motorn innehåller körbara verktyg, MMP innehåller enbart deklarativ metamodell och valideringsresurser.
+
+## Föreslagna konformitetsprofiler
+
+Nästa formatrevision behandlas i [MMP-konformitetsprofilerna](mmp-conformance-profiles-proposal.md). Deklarationsformatet finns i `schemas/mmp-conformance-declaration-v1.schema.json` och ska användas utanför befintliga 1.0.0-manifest.
