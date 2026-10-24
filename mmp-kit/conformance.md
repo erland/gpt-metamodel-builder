@@ -53,3 +53,7 @@ The accompanying `conformance/mmp-1-1-readiness.json` and `specification/mmp-1-1
 ## Proposed required-minimum policy
 
 `conformance/required-policy-v1.json` verifies a versioned opt-in decision to interpret `required: true` as effective minimum 1. It is **not** a retroactive MMP 1.0.0 import rule; the former undecided helper is preserved.
+
+## Candidate canonical text values
+
+`conformance/canonical-values-v1.json` exercises text-level integer, decimal, date, UTC timestamp and restricted HTTP(S) URI canonicalization in both Python and TypeScript. This is a **limited opt-in proposal**, not full URI/number semantics and not MMP 1.0.0 import enforcement.
