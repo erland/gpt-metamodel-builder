@@ -434,9 +434,24 @@ runtime:
     enabled: true
     role: peer_distribution
     mode: claude_project
+    project:
+      instructions: project/instructions.md
+      knowledge: project/knowledge
+      runtime_contract: project/runtime-contract.json
+    templates:
+      readme: templates/README.claude.md.tpl
   opencode:
     enabled: true
     role: peer_distribution
+    layout:
+      instructions: AGENTS.md
+      config: opencode.json
+      tools: .opencode/tools
+      runtime_scripts: scripts
+      runtime_contract: .opencode/runtime-contract.json
+      knowledge: knowledge
+    templates:
+      readme: templates/README.opencode.md.tpl
     project_instruction: AGENTS.md
     default_agent: metamodel-builder
     agent_file: .opencode/agents/metamodel-builder.md
@@ -451,6 +466,14 @@ runtime:
     enabled: true
     role: peer_distribution
     mode: skills_first
+    layout:
+      manifest_file: plugin.json
+      skills: skills
+      references: references
+      assets: assets
+      scripts: scripts
+    templates:
+      readme: templates/README.plugin.md.tpl
     skill_id: metamodel-builder
     state_authority: workspace_file
     state_path: project-status.yaml
