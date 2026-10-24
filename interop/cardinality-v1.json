@@ -1,0 +1,70 @@
+{
+  "valid": [
+    {
+      "text": "*",
+      "min": 0,
+      "max": null
+    },
+    {
+      "text": "0",
+      "min": 0,
+      "max": 0
+    },
+    {
+      "text": "1",
+      "min": 1,
+      "max": 1
+    },
+    {
+      "text": "2..4",
+      "min": 2,
+      "max": 4
+    },
+    {
+      "text": "3..*",
+      "min": 3,
+      "max": null
+    },
+    {
+      "text": "0..0",
+      "min": 0,
+      "max": 0
+    }
+  ],
+  "invalid": [
+    "3..1",
+    "-1",
+    "1 ..2",
+    "01",
+    "1..x",
+    "1.5",
+    ""
+  ],
+  "required": [
+    {
+      "required": true,
+      "cardinality": "1..*",
+      "strict": "accept"
+    },
+    {
+      "required": false,
+      "cardinality": "0..*",
+      "strict": "accept"
+    },
+    {
+      "required": true,
+      "cardinality": "0..*",
+      "strict": "undecided"
+    },
+    {
+      "required": true,
+      "cardinality": null,
+      "strict": "accept"
+    },
+    {
+      "required": false,
+      "cardinality": "1",
+      "strict": "accept"
+    }
+  ]
+}
