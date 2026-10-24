@@ -33,3 +33,7 @@ This suite is a **baseline subset** of Core behavior. It does not yet establish 
 ## Default value vectors
 
 `conformance/default-values-v1.json` contains datatype, enumeration, and cardinality-sensitive default value cases. Python and TypeScript implementations run the same cases without changing MMP 1.0.0 admission semantics. This subset does not establish full Core conformance.
+
+## Relationship semantics vectors
+
+`conformance/relationship-semantics-v1.json` tests subtype-compatible endpoint roles, direction and navigability across Python and TypeScript. Relationship-type endpoint inheritance narrowing remains unspecified; this is a partial Core test profile only.
