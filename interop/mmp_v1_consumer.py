@@ -68,7 +68,7 @@ def parse_cardinality(value: str):
     if re.fullmatch(part, value):
         n = int(value)
         return {"min": n, "max": n}
-    match = re.fullmatch(rf"({part})\\.\\.({part}|\\*)", value)
+    match = re.fullmatch(rf"({part})[.]{{2}}({part}|[*])", value)
     if not match:
         raise ValueError("Invalid cardinality syntax")
     minimum = int(match.group(1))
