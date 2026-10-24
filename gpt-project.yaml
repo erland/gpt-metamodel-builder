@@ -125,8 +125,17 @@ skills:
     - scripts/export_mmp.py
     - scripts/import_mmp.py
     assets:
-    - schemas
-    - templates/metamodel
+    - schemas/metamodel.schema.json
+    - schemas/properties.schema.json
+    - schemas/constraints.schema.json
+    - schemas/viewpoints.schema.json
+    - schemas/notation.schema.json
+    - schemas/provenance.schema.json
+    - schemas/version.schema.json
+    - schemas/guidance.schema.json
+    - schemas/common-definitions.schema.json
+    - schemas/mmp-manifest-v1.schema.json
+    - templates/metamodel/guidance.yaml
   - id: kallanpassning
     name: Källanpassning
     description: Anpassa metamodeller från källstandarder via godkända transformationsplaner.
