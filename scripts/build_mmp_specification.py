@@ -35,6 +35,8 @@ def package(output:Path):
             "conformance/effective-properties-v1.json":(ROOT/"interop/effective-properties-v1.json").read_bytes(),
             "conformance/cardinality-v1.json":(ROOT/"interop/cardinality-v1.json").read_bytes(),
             "conformance/default-values-v1.json":(ROOT/"interop/default-values-v1.json").read_bytes(),
+            "conformance/relationship-semantics-v1.json":(ROOT/"interop/relationship-semantics-v1.json").read_bytes(),
+            "specification/relationship-semantics-proposal.md":(ROOT/"docs/mmp-relationship-semantics.md").read_bytes(),
             "specification/default-value-semantics-proposal.md":(ROOT/"docs/mmp-default-value-semantics.md").read_bytes(),
             "specification/cardinality-semantics-proposal.md":(ROOT/"docs/mmp-cardinality-semantics.md").read_bytes(),
         }
