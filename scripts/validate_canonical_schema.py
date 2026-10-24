@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 from pathlib import Path
 import json, sys, yaml
 from jsonschema import Draft202012Validator, FormatChecker
@@ -31,6 +32,18 @@ def validate_package(directory):
     return errors
 
 def main():
+    ap=argparse.ArgumentParser()
+    ap.add_argument('directory', type=Path, nargs='?', help='Model directory (legacy positional syntax)')
+    ap.add_argument('--model-dir', type=Path, help='Validate an external canonical YAML model directory')
+    args=ap.parse_args()
+    selected = args.model_dir or args.directory
+    if selected:
+        target=selected.resolve()
+        if not target.is_dir(): raise ValueError(f'Model directory not found: {target}')
+        errs=validate_package(target)
+        if errs: raise ValueError(f'{target}:\n'+'\n'.join(errs))
+        print(f'Canonical schema validation PASS: {target}')
+        return 0
     targets=[ROOT/'examples'/'architecture-lite', ROOT/'templates'/'metamodel']
     for target in targets:
         errs=validate_package(target)

@@ -604,6 +604,7 @@ release:
     - claude_skills_zip
     - opencode_zip
     - plugin_zip
+    - engine_zip
     - runtime_parity_report
     - release_manifest
     - sha256sums
