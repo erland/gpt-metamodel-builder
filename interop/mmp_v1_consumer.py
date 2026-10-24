@@ -119,6 +119,59 @@ def consume(source: Path):
             for value in r[end]["types"]:
                 if value not in ids:
                     raise ValueError(f"Unknown relationship endpoint: {value}")
+    # Independently enforce essential cross-document invariants.
+    def unique(items, label):
+        identifiers = [item["id"] for item in items]
+        if len(identifiers) != len(set(identifiers)):
+            raise ValueError(f"Duplicate identifier in {label}")
+        return set(identifiers)
+
+    element_ids = unique(elements, "elements")
+    relation_ids = unique(relations, "relationships")
+    if element_ids & relation_ids:
+        raise ValueError("Element/relationship type ID collision")
+    property_ids = unique(props["property_definitions"], "property_definitions")
+    set_ids = unique(props["property_sets"], "property_sets")
+    data_type_ids = unique(props["data_types"], "data_types")
+    enum_ids = unique(props["enumerations"], "enumerations")
+    for collection, available, label in (
+        (elements, element_ids, "elements"), (relations, relation_ids, "relationships")
+    ):
+        graph = {item["id"]: item.get("extends", []) or [] for item in collection}
+        visiting, visited = set(), set()
+        def visit(node):
+            if node in visiting:
+                raise ValueError(f"Inheritance cycle in {label}: {node}")
+            if node in visited:
+                return
+            visiting.add(node)
+            for parent in graph[node]:
+                if parent not in available:
+                    raise ValueError(f"Unknown inherited type: {parent}")
+                visit(parent)
+            visiting.remove(node)
+            visited.add(node)
+        for node in graph:
+            visit(node)
+        for item in collection:
+            for ref in item.get("property_sets", []) or []:
+                if ref not in set_ids:
+                    raise ValueError(f"Unknown property set: {ref}")
+    for item in props["property_sets"]:
+        for ref in item["properties"]:
+            if ref not in property_ids:
+                raise ValueError(f"Unknown property definition: {ref}")
+    for item in props["property_definitions"]:
+        datatype = item["type"]
+        if datatype.get("data_type") and datatype["data_type"] not in data_type_ids:
+            raise ValueError(f"Unknown data type: {datatype['data_type']}")
+        if datatype.get("enumeration") and datatype["enumeration"] not in enum_ids:
+            raise ValueError(f"Unknown enumeration: {datatype['enumeration']}")
+    for item in props["enumerations"]:
+        unique(item["values"], f"enumeration {item['id']} values")
+    for key, collection in (("constraints", docs["constraints"].get("constraints", [])),
+                            ("viewpoints", docs["viewpoints"].get("viewpoints", []))):
+        unique(collection, key)
     known_languages = {"declarative"}
     rules = [{"id": c["id"], "language": c.get("language"),
               "evaluation": "not_supported" if c.get("language") not in known_languages else "not_supported"}
