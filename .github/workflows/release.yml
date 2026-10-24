@@ -72,6 +72,19 @@ jobs:
           python -m zipfile -e dist/metamodel-builder-engine-*.zip "$RUNNER_TEMP/metamodel-domain-engine"
           python "$RUNNER_TEMP/metamodel-domain-engine/scripts/selftest_metamodel_engine.py" --json-out "$RUNNER_TEMP/metamodel-engine-selftest.json"
           python scripts/test_runtime_archive_parity.py --dist dist
+          python - <<'PY'
+          import shutil, subprocess, sys, tempfile
+          from pathlib import Path
+          with tempfile.TemporaryDirectory() as tmp:
+              base = Path(tmp)
+              shutil.copytree('examples/architecture-lite', base/'external-model')
+              shutil.copytree('workspace', base/'external-workspace')
+              for script, flag, target in [
+                  ('validate_canonical_schema.py', '--model-dir', 'external-model'),
+                  ('validate_workspace.py', '--workspace-dir', 'external-workspace'),
+              ]:
+                  subprocess.run([sys.executable, 'scripts/'+script, flag, str(base/target)], check=True)
+          PY
           for runtime in project chat claude-project claude-skills opencode plugin; do
             test -s "dist/metamodel-builder-${runtime}-${VERSION}.zip"
           done
