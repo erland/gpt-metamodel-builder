@@ -1,0 +1,171 @@
+{
+  "cases": [
+    {
+      "name": "labels",
+      "before": {
+        "namespace": "urn:demo",
+        "elements": [
+          {
+            "id": "a",
+            "name": "Old"
+          }
+        ],
+        "relationships": []
+      },
+      "after": {
+        "namespace": "urn:demo",
+        "elements": [
+          {
+            "id": "a",
+            "name": "New"
+          }
+        ],
+        "relationships": []
+      },
+      "expected": "compatible"
+    },
+    {
+      "name": "added_type",
+      "before": {
+        "namespace": "urn:demo",
+        "elements": [
+          {
+            "id": "a"
+          }
+        ],
+        "relationships": []
+      },
+      "after": {
+        "namespace": "urn:demo",
+        "elements": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          }
+        ],
+        "relationships": []
+      },
+      "expected": "compatible"
+    },
+    {
+      "name": "removed_type",
+      "before": {
+        "namespace": "urn:demo",
+        "elements": [
+          {
+            "id": "a"
+          }
+        ],
+        "relationships": []
+      },
+      "after": {
+        "namespace": "urn:demo",
+        "elements": [],
+        "relationships": []
+      },
+      "expected": "breaking"
+    },
+    {
+      "name": "namespace",
+      "before": {
+        "namespace": "urn:demo",
+        "elements": [
+          {
+            "id": "a"
+          }
+        ],
+        "relationships": []
+      },
+      "after": {
+        "namespace": "urn:other",
+        "elements": [
+          {
+            "id": "a"
+          }
+        ],
+        "relationships": []
+      },
+      "expected": "breaking"
+    },
+    {
+      "name": "unknown_semantics",
+      "before": {
+        "namespace": "urn:demo",
+        "elements": [
+          {
+            "id": "a",
+            "kind": "node"
+          }
+        ],
+        "relationships": []
+      },
+      "after": {
+        "namespace": "urn:demo",
+        "elements": [
+          {
+            "id": "a",
+            "kind": "behavior"
+          }
+        ],
+        "relationships": []
+      },
+      "expected": "needs_review"
+    },
+    {
+      "name": "relation_removed",
+      "before": {
+        "namespace": "urn:demo",
+        "elements": [],
+        "relationships": [
+          {
+            "id": "rel"
+          }
+        ]
+      },
+      "after": {
+        "namespace": "urn:demo",
+        "elements": [],
+        "relationships": []
+      },
+      "expected": "breaking"
+    }
+  ],
+  "extensions": [
+    {
+      "extensions": {
+        "vendor.info": {
+          "label": "Optional"
+        }
+      },
+      "recognized": [],
+      "critical": [],
+      "expected": "preserved_uninterpreted"
+    },
+    {
+      "extensions": {
+        "vendor.logic": {
+          "rule": "x"
+        }
+      },
+      "recognized": [],
+      "critical": [
+        "vendor.logic"
+      ],
+      "expected": "not_supported"
+    },
+    {
+      "extensions": {
+        "vendor.info": {
+          "label": "Optional"
+        }
+      },
+      "recognized": [
+        "vendor.info"
+      ],
+      "critical": [],
+      "expected": "supported"
+    }
+  ]
+}
