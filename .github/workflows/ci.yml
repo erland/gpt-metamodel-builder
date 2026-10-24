@@ -23,13 +23,11 @@ jobs:
         run: python scripts/test_runtime_migration_contract.py
       - name: Run full validation suite
         run: python scripts/run_ci.py --project-root . --reports-dir dist/ci-reports
-      - name: Build distributions
-        run: python scripts/build_distributions.py --project-root . --output-dir dist --version "0.1.0-ci.${GITHUB_RUN_NUMBER}"
-      - name: Validate distributions
-        run: python scripts/validate_distributions.py --project-root . --output-dir dist --version "0.1.0-ci.${GITHUB_RUN_NUMBER}"
+      # Runtime distribution build is performed by pinned engine workflow.
+      # Legacy release script still expects Custom GPT and is deliberately not invoked.
       - name: Upload CI artifacts
         uses: actions/upload-artifact@v4
         with:
           name: metamodel-builder-ci-${{ github.run_number }}
           path: dist/
-          if-no-files-found: error
+          if-no-files-found: warn
