@@ -73,6 +73,9 @@ instructions:
     max_required_file_hops: 1
     knowledge_may_not_be_required_for_core_behavior: true
 skills:
+  contract_version: 1
+  schema: schemas/skill-contract.schema.json
+  mode: explicit
   resource_policy: explicit
   definitions:
   - id: metamodellering
