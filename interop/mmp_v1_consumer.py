@@ -167,6 +167,35 @@ def relationship_semantics(elements, relationships):
     return result, allowed
 
 
+
+def classify_model_change(before, after):
+    """Conservative, opt-in semantic diff; uncertainty is never compatible."""
+    if before.get("namespace") != after.get("namespace"):
+        return "breaking"
+    uncertain = False
+    for collection in ("elements", "relationships"):
+        old = {x["id"]: x for x in before.get(collection, [])}
+        new = {x["id"]: x for x in after.get(collection, [])}
+        if old.keys() - new.keys():
+            return "breaking"
+        for identifier in old.keys() & new.keys():
+            a = {k: v for k, v in old[identifier].items() if k not in ("name", "description")}
+            b = {k: v for k, v in new[identifier].items() if k not in ("name", "description")}
+            if a != b:
+                uncertain = True
+    return "needs_review" if uncertain else "compatible"
+
+
+def extension_support(extensions, recognized, critical):
+    """External criticality policy: 1.0.0 itself does not declare criticality."""
+    if not isinstance(extensions, dict):
+        raise ValueError("Invalid extensions")
+    unknown = set(extensions) - set(recognized)
+    if unknown & set(critical):
+        return "not_supported"
+    return "preserved_uninterpreted" if unknown else "supported"
+
+
 def effective_properties(elements, relationships, property_sets, property_definitions):
     """Deterministic ID-based transitive property union (Core draft)."""
     known_sets = {x["id"]: x["properties"] for x in property_sets}
