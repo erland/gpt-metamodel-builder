@@ -1,0 +1,121 @@
+{
+  "version": "1.0.0",
+  "cases": [
+    {
+      "name": "all-supported",
+      "requirement": {
+        "required": [
+          {
+            "id": "https://example.org/extensions/security",
+            "version": "1.0.0"
+          }
+        ],
+        "optional": [
+          {
+            "id": "https://example.org/extensions/labels",
+            "version": "1.0.0"
+          }
+        ]
+      },
+      "consumer": [
+        {
+          "id": "https://example.org/extensions/security",
+          "versions": [
+            "1.0.0"
+          ]
+        },
+        {
+          "id": "https://example.org/extensions/labels",
+          "versions": [
+            "1.0.0"
+          ]
+        }
+      ],
+      "expected": {
+        "status": "supported",
+        "missing_required": [],
+        "ignored_optional": []
+      }
+    },
+    {
+      "name": "unsupported-required",
+      "requirement": {
+        "required": [
+          {
+            "id": "https://example.org/extensions/security",
+            "version": "1.0.0"
+          }
+        ],
+        "optional": []
+      },
+      "consumer": [],
+      "expected": {
+        "status": "not_supported",
+        "missing_required": [
+          "https://example.org/extensions/security@1.0.0"
+        ],
+        "ignored_optional": []
+      }
+    },
+    {
+      "name": "ignored-optional",
+      "requirement": {
+        "required": [],
+        "optional": [
+          {
+            "id": "https://example.org/extensions/labels",
+            "version": "1.0.0"
+          }
+        ]
+      },
+      "consumer": [],
+      "expected": {
+        "status": "partial",
+        "missing_required": [],
+        "ignored_optional": [
+          "https://example.org/extensions/labels@1.0.0"
+        ]
+      }
+    },
+    {
+      "name": "version-mismatch",
+      "requirement": {
+        "required": [
+          {
+            "id": "https://example.org/extensions/security",
+            "version": "2.0.0"
+          }
+        ],
+        "optional": []
+      },
+      "consumer": [
+        {
+          "id": "https://example.org/extensions/security",
+          "versions": [
+            "1.0.0"
+          ]
+        }
+      ],
+      "expected": {
+        "status": "not_supported",
+        "missing_required": [
+          "https://example.org/extensions/security@2.0.0"
+        ],
+        "ignored_optional": []
+      }
+    },
+    {
+      "name": "no-extensions",
+      "requirement": {
+        "required": [],
+        "optional": []
+      },
+      "consumer": [],
+      "expected": {
+        "status": "supported",
+        "missing_required": [],
+        "ignored_optional": []
+      }
+    }
+  ]
+}
