@@ -1,0 +1,97 @@
+{
+  "version": "1.0",
+  "integer": [
+    {
+      "input": "0",
+      "expected": "0"
+    },
+    {
+      "input": "-42",
+      "expected": "-42"
+    },
+    {
+      "input": "9007199254740991",
+      "expected": "9007199254740991"
+    },
+    {
+      "input": "9007199254740992",
+      "error": "unsafe_integer"
+    },
+    {
+      "input": "01",
+      "error": "invalid_integer"
+    },
+    {
+      "input": "-0",
+      "error": "invalid_integer"
+    }
+  ],
+  "decimal": [
+    {
+      "input": "1.2300",
+      "expected": "1.23"
+    },
+    {
+      "input": "-0.000",
+      "expected": "0"
+    },
+    {
+      "input": "12",
+      "expected": "12"
+    },
+    {
+      "input": "0.005",
+      "expected": "0.005"
+    },
+    {
+      "input": "1e3",
+      "error": "invalid_decimal"
+    },
+    {
+      "input": "NaN",
+      "error": "invalid_decimal"
+    }
+  ],
+  "date": [
+    {
+      "input": "2024-02-29",
+      "expected": "2024-02-29"
+    },
+    {
+      "input": "2025-02-29",
+      "error": "invalid_date"
+    }
+  ],
+  "datetime": [
+    {
+      "input": "2026-10-24T12:30:00+02:00",
+      "expected": "2026-10-24T10:30:00Z"
+    },
+    {
+      "input": "2026-10-24T10:30:00Z",
+      "expected": "2026-10-24T10:30:00Z"
+    },
+    {
+      "input": "2026-10-24T10:30:00",
+      "error": "invalid_datetime"
+    }
+  ],
+  "uri": [
+    {
+      "input": "HTTPS://Example.COM/a",
+      "expected": "https://example.com/a"
+    },
+    {
+      "input": "https://example.com/a%20b",
+      "expected": "https://example.com/a%20b"
+    },
+    {
+      "input": "not a uri",
+      "error": "invalid_uri"
+    },
+    {
+      "input": "https://example.com/a b",
+      "error": "invalid_uri"
+    }
+  ]
+}

@@ -203,6 +203,43 @@ export function requiredMinimumPolicy(required:boolean,cardinality:string|null):
   return {status:"valid",effective_min:minimum,effective_max:bounds.max};
 }
 
+
+export function canonicalValue(kind:string,value:string):{expected?:string;error?:string}{
+  if(kind==="integer"){
+    if(!/^(?:0|-?[1-9][0-9]*)$/.test(value))return {error:"invalid_integer"};
+    const n=BigInt(value);
+    if(n>9007199254740991n||n< -9007199254740991n)return {error:"unsafe_integer"};
+    return {expected:value};
+  }
+  if(kind==="decimal"){
+    if(!/^-?(?:0|[1-9][0-9]*)(?:[.][0-9]+)?$/.test(value))return {error:"invalid_decimal"};
+    let v=value.replace(/([.][0-9]*?)0+$/,"$1").replace(/[.]$/,"");
+    if(/^-?0(?:[.]0*)?$/.test(v))v="0";
+    return {expected:v};
+  }
+  if(kind==="date"){
+    if(!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(value))return {error:"invalid_date"};
+    const [y,m,d]=value.split("-").map(Number);
+    const dt=new Date(Date.UTC(y,m-1,d));
+    return dt.getUTCFullYear()===y&&dt.getUTCMonth()+1===m&&dt.getUTCDate()===d?{expected:value}:{error:"invalid_date"};
+  }
+  if(kind==="datetime"){
+    if(!/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:Z|[+-][0-9]{2}:[0-9]{2})$/.test(value))return {error:"invalid_datetime"};
+    const t=Date.parse(value);
+    if(!Number.isFinite(t))return {error:"invalid_datetime"};
+    return {expected:new Date(t).toISOString().replace(".000Z","Z")};
+  }
+  if(kind==="uri"){
+    if(/\s/.test(value))return {error:"invalid_uri"};
+    try{
+      const url=new URL(value);
+      if(!["http:","https:"].includes(url.protocol)||!url.hostname||url.username||url.password)return {error:"invalid_uri"};
+      return {expected:url.href};
+    }catch{return {error:"invalid_uri"};}
+  }
+  return {error:"unsupported_type"};
+}
+
 export function effectiveProperties(elements:Obj[],relationships:Obj[],propertySets:Obj[],propertyDefinitions:Obj[]):Obj {
   const sets=new Map<string,string[]>(propertySets.map(x=>[x.id,x.properties]));
   const known=new Set<string>(propertyDefinitions.map(x=>x.id));

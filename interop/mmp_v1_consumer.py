@@ -251,6 +251,58 @@ def required_minimum_policy(required, cardinality):
     return {"status": "valid", "effective_min": minimum, "effective_max": maximum}
 
 
+
+def canonical_value(kind, value):
+    """Proposed opt-in canonical text profile, independent of MMP 1.0 admission."""
+    import re
+    from decimal import Decimal
+    from datetime import datetime, date, timezone
+    from urllib.parse import urlsplit, urlunsplit
+    if kind == "integer":
+        if not re.fullmatch(r"(?:0|-?[1-9][0-9]*)", value):
+            return {"error": "invalid_integer"}
+        if abs(int(value)) > 9007199254740991:
+            return {"error": "unsafe_integer"}
+        return {"expected": value}
+    if kind == "decimal":
+        if not re.fullmatch(r"-?(?:0|[1-9][0-9]*)(?:[.][0-9]+)?", value):
+            return {"error": "invalid_decimal"}
+        d = Decimal(value)
+        normalized = format(d, "f").rstrip("0").rstrip(".") if "." in format(d, "f") else format(d, "f")
+        return {"expected": "0" if d == 0 else normalized}
+    if kind == "date":
+        if not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", value):
+            return {"error": "invalid_date"}
+        try: date.fromisoformat(value)
+        except ValueError: return {"error": "invalid_date"}
+        return {"expected": value}
+    if kind == "datetime":
+        if not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:Z|[+-][0-9]{2}:[0-9]{2})", value):
+            return {"error": "invalid_datetime"}
+        try:
+            d = datetime.fromisoformat(value.replace("Z", "+00:00"))
+            if d.utcoffset() is None: raise ValueError()
+            result = d.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            return {"expected": result}
+        except (ValueError, OverflowError): return {"error": "invalid_datetime"}
+    if kind == "uri":
+        if any(ch.isspace() for ch in value):
+            return {"error": "invalid_uri"}
+        try:
+            parsed = urlsplit(value)
+            if parsed.scheme.lower() not in ("http", "https") or not parsed.hostname:
+                return {"error": "invalid_uri"}
+            if parsed.username or parsed.password:
+                return {"error": "invalid_uri"}
+            host = parsed.hostname.lower()
+            port = parsed.port
+            netloc = host + ((":" + str(port)) if port is not None else "")
+            return {"expected": urlunsplit((parsed.scheme.lower(), netloc, parsed.path or "/", parsed.query, parsed.fragment))}
+        except ValueError:
+            return {"error": "invalid_uri"}
+    return {"error": "unsupported_type"}
+
+
 def effective_properties(elements, relationships, property_sets, property_definitions):
     """Deterministic ID-based transitive property union (Core draft)."""
     known_sets = {x["id"]: x["properties"] for x in property_sets}
