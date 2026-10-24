@@ -18,16 +18,14 @@ analysis:
       suitability: equivalent
       rationale: ZIP/workspace, filanalys och genererade artefakter passar kärnflödet.
       activate_by_default: true
-    - runtime_id: chatgpt_custom
-      suitability: equivalent
-      rationale: Fungerar väl med filbaserat projektflöde och kompilerad instruktion,
-        med vissa plattformsgränser.
-      activate_by_default: true
     - runtime_id: claude_project
-      suitability: reduced
-      rationale: Bra för analys men v1 saknar full paritet för lokal deterministisk
-        exekvering och workspaceverktyg.
-      activate_by_default: false
+      suitability: equivalent_runtime_dependent
+      rationale: Canonical kontrakt projiceras till Claude Projects; deterministiska verktyg kräver Python-exekvering.
+      activate_by_default: true
+    - runtime_id: claude_skills
+      suitability: equivalent_runtime_dependent
+      rationale: Modulära Skills med explicit resursberoenden och hostberoende verktygsexekvering.
+      activate_by_default: true
     - runtime_id: opencode
       suitability: equivalent
       rationale: Mycket lämplig för lokalt workspace, valideringsscripts, generatorer
@@ -294,7 +292,7 @@ workspace_state:
     description: Strukturerad projektstatus är auktoritativ för progression.
   runtime_preferences:
     chatgpt_chat: conversation_or_file
-    chatgpt_custom: conversation_or_file
+    claude_skills: conversation_or_file
     opencode: workspace_file
     claude_project: conversation_or_file
     openai_plugin: workspace_file
@@ -396,50 +394,11 @@ runtime:
   chat_zip:
     enabled: true
   custom_gpt:
+    enabled: false
+  claude:
     enabled: true
     role: peer_distribution
-    instruction:
-      mode: compiled
-      max_characters: 8000
-    knowledge:
-      strategy: prioritize
-      max_files: 20
-      sources:
-      - docs/canonical-metamodel-v1.md
-      - docs/semantic-validation-v1.md
-      - docs/sparx-ea-mapping-v1.md
-      - docs/sparx-ea-mdg-generator-v1.md
-      - docs/sparx-ea-mdg-import-v1.md
-      - docs/modeling-guidance-v1.md
-      - examples/architecture-lite/*.yaml
-      - examples/architecture-lite/platforms/sparx-ea/*.yaml
-      priority:
-      - docs/canonical-metamodel-v1.md
-      - docs/semantic-validation-v1.md
-      - docs/sparx-ea-mapping-v1.md
-      - docs/sparx-ea-mdg-generator-v1.md
-      - docs/sparx-ea-mdg-import-v1.md
-      - docs/modeling-guidance-v1.md
-      - examples/architecture-lite/*.yaml
-      - examples/architecture-lite/platforms/sparx-ea/*.yaml
-    builder:
-      instructions: builder/instructions.md
-      conversation_starters: builder/conversation-starters.md
-      capabilities: builder/capabilities.md
-      knowledge_package: builder/knowledge-package
-      runtime_contract: builder/runtime-contract.json
-    compatibility:
-      report_required: true
-      parity_symbols:
-        equivalent: ✅
-        reduced: ⚠️
-        missing: ❌
-    validation:
-      block_on_instruction_limit: true
-      block_on_knowledge_limit: true
-      block_on_misleading_core_functionality: true
-  claude:
-    enabled: false
+    mode: claude_project
   opencode:
     enabled: true
     role: peer_distribution
@@ -471,13 +430,14 @@ runtime:
 runtime_parity:
   registered_runtimes:
   - chatgpt_chat
-  - chatgpt_custom
+  - claude_skills
   - claude_project
   - opencode
   - openai_plugin
   active_runtimes:
   - chatgpt_chat
-  - chatgpt_custom
+  - claude_project
+  - claude_skills
   - opencode
   - openai_plugin
   policy: docs/runtime-parity-v1.md
@@ -490,15 +450,18 @@ runtime_parity:
   allowed_execution_differences: true
 build:
   build_chat_zip: true
-  build_custom_gpt_zip: true
-  build_claude_zip: false
+  build_custom_gpt_zip: false
+  build_claude_zip: true
+  build_claude_project_zip: true
+  build_claude_skills_zip: true
   build_opencode_zip: true
   build_plugin_zip: true
 build_system:
   targets:
   - project
   - chat
-  - custom-gpt
+  - claude_project
+  - claude_skills
   - opencode
   - plugin
   runtime_targets:
@@ -508,12 +471,18 @@ build_system:
       builder: chat
       artifact_type: chat_zip
       filename_pattern: <project-id>-chat-<version>.zip
-    custom-gpt:
-      runtime_id: chatgpt_custom
-      runtime_key: custom_gpt
-      builder: custom_gpt
-      artifact_type: custom_gpt_zip
-      filename_pattern: <project-id>-custom-gpt-<version>.zip
+    claude_project:
+      runtime_id: claude_project
+      runtime_key: claude
+      builder: claude
+      artifact_type: claude_project_zip
+      filename_pattern: <project-id>-claude-project-<version>.zip
+    claude_skills:
+      runtime_id: claude_skills
+      runtime_key: claude
+      builder: claude_skills
+      artifact_type: claude_skills_zip
+      filename_pattern: <project-id>-claude-skills-<version>.zip
     opencode:
       runtime_id: opencode
       runtime_key: opencode
@@ -546,7 +515,8 @@ release:
     required_artifacts:
     - project_package
     - chat_zip
-    - custom_gpt_zip
+    - claude_project_zip
+    - claude_skills_zip
     - opencode_zip
     - plugin_zip
     - runtime_parity_report
