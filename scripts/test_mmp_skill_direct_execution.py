@@ -31,9 +31,9 @@ def main():
             with zipfile.ZipFile(archives[0]) as z:
                 z.extractall(base)
             skill=base/"skills/metamodellering"
-            for item in ("schemas/mmp-manifest-v1.schema.json","schemas/metamodel.schema.json"):
+            for item in ("mmp-manifest-v1.schema.json","metamodel.schema.json"):
                 assert (skill/"assets"/item).is_file(),item
-            assert (skill/"assets/metamodel/guidance.yaml").is_file()
+            assert (skill/"assets/guidance.yaml").is_file()
             source=base/"external-model"
             shutil.copytree(ROOT/"examples/architecture-lite",source)
             file=source/"metamodel.yaml"
