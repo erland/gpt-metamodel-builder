@@ -1,6 +1,6 @@
 # Metamodel Exchange Package (MMP) v1 – kontrakt
 
-Status: projektspecifikt formatförslag, inte extern standard. Version på paketkontraktet: `1.0.0`.
+Status: publicerat projektspecifikt format, inte extern standard. Version på paketkontraktet: `1.0.0`. **Kommande semantiska preciseringar** dokumenteras separat i [MMP Core-förslaget](mmp-core-semantics-proposal.md) och [kompatibilitetsanalysen](mmp-core-compatibility-analysis.md); dessa ändrar inte retroaktivt gällande 1.0.0.
 
 MMP är ett generellt, självbeskrivande utbytespaket **för metamodell**, inte för instansdata eller verktygsspecifik konfiguration. Befintlig canonical YAML är sanningskälla; MMP är en distributionsprojektion och en inläst MMP får inte ändra originalpaketet.
 
