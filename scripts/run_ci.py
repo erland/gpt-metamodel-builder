@@ -21,6 +21,7 @@ def main() -> int:
         [py,'scripts/validate_canonical_schema.py'],
         [py,'scripts/test_mmp_manifest_contract.py'],
         [py,'scripts/test_mmp_export.py'],
+        [py,'scripts/test_mmp_import.py'],
         [py,'scripts/test_semantic_validator.py'],
         [py,'scripts/test_sparx_mapping.py'],
         [py,'scripts/test_mdg_generator.py'],
