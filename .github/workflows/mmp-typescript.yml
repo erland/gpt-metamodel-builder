@@ -31,3 +31,4 @@ jobs:
       - run: node interop/typescript/dist/relation-inheritance-test.js interop/relationship-inheritance-v1.json
       - run: node interop/typescript/dist/required-policy-test.js interop/required-policy-v1.json
       - run: node interop/typescript/dist/canonical-value-test.js interop/canonical-values-v1.json
+      - run: node interop/typescript/dist/extension-negotiation-test.js interop/extension-negotiation-v1.json
