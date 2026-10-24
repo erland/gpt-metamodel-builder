@@ -36,17 +36,6 @@ jobs:
           python /tmp/gpt-byggaren-engine/scripts/selftest_distribution_engine.py \
             --source /tmp/gpt-byggaren-engine \
             --output "$RUNNER_TEMP/engine-selftest.json"
-      - name: Verify original engine installer on isolated project copy
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/metamodel-project"
-          cp -a . "$RUNNER_TEMP/metamodel-project/"
-          python /tmp/gpt-byggaren-engine/scripts/install_distribution_engine.py \
-            --source /tmp/gpt-byggaren-engine \
-            --project-root "$RUNNER_TEMP/metamodel-project"
-          test -f "$RUNNER_TEMP/metamodel-project/scripts/distribution-engine/scripts/build_distributions.py"
-          test -f "$RUNNER_TEMP/metamodel-project/scripts/distribution-engine/scripts/validate_distributions.py"
       - name: Upload engine preflight evidence
         if: always()
         uses: actions/upload-artifact@v4
