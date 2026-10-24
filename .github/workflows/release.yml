@@ -67,6 +67,7 @@ jobs:
           python scripts/lint_gpt_project.py --project-root .
           python scripts/build_distributions.py --project-root . --version "$VERSION"
           python scripts/validate_distributions.py --project-root .
+          python scripts/test_runtime_archive_parity.py --dist dist
           for runtime in project chat claude-project claude-skills opencode plugin; do
             test -s "dist/metamodel-builder-${runtime}-${VERSION}.zip"
           done
