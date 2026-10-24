@@ -56,6 +56,41 @@ def read(source: Path):
     return files
 
 
+
+def effective_properties(elements, relationships, property_sets, property_definitions):
+    """Deterministic ID-based transitive property union (Core draft)."""
+    known_sets = {x["id"]: x["properties"] for x in property_sets}
+    known_properties = {x["id"] for x in property_definitions}
+    result = {}
+    for label, types in (("elements", elements), ("relationships", relationships)):
+        by_id = {item["id"]: item for item in types}
+        cache = {}
+        visiting = set()
+        def resolve(identifier):
+            if identifier in cache:
+                return cache[identifier]
+            if identifier in visiting:
+                raise ValueError("Inheritance cycle")
+            if identifier not in by_id:
+                raise ValueError("Unknown inherited type")
+            visiting.add(identifier)
+            item = by_id[identifier]
+            sets = set(item.get("property_sets", []) or [])
+            for parent in item.get("extends", []) or []:
+                sets.update(resolve(parent)["property_sets"])
+            visiting.remove(identifier)
+            if not sets <= known_sets.keys():
+                raise ValueError("Unknown property set")
+            props = set()
+            for set_id in sets:
+                props.update(known_sets[set_id])
+            if not props <= known_properties:
+                raise ValueError("Unknown property definition")
+            cache[identifier] = {"property_sets": sorted(sets), "properties": sorted(props)}
+            return cache[identifier]
+        result[label] = {identifier: resolve(identifier) for identifier in sorted(by_id)}
+    return result
+
 def consume(source: Path):
     files = read(source)
     m = yaml.safe_load(files["manifest.yaml"])
@@ -176,7 +211,8 @@ def consume(source: Path):
     rules = [{"id": c["id"], "language": c.get("language"),
               "evaluation": "not_supported" if c.get("language") not in known_languages else "not_supported"}
              for c in docs["constraints"].get("constraints", [])]
-    return {"package_format_version": m["package_format_version"], "metamodel": m["metamodel"],
+    effective = effective_properties(elements, relations, props["property_sets"], props["property_definitions"])
+    return {"effective_properties": effective, "package_format_version": m["package_format_version"], "metamodel": m["metamodel"],
             "elements": [{"id": x["id"], "name": x["name"]} for x in elements],
             "relationships": [{"id": x["id"], "name": x["name"],
                                "source": x["source"]["types"], "target": x["target"]["types"]}
