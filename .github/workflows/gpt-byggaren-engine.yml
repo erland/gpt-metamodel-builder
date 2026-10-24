@@ -1,0 +1,56 @@
+name: GPT Byggaren engine 1.6.31 preflight
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  engine-preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install validator dependencies
+        run: python -m pip install PyYAML jsonschema
+      - name: Download pinned original engine archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 \
+            --output /tmp/gpt-byggaren-engine-1.6.31.zip \
+            https://github.com/erland/gpt-byggaren/releases/download/v1.6.31/gpt-byggaren-engine-1.6.31.zip
+          echo "d8b9938e9e008415ee46eeb699d7520c2b7354a39f07f40fcac1fb6adc819e70  /tmp/gpt-byggaren-engine-1.6.31.zip" | sha256sum --check
+      - name: Unpack original engine
+        shell: bash
+        run: |
+          mkdir -p /tmp/gpt-byggaren-engine
+          python -m zipfile -e /tmp/gpt-byggaren-engine-1.6.31.zip /tmp/gpt-byggaren-engine
+      - name: Run original engine self-test
+        shell: bash
+        run: |
+          python /tmp/gpt-byggaren-engine/scripts/selftest_distribution_engine.py \
+            --source /tmp/gpt-byggaren-engine \
+            --output "$RUNNER_TEMP/engine-selftest.json"
+      - name: Verify original engine installer on isolated project copy
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/metamodel-project"
+          cp -a . "$RUNNER_TEMP/metamodel-project/"
+          python /tmp/gpt-byggaren-engine/scripts/install_distribution_engine.py \
+            --source /tmp/gpt-byggaren-engine \
+            --project-root "$RUNNER_TEMP/metamodel-project"
+          test -f "$RUNNER_TEMP/metamodel-project/scripts/distribution-engine/scripts/build_distributions.py"
+          test -f "$RUNNER_TEMP/metamodel-project/scripts/distribution-engine/scripts/validate_distributions.py"
+      - name: Upload engine preflight evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gpt-byggaren-engine-1.6.31-preflight
+          path: ${{ runner.temp }}/engine-selftest.json
+          if-no-files-found: warn
