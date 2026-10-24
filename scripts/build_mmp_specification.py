@@ -32,6 +32,7 @@ def package(output:Path):
             "examples/mmp-consumer-conformance.json":(ROOT/"examples/mmp-consumer-conformance.json").read_bytes(),
             "reference-implementation/mmp_v1_consumer.py":(ROOT/"interop/mmp_v1_consumer.py").read_bytes(),
             "examples/architecture-example.mmp.zip":example.read_bytes(),
+            "conformance/effective-properties-v1.json":(ROOT/"interop/effective-properties-v1.json").read_bytes(),
         }
         entries.update(conformance_bundle(example.read_bytes()))
         entries["conformance/run_suite.py"]=(ROOT/"scripts/mmp_conformance_runner.py").read_bytes()
