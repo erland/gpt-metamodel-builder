@@ -24,3 +24,9 @@ Regenerera MDG och kör den manuella EA-importfixturen igen. Skapa därefter nä
 
 ## Steg 17
 Canonical `guidance.yaml` och export till Markdown, Confluence markup och PDF är implementerad.
+
+## Migration 1.6.31 – distribution och release
+
+Den kanoniska motorn har i PR #8 byggt sex arkiv och passerat distributionsvalideringen i GitHub Actions. Domänregressionen har också passerat. En ny release-workflow använder versionslåst engine 1.6.31, oförändrade domäntester och SHA-256-verifiering. **Release-workflowen är ännu inte verifierad genom en verklig publicerad release.** Äldre byggskript ligger kvar för historik och för eventuell återstående funktionsinventering, men ska inte användas av release-workflowen.
+
+Custom GPT är avaktiverad. Fem peer-runtimepaket genereras: Chat, Plugin, Claude Projects, Claude Skills och OpenCode. Manuell Sparx EA-import är fortfarande en extern kontroll.

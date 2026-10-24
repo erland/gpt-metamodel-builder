@@ -26,39 +26,67 @@ jobs:
       - name: Resolve version
         id: version
         shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          REQUESTED_VERSION: ${{ inputs.version }}
         run: |
-          if [[ "${{ github.event_name }}" == "release" ]]; then
-            TAG="${{ github.event.release.tag_name }}"
-            VERSION="${TAG#v}"
+          set -euo pipefail
+          if [[ "$EVENT_NAME" == "release" ]]; then
+            [[ "$RELEASE_TAG" == v* ]] || { echo "Release tag must begin with v"; exit 1; }
+            VERSION="${RELEASE_TAG#v}"
           else
-            VERSION="${{ inputs.version }}"
+            VERSION="$REQUESTED_VERSION"
           fi
-          test -n "$VERSION"
+          [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]] || { echo "Invalid release version"; exit 1; }
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-      - name: Run full validation suite
+      - name: Run domain regression gates
         run: python scripts/run_ci.py --project-root . --reports-dir dist/ci-reports
-      - name: Build distributions
-        run: python scripts/build_distributions.py --project-root . --output-dir dist --version "${{ steps.version.outputs.version }}"
-      - name: Validate distributions
-        run: python scripts/validate_distributions.py --project-root . --output-dir dist --version "${{ steps.version.outputs.version }}"
-      - name: Upload release build as workflow artifact
+      - name: Download and verify pinned original engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 \
+            --output /tmp/gpt-byggaren-engine-1.6.31.zip \
+            https://github.com/erland/gpt-byggaren/releases/download/v1.6.31/gpt-byggaren-engine-1.6.31.zip
+          echo "d8b9938e9e008415ee46eeb699d7520c2b7354a39f07f40fcac1fb6adc819e70  /tmp/gpt-byggaren-engine-1.6.31.zip" | sha256sum --check
+          mkdir -p /tmp/gpt-byggaren-engine
+          python -m zipfile -e /tmp/gpt-byggaren-engine-1.6.31.zip /tmp/gpt-byggaren-engine
+      - name: Self-test original engine
+        run: |
+          python /tmp/gpt-byggaren-engine/scripts/selftest_distribution_engine.py --source /tmp/gpt-byggaren-engine --output "$RUNNER_TEMP/engine-selftest.json"
+      - name: Install canonical engine
+        run: |
+          python /tmp/gpt-byggaren-engine/scripts/install_distribution_engine.py --source /tmp/gpt-byggaren-engine --project-root .
+      - name: Lint, build and validate canonical distributions
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          python scripts/lint_gpt_project.py --project-root .
+          python scripts/build_distributions.py --project-root . --version "$VERSION"
+          python scripts/validate_distributions.py --project-root .
+          for runtime in project chat claude-project claude-skills opencode plugin; do
+            test -s "dist/metamodel-builder-${runtime}-${VERSION}.zip"
+          done
+          test -s dist/DELIVERY-MANIFEST.json
+          (cd dist && sha256sum --check SHA256SUMS.txt)
+      - name: Upload six archives and manifest
         uses: actions/upload-artifact@v4
         with:
           name: metamodel-builder-${{ steps.version.outputs.version }}
-          path: dist/
+          path: |
+            dist/metamodel-builder-*.zip
+            dist/DELIVERY-MANIFEST.json
+            dist/SHA256SUMS.txt
           if-no-files-found: error
-      - name: Upload files to published GitHub release
+      - name: Attach verified distributions to published release
         if: github.event_name == 'release'
+        shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
-          gh release upload "${{ github.event.release.tag_name }}" \
-            dist/metamodel-builder-project-${{ steps.version.outputs.version }}.zip \
-            dist/metamodel-builder-chat-${{ steps.version.outputs.version }}.zip \
-            dist/metamodel-builder-custom-gpt-${{ steps.version.outputs.version }}.zip \
-            dist/metamodel-builder-opencode-${{ steps.version.outputs.version }}.zip \
-            dist/metamodel-builder-plugin-${{ steps.version.outputs.version }}.zip \
-            dist/release-manifest.json \
-            dist/runtime-parity.json \
-            dist/SHA256SUMS.txt \
-            --clobber
+          set -euo pipefail
+          gh release upload "$RELEASE_TAG" dist/metamodel-builder-*.zip dist/DELIVERY-MANIFEST.json dist/SHA256SUMS.txt --clobber
