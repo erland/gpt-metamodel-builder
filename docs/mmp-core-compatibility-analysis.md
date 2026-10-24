@@ -22,3 +22,7 @@ Vårt mål är inte att alla tidigare JSON Schema-giltiga paket automatiskt mås
 **Beslut före implementation:** fastställ vilka preciseringar som är dokumenterande, vilka som kräver opt-in konformitetsprofil och vilka som faktiskt är brytande. Om innebörden av ett redan accepterat fält behöver ändras krävs en större formatversion.
 
 Se `mmp-core-semantics-proposal.md` för den fullständiga semantiska texten.
+
+## Samlat inför 1.1
+
+Ett åtgärds- och beslutsregister med 14 regler finns i [mmp-core-1-1-readiness.md](mmp-core-1-1-readiness.md). Regressionskontrollen `scripts/test_mmp_core_compatibility_review.py` verifierar faktiska egenskaper i 1.0.0-schemana. Registret är fortfarande ett **förslag**; nuvarande exporter/importer och MMP 1.0.0-specifikation är oförändrade.
