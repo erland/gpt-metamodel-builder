@@ -18,6 +18,7 @@ import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parents[1]
+SCHEMAS = ROOT / "schemas" if (ROOT / "schemas").is_dir() else ROOT / "assets" / "schemas"
 CORE = ("metamodel", "properties", "constraints", "viewpoints",
         "notation", "provenance", "version")
 ALL = (*CORE, "guidance")
@@ -81,7 +82,7 @@ def collect(model_dir: Path, schema_dir: Path) -> dict[str, bytes]:
 
 
 def export(model_dir: Path, output: Path, producer_version: str,
-           *, schema_dir: Path = ROOT / "schemas", as_directory: bool = False,
+           *, schema_dir: Path = SCHEMAS, as_directory: bool = False,
            skip_validation: bool = False) -> Path:
     model_dir = model_dir.resolve()
     contents = collect(model_dir, schema_dir.resolve())
@@ -121,7 +122,7 @@ def export(model_dir: Path, output: Path, producer_version: str,
             "structural": "passed", "semantic": "passed",
             "validator": "metamodel-builder", "validator_version": producer_version,
         }
-    schema = json.loads((ROOT / "schemas/mmp-manifest-v1.schema.json").read_text(encoding="utf-8"))
+    schema = json.loads((SCHEMAS / "mmp-manifest-v1.schema.json").read_text(encoding="utf-8"))
     Draft202012Validator(schema, format_checker=FormatChecker()).validate(manifest)
     payload = yaml.safe_dump(manifest, sort_keys=False, allow_unicode=True).encode("utf-8")
     contents["manifest.yaml"] = payload
