@@ -15,3 +15,9 @@ När användaren vill skapa, ändra, validera eller versionsjämföra en verktyg
 - Kräv en stabil, godkänd URI-namespace och fullständig schema-/semantikvalidering före export.
 - Behåll käll-YAML oförändrad och inkludera checksummor samt lokalt användbara JSON Schemas. Använd inbyggt skript när det går att exekvera; separat versionsmatchad Engine ZIP endast som reservväg.
 - Skilj MMP (deklarativ utbytesfil) från körbara Engine ZIP och målverktygsspecifik Sparx MDG.
+
+## MMP-import
+- Importera verktygsneutrala MMP v1-paket med `scripts/import_mmp.py` i lägena `inspect`, `validate` och `import`.
+- Kontrollera ZIP-säkerhet, manifest, SHA-256 och medföljande JSON Schemas innan canonical semantik verifieras.
+- Skriv aldrig över existerande projekt; importera i en ny användarvald katalog och behåll originalpaketet oförändrat.
+- Kör paketerade skript direkt där de kan exekveras; begär versionsmatchad Engine ZIP enbart som reservväg.
