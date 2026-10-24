@@ -160,6 +160,40 @@ export function extensionSupport(extensions:Obj,recognized:string[],critical:str
   return unknown.length?"preserved_uninterpreted":"supported";
 }
 
+
+export function relationInheritanceProfile(elements:Obj[],relations:Obj[]):"compatible"|"breaking"|"needs_review"|"invalid" {
+  const byElement=new Map<string,Obj>(elements.map(x=>[x.id,x]));
+  const byRelation=new Map<string,Obj>(relations.map(x=>[x.id,x]));
+  const subtype=(actual:string,parent:string,seen=new Set<string>()):boolean=>{
+    if(actual===parent)return true;
+    if(seen.has(actual))return false;
+    seen.add(actual);
+    return (byElement.get(actual)?.extends??[]).some((p:string)=>subtype(p,parent,new Set(seen)));
+  };
+  for(const r of relations)for(const end of ["source","target"]){
+    if(r[end].cardinality!==undefined){try{parseCardinality(r[end].cardinality);}catch{return "invalid";}}
+  }
+  for(const r of relations){
+    const parents:string[]=r.extends??[];
+    if(parents.length>1)return "needs_review";
+    for(const id of parents){
+      const parent=byRelation.get(id);
+      if(!parent)return "invalid";
+      if((r.directed??true)!==(parent.directed??true))return "breaking";
+      for(const end of ["source","target"]){
+        if(!r[end].types.every((t:string)=>parent[end].types.some((p:string)=>subtype(t,p))))return "breaking";
+        const oldText=parent[end].cardinality,newText=r[end].cardinality;
+        if((oldText===undefined)!==(newText===undefined))return "needs_review";
+        if(oldText!==undefined){
+          const old=parseCardinality(oldText),now=parseCardinality(newText);
+          if(now.min<old.min||(old.max!==null&&(now.max===null||now.max>old.max)))return "breaking";
+        }
+      }
+    }
+  }
+  return "compatible";
+}
+
 export function effectiveProperties(elements:Obj[],relationships:Obj[],propertySets:Obj[],propertyDefinitions:Obj[]):Obj {
   const sets=new Map<string,string[]>(propertySets.map(x=>[x.id,x.properties]));
   const known=new Set<string>(propertyDefinitions.map(x=>x.id));

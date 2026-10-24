@@ -1,0 +1,279 @@
+{
+  "elements": [
+    {
+      "id": "entity"
+    },
+    {
+      "id": "application",
+      "extends": [
+        "entity"
+      ]
+    },
+    {
+      "id": "service",
+      "extends": [
+        "application"
+      ]
+    },
+    {
+      "id": "team"
+    }
+  ],
+  "cases": [
+    {
+      "id": "valid-narrowing",
+      "relations": [
+        {
+          "id": "parent",
+          "directed": true,
+          "source": {
+            "types": [
+              "entity"
+            ],
+            "cardinality": "0..*"
+          },
+          "target": {
+            "types": [
+              "team"
+            ],
+            "cardinality": "1..*"
+          }
+        },
+        {
+          "id": "child",
+          "extends": [
+            "parent"
+          ],
+          "directed": true,
+          "source": {
+            "types": [
+              "application"
+            ],
+            "cardinality": "1..3"
+          },
+          "target": {
+            "types": [
+              "team"
+            ],
+            "cardinality": "1..2"
+          }
+        }
+      ],
+      "expected": "compatible"
+    },
+    {
+      "id": "widen-source",
+      "relations": [
+        {
+          "id": "parent",
+          "source": {
+            "types": [
+              "application"
+            ]
+          },
+          "target": {
+            "types": [
+              "team"
+            ]
+          }
+        },
+        {
+          "id": "child",
+          "extends": [
+            "parent"
+          ],
+          "source": {
+            "types": [
+              "entity"
+            ]
+          },
+          "target": {
+            "types": [
+              "team"
+            ]
+          }
+        }
+      ],
+      "expected": "breaking"
+    },
+    {
+      "id": "widen-cardinality",
+      "relations": [
+        {
+          "id": "parent",
+          "source": {
+            "types": [
+              "entity"
+            ],
+            "cardinality": "1..2"
+          },
+          "target": {
+            "types": [
+              "team"
+            ]
+          }
+        },
+        {
+          "id": "child",
+          "extends": [
+            "parent"
+          ],
+          "source": {
+            "types": [
+              "entity"
+            ],
+            "cardinality": "0..*"
+          },
+          "target": {
+            "types": [
+              "team"
+            ]
+          }
+        }
+      ],
+      "expected": "breaking"
+    },
+    {
+      "id": "direction-change",
+      "relations": [
+        {
+          "id": "parent",
+          "directed": true,
+          "source": {
+            "types": [
+              "entity"
+            ]
+          },
+          "target": {
+            "types": [
+              "team"
+            ]
+          }
+        },
+        {
+          "id": "child",
+          "extends": [
+            "parent"
+          ],
+          "directed": false,
+          "source": {
+            "types": [
+              "entity"
+            ]
+          },
+          "target": {
+            "types": [
+              "team"
+            ]
+          }
+        }
+      ],
+      "expected": "breaking"
+    },
+    {
+      "id": "missing-cardinality-policy",
+      "relations": [
+        {
+          "id": "parent",
+          "source": {
+            "types": [
+              "entity"
+            ],
+            "cardinality": "1..*"
+          },
+          "target": {
+            "types": [
+              "team"
+            ]
+          }
+        },
+        {
+          "id": "child",
+          "extends": [
+            "parent"
+          ],
+          "source": {
+            "types": [
+              "entity"
+            ]
+          },
+          "target": {
+            "types": [
+              "team"
+            ]
+          }
+        }
+      ],
+      "expected": "needs_review"
+    },
+    {
+      "id": "multiple-parents-conflict",
+      "relations": [
+        {
+          "id": "a",
+          "source": {
+            "types": [
+              "entity"
+            ]
+          },
+          "target": {
+            "types": [
+              "team"
+            ]
+          }
+        },
+        {
+          "id": "b",
+          "source": {
+            "types": [
+              "application"
+            ]
+          },
+          "target": {
+            "types": [
+              "team"
+            ]
+          }
+        },
+        {
+          "id": "child",
+          "extends": [
+            "a",
+            "b"
+          ],
+          "source": {
+            "types": [
+              "application"
+            ]
+          },
+          "target": {
+            "types": [
+              "team"
+            ]
+          }
+        }
+      ],
+      "expected": "needs_review"
+    },
+    {
+      "id": "invalid-interval",
+      "relations": [
+        {
+          "id": "parent",
+          "source": {
+            "types": [
+              "entity"
+            ],
+            "cardinality": "3..1"
+          },
+          "target": {
+            "types": [
+              "team"
+            ]
+          }
+        }
+      ],
+      "expected": "invalid"
+    }
+  ]
+}

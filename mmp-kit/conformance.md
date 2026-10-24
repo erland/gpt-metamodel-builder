@@ -45,3 +45,7 @@ This suite is a **baseline subset** of Core behavior. It does not yet establish 
 ## MMP 1.1 readiness
 
 The accompanying `conformance/mmp-1-1-readiness.json` and `specification/mmp-1-1-readiness-review.md` map CORE-001–014 to evidence and blockers. Their explicit conclusion is **NO-GO** for a new MMP 1.1.0 release; subset tests and reference implementations do not certify full Core 1.1 support.
+
+## Proposed relationship inheritance semantics
+
+`conformance/relationship-inheritance-v1.json` documents seven independently executed Python/TypeScript cases. This is opt-in proposed static type-specialization semantics, not MMP 1.0.0 admission and not full relationship-instance cardinality conformance.

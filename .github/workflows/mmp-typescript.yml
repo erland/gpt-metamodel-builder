@@ -28,3 +28,4 @@ jobs:
       - run: node interop/typescript/dist/default-values-test.js interop/default-values-v1.json
       - run: node interop/typescript/dist/relationship-test.js interop/relationship-semantics-v1.json
       - run: node interop/typescript/dist/version-extension-test.js interop/version-extension-v1.json
+      - run: node interop/typescript/dist/relation-inheritance-test.js interop/relationship-inheritance-v1.json
