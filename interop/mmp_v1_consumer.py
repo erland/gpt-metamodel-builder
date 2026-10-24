@@ -303,6 +303,16 @@ def canonical_value(kind, value):
     return {"error": "unsupported_type"}
 
 
+
+def negotiate_extensions(requirement, consumer):
+    """Opt-in external negotiation; 1.0.0 manifests are unchanged."""
+    supported = {(item["id"], version) for item in consumer for version in item["versions"]}
+    missing = sorted(f'{item["id"]}@{item["version"]}' for item in requirement["required"] if (item["id"],item["version"]) not in supported)
+    optional = sorted(f'{item["id"]}@{item["version"]}' for item in requirement["optional"] if (item["id"],item["version"]) not in supported)
+    return {"status": "not_supported" if missing else "partial" if optional else "supported",
+            "missing_required": missing, "ignored_optional": optional}
+
+
 def effective_properties(elements, relationships, property_sets, property_definitions):
     """Deterministic ID-based transitive property union (Core draft)."""
     known_sets = {x["id"]: x["properties"] for x in property_sets}
