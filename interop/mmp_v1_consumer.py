@@ -237,6 +237,20 @@ def relation_inheritance_profile(elements, relations):
     return "compatible"
 
 
+
+def required_minimum_policy(required, cardinality):
+    """Opt-in Core candidate: required raises effective minimum to one."""
+    try:
+        bounds = parse_cardinality(cardinality) if cardinality is not None else {"min": 0, "max": None}
+    except ValueError:
+        return {"status": "invalid", "reason": "invalid_cardinality"}
+    minimum = max(bounds["min"], 1 if required else 0)
+    maximum = bounds["max"]
+    if maximum is not None and minimum > maximum:
+        return {"status": "invalid", "reason": "empty_upper_bound"}
+    return {"status": "valid", "effective_min": minimum, "effective_max": maximum}
+
+
 def effective_properties(elements, relationships, property_sets, property_definitions):
     """Deterministic ID-based transitive property union (Core draft)."""
     known_sets = {x["id"]: x["properties"] for x in property_sets}

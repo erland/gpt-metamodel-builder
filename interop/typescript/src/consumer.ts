@@ -194,6 +194,15 @@ export function relationInheritanceProfile(elements:Obj[],relations:Obj[]):"comp
   return "compatible";
 }
 
+export function requiredMinimumPolicy(required:boolean,cardinality:string|null):{status:string;reason?:string;effective_min?:number;effective_max?:number|null}{
+  let bounds:{min:number;max:number|null};
+  try {bounds=cardinality===null?{min:0,max:null}:parseCardinality(cardinality);}
+  catch {return {status:"invalid",reason:"invalid_cardinality"};}
+  const minimum=Math.max(bounds.min,required?1:0);
+  if(bounds.max!==null&&minimum>bounds.max)return {status:"invalid",reason:"empty_upper_bound"};
+  return {status:"valid",effective_min:minimum,effective_max:bounds.max};
+}
+
 export function effectiveProperties(elements:Obj[],relationships:Obj[],propertySets:Obj[],propertyDefinitions:Obj[]):Obj {
   const sets=new Map<string,string[]>(propertySets.map(x=>[x.id,x.properties]));
   const known=new Set<string>(propertyDefinitions.map(x=>x.id));

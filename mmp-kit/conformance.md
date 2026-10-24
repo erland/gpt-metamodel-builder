@@ -49,3 +49,7 @@ The accompanying `conformance/mmp-1-1-readiness.json` and `specification/mmp-1-1
 ## Proposed relationship inheritance semantics
 
 `conformance/relationship-inheritance-v1.json` documents seven independently executed Python/TypeScript cases. This is opt-in proposed static type-specialization semantics, not MMP 1.0.0 admission and not full relationship-instance cardinality conformance.
+
+## Proposed required-minimum policy
+
+`conformance/required-policy-v1.json` verifies a versioned opt-in decision to interpret `required: true` as effective minimum 1. It is **not** a retroactive MMP 1.0.0 import rule; the former undecided helper is preserved.

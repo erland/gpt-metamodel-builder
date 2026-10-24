@@ -35,6 +35,7 @@ def main() -> int:
         [py,'scripts/test_mmp_version_extensions.py'],
         [py,'scripts/test_mmp_1_1_readiness.py'],
         [py,'scripts/test_mmp_relation_inheritance.py'],
+        [py,'scripts/test_mmp_required_policy.py'],
         [py,'scripts/test_semantic_validator.py'],
         [py,'scripts/test_sparx_mapping.py'],
         [py,'scripts/test_mdg_generator.py'],
