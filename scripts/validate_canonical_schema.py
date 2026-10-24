@@ -33,10 +33,12 @@ def validate_package(directory):
 
 def main():
     ap=argparse.ArgumentParser()
+    ap.add_argument('directory', type=Path, nargs='?', help='Model directory (legacy positional syntax)')
     ap.add_argument('--model-dir', type=Path, help='Validate an external canonical YAML model directory')
     args=ap.parse_args()
-    if args.model_dir:
-        target=args.model_dir.resolve()
+    selected = args.model_dir or args.directory
+    if selected:
+        target=selected.resolve()
         if not target.is_dir(): raise ValueError(f'Model directory not found: {target}')
         errs=validate_package(target)
         if errs: raise ValueError(f'{target}:\n'+'\n'.join(errs))
