@@ -47,11 +47,11 @@ jobs:
         run: |
           set -euo pipefail
           curl --fail --location --retry 3 \
-            --output /tmp/gpt-byggaren-engine-1.6.31.zip \
-            https://github.com/erland/gpt-byggaren/releases/download/v1.6.31/gpt-byggaren-engine-1.6.31.zip
-          echo "d8b9938e9e008415ee46eeb699d7520c2b7354a39f07f40fcac1fb6adc819e70  /tmp/gpt-byggaren-engine-1.6.31.zip" | sha256sum --check
+            --output /tmp/gpt-byggaren-engine-1.6.32.zip \
+            https://github.com/erland/gpt-byggaren/releases/download/v1.6.32/gpt-byggaren-engine-1.6.32.zip
+          echo "cba505ed53f48ab0359b827e5bf0a31afb5ecdbc66a5682ced723b8c8c178eda  /tmp/gpt-byggaren-engine-1.6.32.zip" | sha256sum --check
           mkdir -p /tmp/gpt-byggaren-engine
-          python -m zipfile -e /tmp/gpt-byggaren-engine-1.6.31.zip /tmp/gpt-byggaren-engine
+          python -m zipfile -e /tmp/gpt-byggaren-engine-1.6.32.zip /tmp/gpt-byggaren-engine
       - name: Self-test original engine
         run: |
           python /tmp/gpt-byggaren-engine/scripts/selftest_distribution_engine.py --source /tmp/gpt-byggaren-engine --output "$RUNNER_TEMP/engine-selftest.json"
