@@ -534,7 +534,7 @@ testing:
   model_compatibility_dir: evals/model-compatibility
 ci:
   enabled: true
-  workflow: .github/workflows/ci.yml
+  workflow: .github/workflows/gpt-byggaren-engine.yml
   runner: ubuntu-latest
   python: '3.12'
   validation_script: scripts/run_ci.py
