@@ -43,6 +43,8 @@ def package(output:Path):
             "conformance/relationship-inheritance-v1.json":(ROOT/"interop/relationship-inheritance-v1.json").read_bytes(),
             "conformance/required-policy-v1.json":(ROOT/"interop/required-policy-v1.json").read_bytes(),
             "conformance/canonical-values-v1.json":(ROOT/"interop/canonical-values-v1.json").read_bytes(),
+            "conformance/extension-negotiation-v1.json":(ROOT/"interop/extension-negotiation-v1.json").read_bytes(),
+            "specification/extension-negotiation-proposal.md":(ROOT/"docs/mmp-extension-negotiation.md").read_bytes(),
             "specification/canonical-values-policy.md":(ROOT/"docs/mmp-canonical-values-policy.md").read_bytes(),
             "specification/required-minimum-policy.md":(ROOT/"docs/mmp-required-minimum-policy.md").read_bytes(),
             "specification/relation-inheritance-policy.md":(ROOT/"docs/mmp-relation-inheritance-policy.md").read_bytes(),
