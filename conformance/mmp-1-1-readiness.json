@@ -1,0 +1,166 @@
+{
+  "review_version": "1.0.0",
+  "target_format_version": "1.1.0",
+  "source_contract_version": "1.0.0",
+  "overall": "not_ready",
+  "statuses": {
+    "covered_subset": "Golden/CI coverage for a limited interpretation, not full normative verification",
+    "open": "Normative interpretation or conformance tests missing",
+    "decision_required": "Compatibility-affecting format decision required"
+  },
+  "requirements": [
+    {
+      "id": "CORE-001",
+      "status": "covered_subset",
+      "evidence": [
+        "scripts/test_mmp_identity_evolution.py"
+      ],
+      "limitation": "Namespace and label identity tests; complete external conformance pending"
+    },
+    {
+      "id": "CORE-002",
+      "status": "covered_subset",
+      "evidence": [
+        "scripts/test_mmp_consumer_semantics.py",
+        "scripts/mmp_conformance_fixtures.py"
+      ],
+      "limitation": "Cycle and unknown supertype tested by reference consumers"
+    },
+    {
+      "id": "CORE-003",
+      "status": "covered_subset",
+      "evidence": [
+        "interop/effective-properties-v1.json",
+        "scripts/test_mmp_effective_properties.py"
+      ],
+      "limitation": "Transitive property-set outcome tested, complete ancestor closure API not certified"
+    },
+    {
+      "id": "CORE-004",
+      "status": "covered_subset",
+      "evidence": [
+        "interop/effective-properties-v1.json"
+      ],
+      "limitation": "Diamond inheritance, ID deduplication tested"
+    },
+    {
+      "id": "CORE-005",
+      "status": "covered_subset",
+      "evidence": [
+        "scripts/mmp_conformance_fixtures.py",
+        "scripts/test_mmp_consumer_semantics.py"
+      ],
+      "limitation": "Subset of referential and uniqueness checks tested"
+    },
+    {
+      "id": "CORE-006",
+      "status": "covered_subset",
+      "evidence": [
+        "interop/relationship-semantics-v1.json"
+      ],
+      "limitation": "Role/direction/navigable interpretation tested with shared vectors"
+    },
+    {
+      "id": "CORE-007",
+      "status": "open",
+      "evidence": [
+        "interop/relationship-semantics-v1.json",
+        "interop/cardinality-v1.json"
+      ],
+      "limitation": "Endpoint cardinality on model instances has no normative conformance suite"
+    },
+    {
+      "id": "CORE-008",
+      "status": "covered_subset",
+      "evidence": [
+        "interop/cardinality-v1.json",
+        "scripts/test_mmp_cardinality.py"
+      ],
+      "limitation": "Candidate strict parser tested but not enforced for 1.0.0 imports"
+    },
+    {
+      "id": "CORE-009",
+      "status": "decision_required",
+      "evidence": [
+        "interop/cardinality-v1.json",
+        "docs/mmp-cardinality-semantics.md"
+      ],
+      "limitation": "required:true plus minimum zero is explicitly undecided"
+    },
+    {
+      "id": "CORE-010",
+      "status": "covered_subset",
+      "evidence": [
+        "interop/default-values-v1.json",
+        "scripts/test_mmp_defaults.py"
+      ],
+      "limitation": "Candidate default type validation tested but not activated in admission"
+    },
+    {
+      "id": "CORE-011",
+      "status": "decision_required",
+      "evidence": [
+        "docs/mmp-default-value-semantics.md",
+        "interop/default-values-v1.json"
+      ],
+      "limitation": "Integer range, decimal precision, datetime/URI normalization unresolved"
+    },
+    {
+      "id": "CORE-012",
+      "status": "open",
+      "evidence": [
+        "docs/mmp-conformance-profiles-proposal.md"
+      ],
+      "limitation": "No normative executable rule language profile or evaluator tests"
+    },
+    {
+      "id": "CORE-013",
+      "status": "decision_required",
+      "evidence": [
+        "interop/version-extension-v1.json",
+        "docs/mmp-version-extensions.md"
+      ],
+      "limitation": "Critical extension negotiation external, no on-wire requirement contract"
+    },
+    {
+      "id": "CORE-014",
+      "status": "covered_subset",
+      "evidence": [
+        "interop/version-extension-v1.json",
+        "docs/mmp-version-extensions.md"
+      ],
+      "limitation": "Partial type-ID diff only; entire metamodel diff not covered"
+    }
+  ],
+  "optional_profiles": [
+    {
+      "id": "mmp-rules",
+      "status": "not_verified",
+      "reason": "No executable rule-language contract and shared evaluator suite"
+    },
+    {
+      "id": "mmp-notation",
+      "status": "not_verified",
+      "reason": "Rendering semantics and conformance cases not verified"
+    },
+    {
+      "id": "mmp-viewpoints",
+      "status": "not_verified",
+      "reason": "Viewpoint semantics and conformance cases not verified"
+    }
+  ],
+  "implementation_evidence": {
+    "python": "interop/mmp_v1_consumer.py",
+    "typescript": "interop/typescript/src/consumer.ts",
+    "shared_baseline": "scripts/mmp_conformance_fixtures.py",
+    "typescript_ci": ".github/workflows/mmp-typescript.yml"
+  },
+  "release_blockers": [
+    "required/cardinality conflict policy",
+    "relationship inheritance endpoint narrowing and endpoint cardinalities",
+    "integer/decimal/date/URI normalization",
+    "critical extension negotiation",
+    "normative rule language profile or explicit exclusion from Core",
+    "complete Core conformance suite and external capability evidence"
+  ]
+}
