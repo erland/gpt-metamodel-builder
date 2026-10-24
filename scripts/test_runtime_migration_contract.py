@@ -30,5 +30,5 @@ for skill in project["skills"]["definitions"]:
     assert (ROOT / skill["source"]).is_file(), skill["id"]
     for kind in ("references", "assets", "scripts"):
         for path in skill[kind]:
-            assert (ROOT / path).is_file(), path
+            assert (ROOT / path).exists() and ((ROOT / path).is_dir() if kind == "assets" else (ROOT / path).is_file()), path
 print("Migration runtime 1.6.31 contract: PASS (declarative, not build verification)")
