@@ -18,3 +18,7 @@ Skapa och förvalta verktygsneutrala metamodeller med canonical YAML som sanning
 
 ## Nuvarande fas
 Alla 19 utvecklingssteg är genomförda ur automatiserat projektperspektiv. OpenAI Plugin ingår nu som verifierad runtime-dependent peer distribution. Senaste maintenance-steget korrigerar Sparx MDG Technology-ID till högst 12 tecken efter praktisk importfeedback. Manuell Sparx EA-importverifiering ska köras om som extern gate.
+
+## Migration till GPT Byggaren 1.6.31
+
+Den aktuella distributionsarkitekturen använder gemensam canonical core, fyra modulära Skills och fem runtime-mål: Chat ZIP, OpenAI Plugin, Claude Projects, Claude Skills och OpenCode. Historiskt Custom GPT-stöd ingår inte längre i den aktiva byggkedjan. De elva produktverktygen och den verktygsneutrala YAML-modellen förblir oförändrade. En verklig Sparx EA-import verifieras separat.
