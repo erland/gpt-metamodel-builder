@@ -14,7 +14,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 from referencing import Registry, Resource
 
 ROOT = Path(__file__).resolve().parents[1]
-SCHEMAS = ROOT / "schemas" if (ROOT / "schemas").is_dir() else ROOT / "assets" / "schemas"
+SCHEMAS = ROOT / "schemas" if (ROOT / "schemas").is_dir() else ROOT / "assets"
 GUIDANCE = ROOT / "templates/metamodel/guidance.yaml" if (ROOT / "templates/metamodel/guidance.yaml").is_file() else ROOT / "assets/guidance.yaml"
 REQUIRED = ("metamodel", "properties", "constraints", "viewpoints", "notation", "provenance", "version")
 LIMIT_FILES = 300
