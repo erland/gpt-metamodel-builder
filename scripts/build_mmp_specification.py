@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse, hashlib, json, os, shutil, subprocess, sys, tempfile, zipfile
 from pathlib import Path
 import yaml
+from mmp_conformance_fixtures import bundle as conformance_bundle
 
 ROOT=Path(__file__).resolve().parents[1]
 FORMAT_VERSION="1.0.0"
@@ -32,6 +33,8 @@ def package(output:Path):
             "reference-implementation/mmp_v1_consumer.py":(ROOT/"interop/mmp_v1_consumer.py").read_bytes(),
             "examples/architecture-example.mmp.zip":example.read_bytes(),
         }
+        entries.update(conformance_bundle(example.read_bytes()))
+        entries["conformance/run_suite.py"]=(ROOT/"scripts/mmp_conformance_runner.py").read_bytes()
         for name in SCHEMAS:
             filename=name+".schema.json"
             entries["schemas/"+filename]=(ROOT/"schemas"/filename).read_bytes()
