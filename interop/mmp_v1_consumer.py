@@ -196,6 +196,47 @@ def extension_support(extensions, recognized, critical):
     return "preserved_uninterpreted" if unknown else "supported"
 
 
+
+def relation_inheritance_profile(elements, relations):
+    """Opt-in candidate narrowing rules, never invoked by MMP 1.0.0 admission."""
+    by_element = {x["id"]: x for x in elements}
+    by_relation = {x["id"]: x for x in relations}
+    def subtype(actual, parent):
+        if actual == parent:
+            return True
+        return any(subtype(p, parent) for p in by_element.get(actual, {}).get("extends", []))
+    def bounds(text):
+        return parse_cardinality(text)
+    for rel in relations:
+        for end in ("source", "target"):
+            if "cardinality" in rel[end]:
+                try: bounds(rel[end]["cardinality"])
+                except ValueError: return "invalid"
+    for rel in relations:
+        parents = rel.get("extends", [])
+        if len(parents) > 1:
+            return "needs_review"
+        for parent_id in parents:
+            parent = by_relation.get(parent_id)
+            if parent is None:
+                return "invalid"
+            if rel.get("directed", True) != parent.get("directed", True):
+                return "breaking"
+            for end in ("source", "target"):
+                new_types = rel[end]["types"]
+                allowed = parent[end]["types"]
+                if not all(any(subtype(t, p) for p in allowed) for t in new_types):
+                    return "breaking"
+                old_card, new_card = parent[end].get("cardinality"), rel[end].get("cardinality")
+                if (old_card is None) != (new_card is None):
+                    return "needs_review"
+                if old_card is not None:
+                    old, new = bounds(old_card), bounds(new_card)
+                    if new["min"] < old["min"] or (old["max"] is not None and (new["max"] is None or new["max"] > old["max"])):
+                        return "breaking"
+    return "compatible"
+
+
 def effective_properties(elements, relationships, property_sets, property_definitions):
     """Deterministic ID-based transitive property union (Core draft)."""
     known_sets = {x["id"]: x["properties"] for x in property_sets}
