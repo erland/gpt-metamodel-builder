@@ -1,0 +1,65 @@
+{
+  "policy": "required-minimum-v1",
+  "cases": [
+    {
+      "required": true,
+      "cardinality": "0..*",
+      "status": "valid",
+      "effective_min": 1,
+      "effective_max": null
+    },
+    {
+      "required": true,
+      "cardinality": "0",
+      "status": "invalid",
+      "reason": "empty_upper_bound"
+    },
+    {
+      "required": true,
+      "cardinality": "0..0",
+      "status": "invalid",
+      "reason": "empty_upper_bound"
+    },
+    {
+      "required": true,
+      "cardinality": "1..*",
+      "status": "valid",
+      "effective_min": 1,
+      "effective_max": null
+    },
+    {
+      "required": false,
+      "cardinality": "1..2",
+      "status": "valid",
+      "effective_min": 1,
+      "effective_max": 2
+    },
+    {
+      "required": false,
+      "cardinality": "*",
+      "status": "valid",
+      "effective_min": 0,
+      "effective_max": null
+    },
+    {
+      "required": true,
+      "cardinality": null,
+      "status": "valid",
+      "effective_min": 1,
+      "effective_max": null
+    },
+    {
+      "required": false,
+      "cardinality": null,
+      "status": "valid",
+      "effective_min": 0,
+      "effective_max": null
+    },
+    {
+      "required": true,
+      "cardinality": "3..1",
+      "status": "invalid",
+      "reason": "invalid_cardinality"
+    }
+  ]
+}
