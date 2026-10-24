@@ -240,6 +240,14 @@ export function canonicalValue(kind:string,value:string):{expected?:string;error
   return {error:"unsupported_type"};
 }
 
+
+export function negotiateExtensions(requirement:Obj,consumer:Obj[]):Obj{
+  const supported=new Set<string>(consumer.flatMap(x=>x.versions.map((v:string)=>x.id+"@"+v)));
+  const missing_required:string[]=requirement.required.filter((x:Obj)=>!supported.has(x.id+"@"+x.version)).map((x:Obj)=>x.id+"@"+x.version).sort();
+  const ignored_optional:string[]=requirement.optional.filter((x:Obj)=>!supported.has(x.id+"@"+x.version)).map((x:Obj)=>x.id+"@"+x.version).sort();
+  return {status:missing_required.length?"not_supported":ignored_optional.length?"partial":"supported",missing_required,ignored_optional};
+}
+
 export function effectiveProperties(elements:Obj[],relationships:Obj[],propertySets:Obj[],propertyDefinitions:Obj[]):Obj {
   const sets=new Map<string,string[]>(propertySets.map(x=>[x.id,x.properties]));
   const known=new Set<string>(propertyDefinitions.map(x=>x.id));
