@@ -122,6 +122,7 @@ skills:
     - scripts/validate_semantics.py
     - scripts/diff_metamodel.py
     - scripts/validate_workspace.py
+    - scripts/export_mmp.py
     assets: []
   - id: kallanpassning
     name: Källanpassning
