@@ -27,6 +27,12 @@ def main():
                    str(base/"examples/architecture-example.mmp.zip")],capture_output=True,text=True)
             assert test.returncode==0,test.stderr
             assert '"elements"' in test.stdout and '"relationships"' in test.stdout
+            z.extract("conformance/run_suite.py",td)
+            suite=subprocess.run([sys.executable,str(base/"conformance/run_suite.py"),
+                  "--kit",str(a.archive.resolve()),"--consumer",
+                  str(base/"reference-implementation/mmp_v1_consumer.py")],capture_output=True,text=True)
+            assert suite.returncode==0,suite.stdout+"\n"+suite.stderr
+            assert "9/9 PASS" in suite.stdout,suite.stdout
     print("MMP specification kit PASS: checksums, files, independent example consumption")
 
 if __name__=="__main__":main()
