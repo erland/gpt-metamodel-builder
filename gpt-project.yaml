@@ -58,7 +58,9 @@ analysis:
     deterministic_gates: true
     model_compatibility_evals: true
 instructions:
-  canonical: assistant/instructions.md
+  mode: modular_skills
+  canonical: canonical/core.md
+  core: canonical/core.md
   core_contract:
     enabled: true
     required_markers:
@@ -70,6 +72,53 @@ instructions:
     - assistant/policies/workflow.md
     max_required_file_hops: 1
     knowledge_may_not_be_required_for_core_behavior: true
+skills:
+  resource_policy: explicit
+  definitions:
+  - id: metamodellering
+    name: Metamodellering
+    description: Skapa, ändra, validera och versionsjämföra canonical metamodeller.
+    source: canonical/skills/metamodellering/behavior.md
+    references:
+    - docs/canonical-metamodel-v1.md
+    - docs/semantic-validation-v1.md
+    scripts:
+    - scripts/validate_canonical_schema.py
+    - scripts/validate_semantics.py
+    - scripts/diff_metamodel.py
+    assets: []
+  - id: kallanpassning
+    name: Källanpassning
+    description: Anpassa metamodeller från källstandarder via godkända transformationsplaner.
+    source: canonical/skills/kallanpassning/behavior.md
+    references: []
+    scripts:
+    - scripts/adapt_source_model.py
+    assets: []
+  - id: sparx-ea
+    name: Sparx EA MDG
+    description: Importera, mappa, generera och validera Sparx Enterprise Architect MDG.
+    source: canonical/skills/sparx-ea/behavior.md
+    references:
+    - docs/sparx-ea-mapping-v1.md
+    - docs/sparx-ea-mdg-generator-v1.md
+    - docs/sparx-ea-mdg-import-v1.md
+    scripts:
+    - scripts/validate_sparx_mapping.py
+    - scripts/generate_sparx_mdg.py
+    - scripts/validate_generated_mdg.py
+    - scripts/import_sparx_mdg.py
+    assets: []
+  - id: dokumentation
+    name: Dokumentation
+    description: Generera metamodellreferens, modelleringshandledning och snabbguider.
+    source: canonical/skills/dokumentation/behavior.md
+    references:
+    - docs/modeling-guidance-v1.md
+    scripts:
+    - scripts/generate_documentation.py
+    - scripts/export_documentation.py
+    assets: []
 model_robustness:
   level: stateful
   separate_model_instructions: false
