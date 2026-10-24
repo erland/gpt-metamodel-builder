@@ -1,4 +1,4 @@
-name: GPT Byggaren engine 1.6.32 preflight
+name: GPT Byggaren engine 1.6.33 preflight
 
 on:
   pull_request:
@@ -22,14 +22,14 @@ jobs:
         run: |
           set -euo pipefail
           curl --fail --location --retry 3 \
-            --output /tmp/gpt-byggaren-engine-1.6.32.zip \
-            https://github.com/erland/gpt-byggaren/releases/download/v1.6.32/gpt-byggaren-engine-1.6.32.zip
-          echo "cba505ed53f48ab0359b827e5bf0a31afb5ecdbc66a5682ced723b8c8c178eda  /tmp/gpt-byggaren-engine-1.6.32.zip" | sha256sum --check
+            --output /tmp/gpt-byggaren-engine-1.6.33.zip \
+            https://github.com/erland/gpt-byggaren/releases/download/v1.6.33/gpt-byggaren-engine-1.6.33.zip
+          echo "9638ce2b9300423ace6c055ef824284154788d9d8e6e54459f875fe56ff69885  /tmp/gpt-byggaren-engine-1.6.33.zip" | sha256sum --check
       - name: Unpack original engine
         shell: bash
         run: |
           mkdir -p /tmp/gpt-byggaren-engine
-          python -m zipfile -e /tmp/gpt-byggaren-engine-1.6.32.zip /tmp/gpt-byggaren-engine
+          python -m zipfile -e /tmp/gpt-byggaren-engine-1.6.33.zip /tmp/gpt-byggaren-engine
       - name: Run original engine self-test
         shell: bash
         run: |
@@ -75,6 +75,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gpt-byggaren-engine-1.6.32-preflight
+          name: gpt-byggaren-engine-1.6.33-preflight
           path: ${{ runner.temp }}/engine-selftest.json
           if-no-files-found: warn

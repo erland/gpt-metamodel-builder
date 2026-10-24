@@ -32,11 +32,11 @@ Canonical `guidance.yaml` beskriver när element, relationer och viewpoints ska 
 
 OpenAI Plugin distribueras som en skills-first `equivalent_runtime_dependent` peer runtime. Canonical instruktion, workflow-policy, schemas, metamodell, Sparx-adapter, templates, workspace och de deklarerade modell-/generatorverktygen och MMP-export/import följer med som Skill-resurser. Pluginen skapar ingen MCP-wrapper enbart för scriptkörning. Full deterministisk parity kräver persistent writable workspace och kompatibel Python/code execution; faktisk Sparx EA-import förblir en extern manuell verifieringsgate.
 
-## Distribution och release (GPT Byggaren 1.6.32)
+## Distribution och release (GPT Byggaren 1.6.33)
 
 Canonical beteende finns i `canonical/core.md` och fyra avgränsade `canonical/skills/*/behavior.md`. `assistant/instructions.md` är historisk källa för migrationsspårbarhet.
 
-Originalmotorn GPT Byggaren 1.6.32 skapar ett projektpaket och fem distributioner: Chat, OpenAI Plugin, Claude Projects, Claude Skills och OpenCode. CI kör domänregressionstesterna separat; `.github/workflows/gpt-byggaren-engine.yml` verifierar engine-build, medan `.github/workflows/release.yml` använder samma versionslåsta motor för release. Custom GPT byggs inte längre.
+Originalmotorn GPT Byggaren 1.6.33 skapar ett projektpaket och fem distributioner: Chat, OpenAI Plugin, Claude Projects, Claude Skills och OpenCode. CI kör domänregressionstesterna separat; `.github/workflows/gpt-byggaren-engine.yml` verifierar engine-build, medan `.github/workflows/release.yml` använder samma versionslåsta motor för release. Custom GPT byggs inte längre.
 
 Releasepaketens integritet styrks av `DELIVERY-MANIFEST.json` och `SHA256SUMS.txt`. Runtimeparitet kräver fortfarande separat funktionell verifiering i respektive värdmiljö. Manuell Sparx EA-import är inte automatiskt verifierad.
 
