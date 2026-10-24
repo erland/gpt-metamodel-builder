@@ -14,7 +14,7 @@ try{
    const bytes=kit[test.package];if(!bytes)throw Error("Missing fixture: "+test.id);
    if(createHash("sha256").update(bytes).digest("hex")!==test.sha256)throw Error("Tampered fixture: "+test.id);
    let actual:"accept"|"reject"="accept";
-   try{consume(bytes);}catch{actual="reject";}
+   try{consume(bytes);}catch(e){actual="reject"; if(test.expected==="accept")console.error("Unexpected rejection:",e);}
    const pass=actual===test.expected;if(pass)passes++;
    console.log(`${pass?"PASS":"FAIL"} ${test.id}: expected ${test.expected}, got ${actual}`);
  }
