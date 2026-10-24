@@ -23,14 +23,14 @@ def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--dist",type=Path,default=Path("dist"))
     args=ap.parse_args()
-    for runtime in ("plugin","claude-skills"):
+    for runtime in ("plugin","claude-skills","opencode"):
         archives=list(args.dist.glob(f"metamodel-builder-{runtime}-*.zip"))
         assert len(archives)==1,archives
         with tempfile.TemporaryDirectory() as td:
             base=Path(td)
             with zipfile.ZipFile(archives[0]) as z:
                 z.extractall(base)
-            skill=base/"skills/metamodellering"
+            skill=base/(".opencode/skills/metamodellering" if runtime == "opencode" else "skills/metamodellering")
             for item in ("mmp-manifest-v1.schema.json","metamodel.schema.json"):
                 assert (skill/"assets"/item).is_file(),item
             assert (skill/"assets/guidance.yaml").is_file()
