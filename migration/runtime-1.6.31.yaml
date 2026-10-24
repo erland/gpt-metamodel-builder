@@ -1,0 +1,54 @@
+schema_version: 1
+migration:
+  engine_version: 1.6.31
+  source: docs/migration-gpt-byggaren-1.6.31.md
+  phase: runtime_contract
+  status: preparing
+  legacy_build_active: true
+  note: >
+    This is the explicit migration target contract. Existing gpt-project.yaml
+    build targets remain authoritative until the original 1.6.31 engine
+    completes a verified build and legacy CI is replaced.
+runtimes:
+  chat:
+    runtime_id: chatgpt_chat
+    runtime_key: chat_zip
+    builder: chat
+    artifact_type: chat_zip
+    enabled: true
+  plugin:
+    runtime_id: openai_plugin
+    runtime_key: plugin
+    builder: plugin
+    artifact_type: plugin_zip
+    enabled: true
+    requirements: [persistent_workspace, python_execution]
+  claude_project:
+    runtime_id: claude_project
+    runtime_key: claude
+    builder: claude
+    artifact_type: claude_project_zip
+    enabled: true
+    requirements: [file_exchange]
+  claude_skills:
+    runtime_id: claude_skills
+    runtime_key: claude
+    builder: claude_skills
+    artifact_type: claude_skills_zip
+    enabled: true
+    requirements: [skill_resource_packaging]
+  opencode:
+    runtime_id: opencode
+    runtime_key: opencode
+    builder: opencode
+    artifact_type: opencode_zip
+    enabled: true
+    requirements: [local_workspace, python_execution]
+disabled:
+  - chatgpt_custom
+preserve:
+  project_state: project-status.yaml
+  tool_contract: tools.tools
+  canonical_core: canonical/core.md
+  skill_definitions: skills.definitions
+  manual_external_gate: Sparx EA import
