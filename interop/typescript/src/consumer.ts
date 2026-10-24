@@ -110,6 +110,35 @@ export function validateDefaultValue(typeName:string,value:any,opts:{values?:str
   });
 }
 
+
+export function relationshipSemantics(elements:Obj[],relationships:Obj[]){
+  const byElement=new Map<string,Obj>(elements.map(x=>[x.id,x]));
+  const byRelation=new Map<string,Obj>(relationships.map(x=>[x.id,x]));
+  const descendants=(id:string,ancestor:string):boolean=>{
+    const seen=new Set<string>(),todo=[id];
+    while(todo.length){const current=todo.pop()!;
+      if(current===ancestor)return true;
+      if(seen.has(current)||!byElement.has(current))continue;
+      seen.add(current);todo.push(...(byElement.get(current)!.extends??[]));
+    }
+    return false;
+  };
+  const summary:Obj={};
+  for(const id of [...byRelation.keys()].sort()){
+    const r=byRelation.get(id)!;
+    summary[id]={directed:r.directed??true,source_types:[...r.source.types].sort(),
+      target_types:[...r.target.types].sort(),source_navigable:r.source.navigable??null,
+      target_navigable:r.target.navigable??null};
+  }
+  const allowed=(rel:string,source:string,target:string):boolean=>{
+    const r=byRelation.get(rel);
+    if(!r||!byElement.has(source)||!byElement.has(target))return false;
+    return r.source.types.some((t:string)=>descendants(source,t))
+      && r.target.types.some((t:string)=>descendants(target,t));
+  };
+  return {summary,allowed};
+}
+
 export function effectiveProperties(elements:Obj[],relationships:Obj[],propertySets:Obj[],propertyDefinitions:Obj[]):Obj {
   const sets=new Map<string,string[]>(propertySets.map(x=>[x.id,x.properties]));
   const known=new Set<string>(propertyDefinitions.map(x=>x.id));
