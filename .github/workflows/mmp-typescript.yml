@@ -30,3 +30,4 @@ jobs:
       - run: node interop/typescript/dist/version-extension-test.js interop/version-extension-v1.json
       - run: node interop/typescript/dist/relation-inheritance-test.js interop/relationship-inheritance-v1.json
       - run: node interop/typescript/dist/required-policy-test.js interop/required-policy-v1.json
+      - run: node interop/typescript/dist/canonical-value-test.js interop/canonical-values-v1.json
