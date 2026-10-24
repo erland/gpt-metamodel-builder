@@ -58,6 +58,35 @@ function graph(items:Obj[],available:Set<string>):void {
   for(const id of available)visit(id);
 }
 function sha(bytes:Uint8Array):string{return createHash("sha256").update(bytes).digest("hex");}
+
+export function effectiveProperties(elements:Obj[],relationships:Obj[],propertySets:Obj[],propertyDefinitions:Obj[]):Obj {
+  const sets=new Map<string,string[]>(propertySets.map(x=>[x.id,x.properties]));
+  const known=new Set<string>(propertyDefinitions.map(x=>x.id));
+  const result:Obj={};
+  for(const [label,types] of [["elements",elements],["relationships",relationships]] as const){
+    const byId=new Map<string,Obj>(types.map(x=>[x.id,x]));
+    const cache=new Map<string,Obj>(),visiting=new Set<string>();
+    const resolve=(id:string):Obj=>{
+      if(cache.has(id))return cache.get(id)!;
+      ensure(!visiting.has(id),"Inheritance cycle");
+      const item=byId.get(id);ensure(item,"Unknown inherited type");
+      visiting.add(id);
+      const union=new Set<string>(item.property_sets??[]);
+      for(const parent of item.extends??[])for(const p of resolve(parent).property_sets)union.add(p);
+      visiting.delete(id);
+      const props=new Set<string>();
+      for(const setId of union){
+        const refs=sets.get(setId);ensure(refs,"Unknown property set");
+        for(const ref of refs){ensure(known.has(ref),"Unknown property definition");props.add(ref);}
+      }
+      const value={property_sets:[...union].sort(),properties:[...props].sort()};
+      cache.set(id,value);return value;
+    };
+    result[label]=Object.fromEntries([...byId.keys()].sort().map(id=>[id,resolve(id)]));
+  }
+  return result;
+}
+
 export function consume(bytes:Uint8Array):Obj {
   const files=readArchive(bytes);
   ensure(files["manifest.yaml"],"Missing manifest");
@@ -103,7 +132,7 @@ export function consume(bytes:Uint8Array):Obj {
   }
   for(const item of props.enumerations)ids(item.values,"enum values");
   for(const r of relations)for(const end of ["source","target"])for(const ref of r[end].types)ensure(elemIds.has(ref),"Unknown endpoint");
-  return {package_format_version:manifest.package_format_version,metamodel:manifest.metamodel,
+  return {effective_properties:effectiveProperties(elements,relations,props.property_sets,props.property_definitions),package_format_version:manifest.package_format_version,metamodel:manifest.metamodel,
     elements:elements.map((x:Obj)=>({id:x.id,name:x.name})),relationships:relations.map((x:Obj)=>({id:x.id,name:x.name})),
     property_count:props.property_definitions.length};
 }

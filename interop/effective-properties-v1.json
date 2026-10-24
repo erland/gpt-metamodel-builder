@@ -1,0 +1,150 @@
+{
+  "elements": [
+    {
+      "id": "root",
+      "name": "Root",
+      "property_sets": [
+        "common"
+      ]
+    },
+    {
+      "id": "left",
+      "name": "Left",
+      "extends": [
+        "root"
+      ],
+      "property_sets": [
+        "left-set"
+      ]
+    },
+    {
+      "id": "right",
+      "name": "Right",
+      "extends": [
+        "root"
+      ],
+      "property_sets": [
+        "right-set"
+      ]
+    },
+    {
+      "id": "diamond",
+      "name": "Diamond",
+      "extends": [
+        "left",
+        "right"
+      ],
+      "property_sets": [
+        "common"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "id": "uses",
+      "name": "Uses",
+      "property_sets": [
+        "common"
+      ]
+    }
+  ],
+  "property_sets": [
+    {
+      "id": "common",
+      "properties": [
+        "id",
+        "label"
+      ]
+    },
+    {
+      "id": "left-set",
+      "properties": [
+        "left-only",
+        "label"
+      ]
+    },
+    {
+      "id": "right-set",
+      "properties": [
+        "right-only"
+      ]
+    }
+  ],
+  "property_definitions": [
+    {
+      "id": "id",
+      "name": "Identifier"
+    },
+    {
+      "id": "label",
+      "name": "Shared Label"
+    },
+    {
+      "id": "left-only",
+      "name": "Collision"
+    },
+    {
+      "id": "right-only",
+      "name": "Collision"
+    }
+  ],
+  "expected": {
+    "elements": {
+      "root": {
+        "property_sets": [
+          "common"
+        ],
+        "properties": [
+          "id",
+          "label"
+        ]
+      },
+      "left": {
+        "property_sets": [
+          "common",
+          "left-set"
+        ],
+        "properties": [
+          "id",
+          "label",
+          "left-only"
+        ]
+      },
+      "right": {
+        "property_sets": [
+          "common",
+          "right-set"
+        ],
+        "properties": [
+          "id",
+          "label",
+          "right-only"
+        ]
+      },
+      "diamond": {
+        "property_sets": [
+          "common",
+          "left-set",
+          "right-set"
+        ],
+        "properties": [
+          "id",
+          "label",
+          "left-only",
+          "right-only"
+        ]
+      }
+    },
+    "relationships": {
+      "uses": {
+        "property_sets": [
+          "common"
+        ],
+        "properties": [
+          "id",
+          "label"
+        ]
+      }
+    }
+  }
+}

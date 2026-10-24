@@ -22,3 +22,5 @@ jobs:
       - run: npm run build
         working-directory: interop/typescript
       - run: node interop/typescript/dist/conformance.js /tmp/mmp-specification-1.0.0.zip
+      - run: python scripts/test_mmp_effective_properties.py
+      - run: node interop/typescript/dist/effective-properties-test.js interop/effective-properties-v1.json
