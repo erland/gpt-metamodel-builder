@@ -124,7 +124,9 @@ skills:
     - scripts/validate_workspace.py
     - scripts/export_mmp.py
     - scripts/import_mmp.py
-    assets: []
+    assets:
+    - schemas
+    - templates/metamodel
   - id: kallanpassning
     name: Källanpassning
     description: Anpassa metamodeller från källstandarder via godkända transformationsplaner.
