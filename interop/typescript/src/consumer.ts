@@ -94,16 +94,16 @@ export function validateDefaultValue(typeName:string,value:any,opts:{values?:str
       case "decimal":return typeof item==="number"&&Number.isFinite(item);
       case "boolean":return typeof item==="boolean";
       case "date":{
-        if(typeof item!=="string"||!/^\\d{4}-\\d{2}-\\d{2}$/.test(item))return false;
+        if(typeof item!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(item))return false;
         const [y,m,d]=item.split("-").map(Number);
         const dt=new Date(Date.UTC(y,m-1,d));
         return dt.getUTCFullYear()===y&&dt.getUTCMonth()+1===m&&dt.getUTCDate()===d;
       }
       case "datetime":{
-        if(typeof item!=="string"||!/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:Z|[+-]\\d{2}:\\d{2})$/.test(item))return false;
+        if(typeof item!=="string"||!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})$/.test(item))return false;
         return !Number.isNaN(Date.parse(item));
       }
-      case "uri":return typeof item==="string"&&/^[A-Za-z][A-Za-z0-9+.-]*:/.test(item)&&!/[\\s]/.test(item);
+      case "uri":return typeof item==="string"&&/^[A-Za-z][A-Za-z0-9+.-]*:/.test(item)&&!/[\s]/.test(item);
       case "enumeration":return typeof item==="string"&&Array.isArray(opts.values)&&opts.values.includes(item);
       default:return false;
     }
