@@ -1,0 +1,243 @@
+{
+  "profile": "core016-junction-structural-candidate",
+  "semantics": "topology only, AND/OR behaviour not interpreted",
+  "model": {
+    "junctions": [
+      {
+        "id": "and_type",
+        "operator": "and"
+      },
+      {
+        "id": "or_type",
+        "operator": "or"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "id": "and-connected",
+      "expected": "accept",
+      "graph": {
+        "complete": true,
+        "junctions": [
+          {
+            "id": "j",
+            "type": "and_type"
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "kind": "element",
+              "id": "a"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "j"
+            }
+          },
+          {
+            "source": {
+              "kind": "junction",
+              "id": "j"
+            },
+            "target": {
+              "kind": "element",
+              "id": "b"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "or-connected",
+      "expected": "accept",
+      "graph": {
+        "complete": true,
+        "junctions": [
+          {
+            "id": "j",
+            "type": "or_type"
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "kind": "element",
+              "id": "a"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "j"
+            }
+          },
+          {
+            "source": {
+              "kind": "junction",
+              "id": "j"
+            },
+            "target": {
+              "kind": "element",
+              "id": "b"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "unconnected-output",
+      "expected": "reject",
+      "graph": {
+        "complete": true,
+        "junctions": [
+          {
+            "id": "j",
+            "type": "and_type"
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "kind": "element",
+              "id": "a"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "j"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "no-incoming",
+      "expected": "reject",
+      "graph": {
+        "complete": true,
+        "junctions": [
+          {
+            "id": "j",
+            "type": "and_type"
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "kind": "junction",
+              "id": "j"
+            },
+            "target": {
+              "kind": "element",
+              "id": "b"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "incomplete",
+      "expected": "not_supported",
+      "graph": {
+        "complete": false,
+        "junctions": [
+          {
+            "id": "j",
+            "type": "and_type"
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "kind": "element",
+              "id": "a"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "j"
+            }
+          },
+          {
+            "source": {
+              "kind": "junction",
+              "id": "j"
+            },
+            "target": {
+              "kind": "element",
+              "id": "b"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "unknown-junction-type",
+      "expected": "error",
+      "graph": {
+        "complete": true,
+        "junctions": [
+          {
+            "id": "j",
+            "type": "unknown"
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "kind": "element",
+              "id": "a"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "j"
+            }
+          },
+          {
+            "source": {
+              "kind": "junction",
+              "id": "j"
+            },
+            "target": {
+              "kind": "element",
+              "id": "b"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "dangling-junction",
+      "expected": "error",
+      "graph": {
+        "complete": true,
+        "junctions": [
+          {
+            "id": "j",
+            "type": "and_type"
+          }
+        ],
+        "edges": [
+          {
+            "source": {
+              "kind": "element",
+              "id": "a"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "missing"
+            }
+          },
+          {
+            "source": {
+              "kind": "junction",
+              "id": "j"
+            },
+            "target": {
+              "kind": "element",
+              "id": "b"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
