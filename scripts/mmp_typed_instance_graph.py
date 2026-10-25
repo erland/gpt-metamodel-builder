@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from collections import Counter
 from mmp_instance_cardinality import validate_incidence
+from mmp_effective_typed_pairs import effective_typed_pairs
 
 
 def validate_typed_graph(model: dict, graph: dict) -> list[dict]:
@@ -80,11 +81,11 @@ def validate_typed_graph(model: dict, graph: dict) -> list[dict]:
                 raise ValueError("CORE-007 typed endpoint outside declared domain")
             counts[(rel["id"], role, kind, ident)] += 1
 
-        if "allowed_typed_pairs" in rel:
+        if "allowed_typed_pairs" in rel or rel.get("extends"):
             pair = tuple((edge[role]["kind"], types[edge[role]["kind"]][edge[role]["id"]])
                          for role in ("source", "target"))
             allowed_pairs = {tuple((p[role]["kind"], p[role]["id"]) for role in ("source", "target"))
-                             for p in rel["allowed_typed_pairs"]}
+                             for p in effective_typed_pairs(model, rel["id"])}
             if pair not in allowed_pairs:
                 raise ValueError("CORE-016 typed pair disallowed")
 
