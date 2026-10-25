@@ -22,4 +22,14 @@ Versionerna är separata: **Specification Kit 1.1.0** innehåller **MMP-format 1
 
 En grön körning visar att specifikationspaketet är reproducerbart, integritetskontrollerat och fungerar med de två referenskonsumenternas testade delmängder. Den godkänner **releasekandidaten till MMP Specification Kit 1.1.0** med beskrivna begränsningar, inte en oberoende tredjepartscertifiering.
 
-När PR är mergad kan en separat tagg/release publiceras med den byggda ZIP-filen och dess SHA-256. En release skapas inte automatiskt av denna PR.
+## Publicering på GitHub
+
+När PR:en är mergad, bygg utifrån samma commit som releasetaggen:
+
+```bash
+python scripts/build_mmp_specification.py
+python scripts/test_mmp_release_kit.py --kit mmp-specification-kit-1.1.0.zip
+sha256sum mmp-specification-kit-1.1.0.zip > mmp-specification-kit-1.1.0.zip.sha256
+```
+
+Publicera **en distributions-ZIP** (`mmp-specification-kit-1.1.0.zip`) plus den lilla **SHA-256-textfilen** som release assets. SHA-256-filen är en kontrollsumma, inte ett ytterligare distributionspaket. Kontrollera taggens versionsnummer och ange både Specification Kit 1.1.0 och MMP-format 1.0.0 i release notes. Publicera inte MMP 1.1 Core som färdig profil. En GitHub-release skapas inte automatiskt av denna PR.
