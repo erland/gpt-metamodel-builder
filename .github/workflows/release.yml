@@ -74,8 +74,14 @@ jobs:
           python scripts/test_runtime_archive_parity.py --dist dist
           python scripts/test_mmp_distribution_archives.py --dist dist
           python scripts/test_mmp_skill_direct_execution.py --dist dist
-          python scripts/build_mmp_specification.py --output dist/mmp-specification-1.0.0.zip
-          python scripts/test_mmp_specification_kit.py --archive dist/mmp-specification-1.0.0.zip
+          MMP_KIT_NAME="$(python scripts/build_mmp_specification.py --print-filename)"
+          MMP_KIT_PATH="dist/$MMP_KIT_NAME"
+          echo "MMP_KIT_PATH=$MMP_KIT_PATH" >> "$GITHUB_ENV"
+          python scripts/build_mmp_specification.py --output "$MMP_KIT_PATH"
+          python scripts/test_mmp_specification_kit.py --archive "$MMP_KIT_PATH"
+          python scripts/test_mmp_release_kit.py --kit "$MMP_KIT_PATH"
+          (cd dist && sha256sum "$MMP_KIT_NAME" >> SHA256SUMS.txt)
+          sha256sum "$MMP_KIT_PATH" > "$MMP_KIT_PATH.sha256"
           python - <<'PY'
           import shutil, subprocess, sys, tempfile
           from pathlib import Path
@@ -92,16 +98,18 @@ jobs:
           for runtime in project chat claude-project claude-skills opencode plugin; do
             test -s "dist/metamodel-builder-${runtime}-${VERSION}.zip"
           done
-          test -s dist/mmp-specification-1.0.0.zip
+          test -s "$MMP_KIT_PATH"
+          test -s "$MMP_KIT_PATH.sha256"
           test -s dist/DELIVERY-MANIFEST.json
           (cd dist && sha256sum --check SHA256SUMS.txt)
-      - name: Upload six archives and manifest
+      - name: Upload distributions, MMP kit and checksums
         uses: actions/upload-artifact@v4
         with:
           name: metamodel-builder-${{ steps.version.outputs.version }}
           path: |
             dist/metamodel-builder-*.zip
-            dist/mmp-specification-*.zip
+            dist/mmp-specification-kit-*.zip
+            dist/mmp-specification-kit-*.zip.sha256
             dist/DELIVERY-MANIFEST.json
             dist/SHA256SUMS.txt
           if-no-files-found: error
@@ -113,4 +121,4 @@ jobs:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
           set -euo pipefail
-          gh release upload "$RELEASE_TAG" dist/metamodel-builder-*.zip dist/mmp-specification-*.zip dist/DELIVERY-MANIFEST.json dist/SHA256SUMS.txt --clobber
+          gh release upload "$RELEASE_TAG" dist/metamodel-builder-*.zip dist/mmp-specification-kit-*.zip dist/mmp-specification-kit-*.zip.sha256 dist/DELIVERY-MANIFEST.json dist/SHA256SUMS.txt --clobber
