@@ -52,9 +52,9 @@ state:
     verification remains an explicit external release gate when EA is available.
   - "OpenAI Plugin är equivalent_runtime_dependent: full deterministisk parity kräver persistent writable workspace och kompatibel code execution från hosten."
 next_step:
-  recommended: core009-core011-value-required-semantics
-  title: Define and test strict instance-level endpoint cardinality (CORE-007)
-  reason: MMP 1.1-kandidatmanifest finns med kritisk deklaration och fail-closed kontroll. Nästa steg är profiler med verifierad semantik och fulla Python/TypeScript-fixtures utan förändring av 1.0.
+  recommended: mmp-11-tag-bound-final-acceptance
+  title: Verify tagged Specification Kit 1.2.0 candidate release artifact
+  reason: The limited MMP 1.1 profile contract and multi-profile package tests are implemented; reproducible kit build exists. Final tagged artifact verification and explicit release authorization are pending.
 resume:
   supported: true
   required_files:
@@ -69,12 +69,10 @@ resume:
     återstår fortfarande som extern gate för MDG.
 
 mmp_1_1_workstream:
-  status: design_decided_implementation_pending
+  status: release_candidate_preparation
   conformance: partial_no_go
-  plan: docs/mmp-1-1-archimate-gap-plan.md
-  new_requirements:
-  - CORE-015
-  - CORE-016
-  next_action: define_core009_core011_value_canonicalization_and_required_semantics
+  plan: docs/mmp-11-limited-release-review.md
+  candidate_kit_version: 1.2.0
+  candidate_package_format_version: 1.1.0
+  next_action: tag_bound_artifact_verification_and_release_go_no_go
   mmp_1_0_0_unchanged: true
-
