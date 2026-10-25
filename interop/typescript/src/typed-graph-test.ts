@@ -19,6 +19,23 @@ function graphResult(model:Obj,graph:Obj):string{
     if(typeof j.id!=="string"||!j.id||Object.values(maps).some(m=>m.has(j.id))||!junctionDefs.has(j.type))return "error";
     maps.junction.set(j.id,j.type);
   }
+  // Relationship-instance dependency cycles have no supported meaning yet.
+  const dependencies=new Map<string,string[]>();
+  for(const edge of graph.edges){
+    dependencies.set(edge.id,["source","target"]
+      .map(role=>edge[role])
+      .filter((endpoint:Obj)=>endpoint?.kind==="relationship"&&maps.relationship.has(endpoint.id))
+      .map((endpoint:Obj)=>endpoint.id));
+  }
+  const states=new Map<string,number>();
+  const visit=(id:string):boolean=>{
+    if(states.get(id)===1)return false;
+    if(states.get(id)===2)return true;
+    states.set(id,1);
+    for(const dependency of dependencies.get(id)??[])if(!visit(dependency))return false;
+    states.set(id,2);return true;
+  };
+  for(const id of dependencies.keys())if(!visit(id))return "not_supported";
   const counts=new Map<string,number>();
   const key=(r:string,role:string,kind:string,id:string)=>JSON.stringify([r,role,kind,id]);
   for(const edge of graph.edges){

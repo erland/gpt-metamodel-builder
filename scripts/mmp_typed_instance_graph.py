@@ -40,6 +40,28 @@ def validate_typed_graph(model: dict, graph: dict) -> list[dict]:
                 or key in node_types or key in edge_types or typ not in junction_defs):
             raise ValueError("CORE-007 invalid or duplicate junction instance")
         junction_types[key] = typ
+    # A relationship instance may reference other edge instances, but recursive
+    # containment has no defined CORE-007 semantics. Reject cycles fail-closed.
+    dependencies = {}
+    for edge in edges:
+        dependencies[edge["id"]] = [
+            edge[role]["id"] for role in ("source", "target")
+            if isinstance(edge.get(role), dict) and edge[role].get("kind") == "relationship"
+            and isinstance(edge[role].get("id"), str) and edge[role]["id"] in edge_types
+        ]
+    states = {}
+    def visit(ident):
+        state = states.get(ident, 0)
+        if state == 1:
+            raise ValueError("CORE-007 not_supported: cyclic relationship instance references")
+        if state == 2:
+            return
+        states[ident] = 1
+        for ref in dependencies[ident]:
+            visit(ref)
+        states[ident] = 2
+    for ident in dependencies:
+        visit(ident)
     types = {"element": node_types, "relationship": edge_types, "junction": junction_types}
     counts = Counter()
     for edge in edges:

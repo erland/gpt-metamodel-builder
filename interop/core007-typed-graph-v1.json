@@ -593,6 +593,128 @@
           }
         ]
       }
+    },
+    {
+      "id": "cyclic-relationship-instances",
+      "expected": "not_supported",
+      "graph": {
+        "complete": true,
+        "instances": [
+          {
+            "id": "a",
+            "type": "actor"
+          },
+          {
+            "id": "s",
+            "type": "service"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "j",
+            "type": "and"
+          }
+        ],
+        "edges": [
+          {
+            "id": "e1",
+            "relationship": "serves",
+            "source": {
+              "kind": "relationship",
+              "id": "e3"
+            },
+            "target": {
+              "kind": "element",
+              "id": "s"
+            }
+          },
+          {
+            "id": "e2",
+            "relationship": "joins",
+            "source": {
+              "kind": "element",
+              "id": "s"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "j"
+            }
+          },
+          {
+            "id": "e3",
+            "relationship": "annotates",
+            "source": {
+              "kind": "relationship",
+              "id": "e1"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "j"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "self-referential-relationship-instance",
+      "expected": "not_supported",
+      "graph": {
+        "complete": true,
+        "instances": [
+          {
+            "id": "a",
+            "type": "actor"
+          },
+          {
+            "id": "s",
+            "type": "service"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "j",
+            "type": "and"
+          }
+        ],
+        "edges": [
+          {
+            "id": "e1",
+            "relationship": "serves",
+            "source": {
+              "kind": "element",
+              "id": "a"
+            },
+            "target": {
+              "kind": "element",
+              "id": "s"
+            }
+          },
+          {
+            "id": "e2",
+            "relationship": "joins",
+            "source": {
+              "kind": "element",
+              "id": "s"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "j"
+            }
+          },
+          {
+            "id": "e3",
+            "relationship": "annotates",
+            "source": {
+              "kind": "relationship",
+              "id": "e3"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "j"
+            }
+          }
+        ]
+      }
     }
   ]
 }
