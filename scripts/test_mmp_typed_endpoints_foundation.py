@@ -29,7 +29,7 @@ with tempfile.TemporaryDirectory() as tmp:
     report=validate(model)
     assert not report.errors,report.errors
     p=subprocess.run([sys.executable,str(ROOT/"scripts/export_mmp.py"),"--candidate-1-1","--model-dir",str(model),"--output",str(Path(tmp)/"unsupported.zip")],capture_output=True,text=True)
-    assert p.returncode!=0 and "CORE-016 not_supported" in p.stderr,p.stderr
+    assert p.returncode!=0 and "CORE-016 requires explicit" in p.stderr,p.stderr
     assert not (Path(tmp)/"unsupported.zip").exists()
     rel["source"]["typed_refs"].append({"kind":"element","id":source})
     f.write_text(yaml.safe_dump(m,sort_keys=False))
