@@ -252,6 +252,27 @@
               }
             }
           }
+        },
+        "allowed_typed_pairs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source",
+              "target"
+            ],
+            "properties": {
+              "source": {
+                "$ref": "#/$defs/typedReference"
+              },
+              "target": {
+                "$ref": "#/$defs/typedReference"
+              }
+            }
+          }
         }
       }
     },
@@ -271,6 +292,27 @@
         },
         "description": {
           "type": "string"
+        }
+      }
+    },
+    "typedReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "element",
+            "relationship",
+            "junction"
+          ]
+        },
+        "id": {
+          "$ref": "common-definitions.schema.json#/$defs/id"
         }
       }
     }
