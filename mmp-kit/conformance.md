@@ -61,3 +61,7 @@ The accompanying `conformance/mmp-1-1-readiness.json` and `specification/mmp-1-1
 ## Proposed extension negotiation
 
 `conformance/extension-negotiation-v1.json` checks version-matched required and optional extensions across Python and TypeScript; this is a separate opt-in declaration, not 1.0.0 manifest semantics or trusted in-package authorization.
+
+## Traced Core semantic subset suite
+
+`conformance/core-semantic-suite-v1.json` maps independent Python/TypeScript helper golden-vector tests to CORE-001–014. The source-tree runner `scripts/run_mmp_core_semantic_suite.py --typescript --json-out report.json` produces a per-language, per-case and per-requirement machine-readable report. The kit contains a copy of the runner as reference; executing it requires the source tree and built TypeScript implementation. This remains a **subset helper suite** and explicitly states `full_core_conformance: not_verified`, even if all tests pass. Nine MMP 1.0.0 ZIP cases remain a separate acceptance baseline.
