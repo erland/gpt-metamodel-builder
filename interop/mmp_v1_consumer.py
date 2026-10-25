@@ -402,8 +402,12 @@ def consume(source: Path):
         capabilities = meta.get("extensions", {}).get("mmp_required_capabilities", [])
         if not isinstance(capabilities, list) or capabilities != m.get("required_capabilities"):
             raise ValueError("CORE-013 candidate profile mismatch")
-        if capabilities:
+        supported = {"id": "mmp-pairwise-relationships", "version": "1.0.0"}
+        if any(cap != supported for cap in capabilities):
             raise ValueError("CORE-013 not_supported mandatory profile")
+        has_pairs = any("allowed_type_pairs" in rel for rel in docs["metamodel"]["relationships"])
+        if has_pairs and supported not in capabilities:
+            raise ValueError("CORE-015 missing required capability")
     elif meta.get("extensions", {}).get("mmp_required_capabilities"):
         raise ValueError("CORE-013 not_supported in MMP 1.0")
     if (meta["id"], meta["version"], meta.get("namespace")) != (
