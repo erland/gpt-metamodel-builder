@@ -10,7 +10,9 @@ def create(base):
       ("diamond-inheritance","accept","CORE-003",{"application":["owner","status"],"platform":["owner","status"],"special_application":["owner","status"]}),
       ("unknown-property-set","reject","CORE-005",None),
       ("unknown-relation-parent","reject","CORE-002",None),
-      ("inverted-endpoint-cardinality-v1","accept","CORE-007",None)
+      ("inverted-endpoint-cardinality-v1","accept","CORE-007",None),
+      ("required-zero-cardinality-v1","accept","CORE-009",None),
+      ("inverted-property-cardinality-v1","accept","CORE-008",None)
     ]
     result={}
     for ident,expected,req,semantic in cases:
@@ -25,6 +27,10 @@ def create(base):
             model["relationships"][0]["extends"]=["unknown_relation"]
         if ident=="inverted-endpoint-cardinality-v1":
             model["relationships"][0]["source"]["cardinality"]="3..1"
+        if ident in ("required-zero-cardinality-v1","inverted-property-cardinality-v1"):
+            properties=yaml.safe_load(files["canonical/properties.yaml"])
+            properties["property_definitions"][0]["cardinality"]="0" if ident=="required-zero-cardinality-v1" else "3..1"
+            files["canonical/properties.yaml"]=yaml.safe_dump(properties,sort_keys=False,allow_unicode=True).encode()
         files["canonical/metamodel.yaml"]=yaml.safe_dump(model,sort_keys=False,allow_unicode=True).encode()
         for entry in manifest["files"]:
             if entry["path"] in files:
@@ -46,6 +52,7 @@ def create(base):
         entries.append({"id":ident,"expected":expected,"requirement":req,"package":name,
                         "sha256":hashlib.sha256(result[name]).hexdigest(),
                         "effective_properties":semantic,
+                        "strict_expected":"reject" if ident in ("inverted-endpoint-cardinality-v1","required-zero-cardinality-v1","inverted-property-cardinality-v1") else expected,
                         "note":"Schema-valid legacy MMP 1.0.0; inverted range is reserved for opt-in strict profile" if ident=="inverted-endpoint-cardinality-v1" else ""})
     result["conformance/package-semantic-manifest.json"]=(json.dumps({"suite_version":"0.1.0","format_version":"1.0.0","kind":"package-core-subset","cases":entries},indent=2)+"\n").encode()
     return result
