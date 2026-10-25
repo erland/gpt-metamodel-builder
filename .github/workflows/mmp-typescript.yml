@@ -26,6 +26,7 @@ jobs:
       - run: node interop/typescript/dist/conformance.js "$MMP_KIT_PATH"
       - run: python scripts/test_mmp_effective_pairs_package.py --typescript
       - run: python scripts/test_mmp_relation_inheritance_package.py --typescript
+      - run: python scripts/test_mmp_typed_endpoints_package.py --typescript
       - run: python scripts/test_mmp_package_semantics.py "$MMP_KIT_PATH"
       - run: node interop/typescript/dist/package-semantic-test.js "$MMP_KIT_PATH"
       - run: python scripts/test_mmp_strict_package_profile.py "$MMP_KIT_PATH"
