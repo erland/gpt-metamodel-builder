@@ -405,8 +405,21 @@ def consume(source: Path):
         supported = {"id": "mmp-pairwise-relationships", "version": "1.0.0"}
         typed = {"id": "mmp-typed-endpoints", "version": "1.0.0"}
         typed_pairs = {"id": "mmp-typed-pairs", "version": "1.0.0"}
-        if any(cap not in (supported, typed, typed_pairs) for cap in capabilities):
+        junction_profile = {"id": "mmp-junction-structure", "version": "0.1.0"}
+        if any(cap not in (supported, typed, typed_pairs, junction_profile) for cap in capabilities):
             raise ValueError("CORE-013 not_supported mandatory profile")
+        profile_path = "documentation/junction-structure.json"
+        if (junction_profile in capabilities) != (profile_path in files):
+            raise ValueError("CORE-016 junction profile capability/document mismatch")
+        if junction_profile in capabilities:
+            profile = json.loads(files[profile_path])
+            expected = {j["id"] for j in docs["metamodel"].get("junctions", [])}
+            if (profile.get("profile") != "mmp-junction-structure@0.1.0"
+                    or not isinstance(profile.get("junction_operators"), dict)
+                    or set(profile["junction_operators"]) != expected
+                    or any(x not in ("and", "or") for x in profile["junction_operators"].values())
+                    or set(profile) != {"profile", "junction_operators"}):
+                raise ValueError("CORE-016 junction profile invalid")
         has_pairs = any("allowed_type_pairs" in rel for rel in docs["metamodel"]["relationships"])
         if has_pairs and supported not in capabilities:
             raise ValueError("CORE-015 missing required capability")
