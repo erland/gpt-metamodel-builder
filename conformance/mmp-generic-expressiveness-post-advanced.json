@@ -1,0 +1,77 @@
+{
+  "report_version": "1.0.0",
+  "status": "partial_no_go",
+  "scope": "internal synthetic structural evidence only",
+  "legacy_format_unchanged": true,
+  "evidence": [
+    {
+      "feature": "large_type_catalog",
+      "level": "package_roundtrip_tested",
+      "source": "scripts/test_mmp_generic_large_fixture.py",
+      "limitations": [
+        "synthetic group taxonomy",
+        "no external completeness claims"
+      ]
+    },
+    {
+      "feature": "pair_preservation",
+      "level": "content_loss_audit_tested",
+      "source": "scripts/test_mmp_generic_loss_audit.py",
+      "limitations": [
+        "declarative content comparison only"
+      ]
+    },
+    {
+      "feature": "multiple_element_inheritance",
+      "level": "candidate_package_roundtrip_tested",
+      "source": "scripts/test_mmp_generic_advanced_structure.py",
+      "limitations": [
+        "not normative subtype-instance expansion"
+      ]
+    },
+    {
+      "feature": "multiple_relationship_inheritance",
+      "level": "instance_gate_tested",
+      "source": "scripts/test_mmp_generic_advanced_structure.py",
+      "limitations": [
+        "exact typed pair intersection only"
+      ]
+    },
+    {
+      "feature": "relationship_endpoints",
+      "level": "instance_gate_tested",
+      "source": "scripts/test_mmp_generic_advanced_structure.py",
+      "limitations": [
+        "recursive relationship reference cycles unsupported"
+      ]
+    },
+    {
+      "feature": "junction_profiles",
+      "level": "structural_profile_tested",
+      "source": "scripts/test_mmp_generic_advanced_structure.py",
+      "limitations": [
+        "no behavioral activation semantics"
+      ]
+    }
+  ],
+  "blockers": [
+    {
+      "id": "CORE-007",
+      "focus": "instance completeness, specialization cardinality and cycles"
+    },
+    {
+      "id": "CORE-009/011",
+      "focus": "required values and canonicalization"
+    },
+    {
+      "id": "CORE-012",
+      "focus": "declarative rule execution/profile boundary"
+    },
+    {
+      "id": "INTEROP",
+      "focus": "external independent consumer evidence"
+    }
+  ],
+  "next_recommended": "core009_core011_normative_fixture_first",
+  "release_decision": "no_go"
+}
