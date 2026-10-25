@@ -174,9 +174,21 @@ def validate_contents(files: dict[str, bytes], manifest: dict) -> dict:
             raise ValueError("CORE-013 critical capability mismatch between manifest and canonical model")
         supported = [{"id": "mmp-pairwise-relationships", "version": "1.0.0"},
                      {"id": "mmp-typed-endpoints", "version": "1.0.0"},
-                     {"id": "mmp-typed-pairs", "version": "1.0.0"}]
+                     {"id": "mmp-typed-pairs", "version": "1.0.0"},
+                     {"id": "mmp-junction-structure", "version": "0.1.0"}]
         if any(cap not in supported for cap in declared):
             raise ValueError("CORE-013 not_supported: unknown mandatory profile")
+        profile_name = "documentation/junction-structure.json"
+        if (supported[3] in declared) != (profile_name in files):
+            raise ValueError("CORE-016 junction profile capability/document mismatch")
+        if supported[3] in declared:
+            schema_name = "schemas/mmp-junction-structure-profile.schema.json"
+            if schema_name not in files:
+                raise ValueError("CORE-016 junction profile schema missing")
+            profile = json.loads(files[profile_name])
+            Draft202012Validator(json.loads(files[schema_name])).validate(profile)
+            if set(profile["junction_operators"]) != {j["id"] for j in documents["metamodel"].get("junctions", [])}:
+                raise ValueError("CORE-016 junction profile coverage mismatch")
         has_pairs = any("allowed_type_pairs" in rel for rel in documents["metamodel"]["relationships"])
         if has_pairs and supported[0] not in declared:
             raise ValueError("CORE-015 missing required capability")

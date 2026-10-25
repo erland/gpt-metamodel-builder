@@ -24,5 +24,6 @@
         ]
       }
     }
-  }
+  },
+  "$id": "https://mmp.example.org/schemas/mmp-junction-structure-profile.schema.json"
 }

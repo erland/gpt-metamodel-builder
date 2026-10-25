@@ -314,7 +314,21 @@ export function consume(bytes:Uint8Array):Obj {
     const supported={id:"mmp-pairwise-relationships",version:"1.0.0"};
     const typed={id:"mmp-typed-endpoints",version:"1.0.0"};
     const typedPairs={id:"mmp-typed-pairs",version:"1.0.0"};
-    ensure(capabilities.every((c:Obj)=>(c.id===supported.id&&c.version===supported.version)||(c.id===typed.id&&c.version===typed.version)||(c.id===typedPairs.id&&c.version===typedPairs.version)),"CORE-013 not_supported mandatory profile");
+    const junctionProfile={id:"mmp-junction-structure",version:"0.1.0"};
+    ensure(capabilities.every((c:Obj)=>(c.id===supported.id&&c.version===supported.version)||(c.id===typed.id&&c.version===typed.version)||(c.id===typedPairs.id&&c.version===typedPairs.version)||(c.id===junctionProfile.id&&c.version===junctionProfile.version)),"CORE-013 not_supported mandatory profile");
+    const profilePath="documentation/junction-structure.json";
+    const declared=capabilities.some((c:Obj)=>c.id===junctionProfile.id&&c.version===junctionProfile.version);
+    ensure(declared===Boolean(files[profilePath]),"CORE-016 junction profile capability/document mismatch");
+    if(declared){
+      const profile=JSON.parse(decoder.decode(files[profilePath]));
+      const operators=profile.junction_operators;
+      const known=(docs.metamodel.junctions??[]).map((j:Obj)=>j.id).sort();
+      ensure(profile.profile==="mmp-junction-structure@0.1.0"&&operators&&typeof operators==="object"&&!Array.isArray(operators)&&
+        JSON.stringify(Object.keys(operators).sort())===JSON.stringify(known)&&
+        Object.values(operators).every(v=>v==="and"||v==="or")&&
+        Object.keys(profile).sort().join(",")==="junction_operators,profile",
+        "CORE-016 junction profile invalid");
+    }
     if((docs.metamodel.junctions??[]).length>0 || docs.metamodel.relationships.some((r:Obj)=>["source","target"].some(side=>r[side].typed_refs!==undefined)))
       ensure(capabilities.some((c:Obj)=>c.id===typed.id&&c.version===typed.version),"CORE-016 missing required capability");
     if(docs.metamodel.relationships.some((r:Obj)=>r.allowed_typed_pairs!==undefined))
