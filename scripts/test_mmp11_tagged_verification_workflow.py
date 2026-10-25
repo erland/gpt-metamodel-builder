@@ -10,6 +10,7 @@ assert "contents: read" in s
 assert "verify_mmp_11_release_artifact.py" in s
 assert "--typescript" in s
 assert s.index("python scripts/run_ci.py") < s.index("python scripts/build_mmp_specification_1_2.py")
+assert "npm install --no-audit --no-fund" in s and "npm ci " not in s
 assert "actions/upload-artifact@v4" in s
 assert "gh release" not in s and "contents: write" not in s
 print("Tagged verification workflow safety PASS")
