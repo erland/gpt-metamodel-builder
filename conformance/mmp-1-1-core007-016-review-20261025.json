@@ -1,0 +1,67 @@
+{
+  "review_version": "1.0.0",
+  "date": "2026-10-25",
+  "target": "MMP 1.1.0 candidate",
+  "decision": "no_go",
+  "evidence_level": "repository source and CI-registration review, not external certification",
+  "historical_baseline": "conformance/mmp-1-1-post-core016-review.json",
+  "legacy_mmp_1_0_unchanged": true,
+  "assessment": [
+    {
+      "id": "CORE-007",
+      "status": "candidate_subset",
+      "implemented": [
+        "explicit complete=true graph and enumerated zero-incidence",
+        "per relationship-type source/target cardinality counts",
+        "typed element/relationship/junction instance references",
+        "fail-closed recursive relationship-instance cycles"
+      ],
+      "evidence": [
+        "scripts/mmp_instance_cardinality.py",
+        "scripts/mmp_instance_graph.py",
+        "scripts/mmp_typed_instance_graph.py",
+        "scripts/test_mmp_typed_graph_vectors.py",
+        "interop/core007-typed-graph-v1.json"
+      ],
+      "gaps": [
+        "complete=true is an unverified source assertion",
+        "inheritance/specialization cardinality is not normative",
+        "relationship endpoint cycles are rejected provisionally",
+        "full independent instance-level consumer certification unavailable"
+      ]
+    },
+    {
+      "id": "CORE-016",
+      "status": "candidate_subset",
+      "implemented": [
+        "typed endpoint declarations and exact typed pairs in 1.1 candidate",
+        "explicit junction instances and structural incidence",
+        "isolated optional junction-structure profile with fail-closed negotiation",
+        "package-to-structural-validation integration in Python and TS tests"
+      ],
+      "evidence": [
+        "scripts/test_mmp_typed_pair_package.py",
+        "scripts/mmp_junction_structure.py",
+        "scripts/mmp_junction_profile_validation.py",
+        "scripts/test_mmp_junction_package_profile.py",
+        "scripts/test_mmp_junction_profile_graph_package.py",
+        "interop/typescript/src/junction-profile-graph-test.ts"
+      ],
+      "gaps": [
+        "junction AND/OR activation and flow semantics not specified",
+        "degree rule is candidate-only, not normative ArchiMate",
+        "typed pairs inheritance and junction cycle policy unresolved",
+        "profile 0.1.0 cannot imply full behavioral conformance"
+      ]
+    }
+  ],
+  "cross_cutting_blockers": [
+    "CORE-015/016 inherited typed-pair rules",
+    "CORE-009/011 value and required/cardinality semantics",
+    "CORE-012 rules execution/profile-scope decision",
+    "complete ArchiMate fixture and independent external interoperability",
+    "normative versioned acceptance criteria and release governance"
+  ],
+  "recommended_next_action": "decide_and_test_inherited_typed_pair_semantics",
+  "no_go_rationale": "Executable candidate subsets do not establish a complete, normative, independently verified MMP 1.1 contract."
+}
