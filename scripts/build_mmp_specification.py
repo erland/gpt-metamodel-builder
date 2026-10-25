@@ -9,6 +9,7 @@ from mmp_package_semantic_fixtures import create as semantic_packages
 
 ROOT=Path(__file__).resolve().parents[1]
 FORMAT_VERSION="1.0.0"
+KIT_VERSION="1.1.0"
 SCHEMAS=("mmp-manifest-v1","metamodel","properties","constraints","viewpoints","notation","provenance","version","guidance","common-definitions","mmp-conformance-declaration-v1")
 ZIP_DATE=(1980,1,1,0,0,0)
 
@@ -26,6 +27,7 @@ def package(output:Path):
         subprocess.run(cmd,check=True,capture_output=True,env=env)
         entries={
             "README.md":(ROOT/"mmp-kit/README.md").read_bytes(),
+            "specification-kit.json":json.dumps({"specification_kit_version":KIT_VERSION,"package_format":"mmp","package_format_version":FORMAT_VERSION,"release_scope":"MMP 1.0.0 stable; opt-in semantic profiles not normative"},indent=2,sort_keys=True).encode()+b"\n",
             "specification/mmp-v1.md":(ROOT/"docs/mmp-v1-contract.md").read_bytes(),
             "specification/implementation-guide.md":(ROOT/"mmp-kit/implementation-guide.md").read_bytes(),
             "specification/package-level-conformance.md":(ROOT/"docs/mmp-package-level-conformance.md").read_bytes(),
