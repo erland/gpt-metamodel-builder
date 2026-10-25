@@ -91,6 +91,9 @@ def export(model_dir: Path, output: Path, producer_version: str,
     # Never silently export pairwise rules into either MMP 1.0 or experimental 1.1.
     model_doc = yaml.safe_load(contents["canonical/metamodel.yaml"])
     # CORE-016 remains canonical-only: older consumers cannot enforce typed endpoints.
+    # Typed exact pairs need their own negotiated semantics; block until consumers support them.
+    if any("allowed_typed_pairs" in rel for rel in model_doc["relationships"]):
+        raise ValueError("CORE-016 not_supported: typed exact pairs require consumer contract")
     has_typed = bool(model_doc.get("junctions")) or any(
         "typed_refs" in rel.get(side, {})
         for rel in model_doc["relationships"] for side in ("source", "target")
