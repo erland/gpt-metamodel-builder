@@ -34,6 +34,7 @@ def main() -> int:
         [py,'scripts/test_mmp_core015_core016_integration.py'],
         [py,'scripts/test_mmp_post_core016_review.py'],
         [py,'scripts/test_mmp_core007_016_review.py'],
+        [py,'scripts/test_mmp_post_pr81_review.py'],
         [py,'scripts/test_mmp_instance_cardinality.py'],
         [py,'scripts/test_mmp_instance_graph.py'],
         [py,'scripts/test_mmp_typed_instance_graph.py'],
