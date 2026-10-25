@@ -85,6 +85,7 @@ def main() -> int:
         [py,'scripts/test_mmp_version_decision.py'],
         [py,'scripts/test_mmp_release_kit.py'],
         [py,'scripts/test_mmp_release_workflow.py'],
+        [py,'scripts/test_ci_pr_concurrency.py'],
         [py,'scripts/test_semantic_validator.py'],
         [py,'scripts/test_sparx_mapping.py'],
         [py,'scripts/test_mdg_generator.py'],
