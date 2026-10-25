@@ -1,6 +1,6 @@
 """CORE-007 candidate: complete graph with element and relationship endpoints.
 
-Instances of relationships are edge IDs. Junction topology remains unsupported.
+Instances of relationships are edge IDs. Junctions are explicit typed instances.
 Existing element-only graphs retain the legacy validate_graph implementation.
 """
 from __future__ import annotations
@@ -12,8 +12,6 @@ from mmp_instance_cardinality import validate_incidence
 def validate_typed_graph(model: dict, graph: dict) -> list[dict]:
     if graph.get("complete") is not True:
         raise ValueError("CORE-007 not_supported: complete=true required")
-    if model.get("junctions") or graph.get("junctions"):
-        raise ValueError("CORE-007 not_supported: junction topology")
     nodes, edges = graph.get("instances"), graph.get("edges")
     if not isinstance(nodes, list) or not isinstance(edges, list):
         raise ValueError("CORE-007 invalid graph population")
@@ -31,7 +29,18 @@ def validate_typed_graph(model: dict, graph: dict) -> list[dict]:
         if not isinstance(key, str) or not key or key in edge_types or key in node_types or typ not in relations:
             raise ValueError("CORE-007 invalid relationship instance")
         edge_types[key] = typ
-    types = {"element": node_types, "relationship": edge_types}
+    junction_defs = {item["id"] for item in model.get("junctions", [])}
+    junctions = graph.get("junctions", [])
+    if not isinstance(junctions, list):
+        raise ValueError("CORE-007 invalid junction population")
+    junction_types = {}
+    for junction in junctions:
+        key, typ = junction.get("id"), junction.get("type")
+        if (not isinstance(key, str) or not key or key in junction_types
+                or key in node_types or key in edge_types or typ not in junction_defs):
+            raise ValueError("CORE-007 invalid or duplicate junction instance")
+        junction_types[key] = typ
+    types = {"element": node_types, "relationship": edge_types, "junction": junction_types}
     counts = Counter()
     for edge in edges:
         rel = relations[edge["relationship"]]
@@ -66,8 +75,6 @@ def validate_typed_graph(model: dict, graph: dict) -> list[dict]:
                 raise ValueError("CORE-007 not_supported: typed domain absent")
             for ref in domain:
                 kind, typ = ref["kind"], ref["id"]
-                if kind not in types:
-                    raise ValueError("CORE-007 not_supported: junction endpoint")
                 for ident, actual_type in types[kind].items():
                     if actual_type == typ:
                         entries.append({"relationship": rel["id"], "role": role,
