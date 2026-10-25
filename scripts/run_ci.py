@@ -41,6 +41,7 @@ def main() -> int:
         [py,'scripts/test_mmp_junction_structure.py'],
         [py,'scripts/test_mmp_junction_profile_boundary.py'],
         [py,'scripts/test_mmp_junction_package_profile.py'],
+        [py,'scripts/test_mmp_junction_profile_graph_package.py'],
         [py,'scripts/test_mmp_relation_inheritance_package.py'],
         [py,'scripts/test_mmp_effective_pairs_package.py'],
         [py,'scripts/test_mmp_interop.py'],
