@@ -19,6 +19,7 @@ def build(output:Path):
   entries["specification/mmp-1-1-combined-profiles.md"]=(ROOT/"docs/mmp-11-combined-profiles-package-test.md").read_bytes()
   entries["conformance/mmp-1-1-version-scope.json"]=(ROOT/"conformance/mmp-11-version-scope-freeze.json").read_bytes()
   entries["conformance/mmp-1-1-limited-release-decision.json"]=(ROOT/"conformance/mmp-11-limited-release-decision.json").read_bytes()
+  entries["conformance/release-status-1.2.0.json"]=(ROOT/"conformance/mmp-11-current-release-status.json").read_bytes()
   entries["schemas/mmp-manifest-1-1-candidate.schema.json"]=(ROOT/"schemas/mmp-manifest-1-1-candidate.schema.json").read_bytes()
   entries["schemas/mmp-junction-structure-profile.schema.json"]=(ROOT/"schemas/mmp-junction-structure-profile.schema.json").read_bytes()
   entries["schemas/mmp-required-default-presence-profile.schema.json"]=(ROOT/"schemas/mmp-required-default-presence-profile.schema.json").read_bytes()

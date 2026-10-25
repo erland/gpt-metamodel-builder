@@ -1,0 +1,9 @@
+{
+  "kit_version": "1.2.0",
+  "package_format_version": "1.1.0",
+  "status": "published_limited_scope",
+  "first_project_release": "v1.4.0",
+  "first_published_date": "2026-10-25",
+  "historical_decision_file": "conformance/mmp-1-1-limited-release-decision.json",
+  "scope": "limited declared profiles; no full Core or instance conformance"
+}

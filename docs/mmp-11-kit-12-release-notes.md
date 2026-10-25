@@ -1,14 +1,14 @@
-# Specification Kit 1.2.0 — release candidate notes
+# Specification Kit 1.2.0 — release notes
 
-**Release status: candidate / NO-GO, not published.**
+**Publication history:** first published with project release **v1.4.0** (2026-10-25). The limited-profile scope is released; this does not imply full MMP Core 1.1 certification.
 
-- Kit version: **1.2.0** (new, separate distribution).
-- Target MMP package format: **1.1.0**, limited declared-profile scope.
-- Earlier Kit **1.1.0**: package format **1.0.0**, unchanged.
-- Required capabilities: pairwise relationships, typed endpoints, exact typed pairs, junction-structure metadata, and required/default-presence where declared. Unsupported required capability versions fail closed.
-- Evidence: shared Python and TypeScript conformance suites, a combined multi-profile actual-package test, and reproducible ZIP + SHA-256 inventory checks.
-- Not guaranteed: complete instance-graph validation, full Core 1.1, behavioral junction rules, relation derivation, rule evaluation, or external certification.
+- Specification Kit: **1.2.0**; MMP package format: **1.1.0**.
+- Legacy Kit **1.1.0** uses package format **1.0.0** and remains independently distributed.
+- Supported capabilities are limited to declared pairwise relationships, typed endpoints, exact typed pairs, junction-structure metadata, and required/default presence where required.
+- Unknown required capability versions fail closed.
+- Verified with Python and TypeScript conformance tests, representative combined-profile package checks, reproducible builds and SHA-256 integrity.
+- Excluded: full instance-graph validation, complete Core 1.1 certification, junction behavior, relationship derivation, general rule evaluation and independent external certification.
 
-**Important:** Historic MMP 1.0 specification documents remain included as an explicitly labeled baseline. Only the 1.1 limited-scope contract describes new candidate guarantees. Distribution from a release tag, final artifact verification and release authorization still remain.
+**Historical record:** older bundled candidate-stage decision files with `conditional_no_go` and open blockers describe a prior review. They are retained verbatim for traceability, not as the current publication decision. The current release-status record is `conformance/release-status-1.2.0.json`. Rebuilding this kit changes its checksum; do not silently replace an already published asset.
 
-Build: `python scripts/build_mmp_specification_1_2.py`. Check: `python scripts/test_mmp_specification_1_2.py`.
+Build: `python scripts/build_mmp_specification_1_2.py`. Verify: `python scripts/test_mmp_specification_1_2.py`.

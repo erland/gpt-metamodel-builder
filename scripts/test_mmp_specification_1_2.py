@@ -11,7 +11,7 @@ def inspect(path):
   required={"specification-kit.json","SHA256SUMS.txt","specification/mmp-1-1-limited-contract.md",
    "conformance/mmp-1-1-version-scope.json","schemas/mmp-manifest-1-1-candidate.schema.json",
    "schemas/mmp-required-default-presence-profile.schema.json",
-   "specification/release-notes-1.2.0.md"}
+   "specification/release-notes-1.2.0.md","conformance/release-status-1.2.0.json"}
   assert required<=set(names),required-set(names)
   inv={}
   for line in z.read("SHA256SUMS.txt").decode().splitlines():
@@ -27,8 +27,14 @@ def inspect(path):
   readme=z.read("README.md").decode()
   notes=z.read("specification/release-notes-1.2.0.md").decode()
   assert "Specification Kit 1.2.0" in readme and "package format 1.1.0" in readme
-  assert "candidate / NO-GO" in readme and "candidate / NO-GO" in notes
-  assert "package format is 1.0.0" in readme and "full Core 1.1" in notes
+  assert "first distributed in project release **v1.4.0**" in readme
+  assert "first published with project release **v1.4.0**" in notes
+  assert "historical candidate decisions" in readme
+  status=json.loads(z.read("conformance/release-status-1.2.0.json"))
+  assert status["status"]=="published_limited_scope" and status["first_project_release"]=="v1.4.0"
+  historic=json.loads(z.read("conformance/mmp-1-1-limited-release-decision.json"))
+  assert historic["decision"]=="conditional_no_go", "do not rewrite historic release decision"
+  assert "targets package format 1.0.0" in readme and "Core 1.1 certification" in notes
   old=json.loads(z.read("conformance/mmp-version-decision-v1.json"))
   assert old["stable_format"]=="1.0.0" # archived baseline, not new release status
   return {"files":len(names),"sha256":sha(path.read_bytes())}
@@ -40,5 +46,5 @@ def main():
   assert a.read_bytes()==b.read_bytes(),"non-reproducible candidate kit"
   info=inspect(a)
   print(json.dumps({"status":"pass","kit_version":"1.2.0","format_version":"1.1.0",
-   "reproducible":True,"release_status":"candidate_no_go",**info},indent=2))
+   "reproducible":True,"release_status":"published_limited_scope",**info},indent=2))
 if __name__=="__main__":main()
