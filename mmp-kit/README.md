@@ -22,3 +22,7 @@ python conformance/run_suite.py --kit mmp-specification-1.0.0.zip --consumer ref
 ```
 
 A different consumer executable can be supplied with `--consumer` if it accepts one package path and returns zero only when accepted. Cases exercise a **subset** of MMP 1.0.0 structural/security/semantic invariants; passing does not certify full proposed Core 1.1 profile support.
+
+## Final release acceptance
+
+See `specification/release-acceptance.md` for the testable scope of the reproducible Specification Kit 1.0.0. The release gate checks all SHA-256 inventory entries and packaged fixtures and preserves an explicit **NO-GO** for full MMP 1.1 Core conformance.
