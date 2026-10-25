@@ -75,6 +75,7 @@ def main() -> int:
         [py,'scripts/test_mmp_11_limited_release_review.py'],
         [py,'scripts/test_mmp_11_combined_profiles_package.py'],
         [py,'scripts/test_mmp_11_version_scope_freeze.py'],
+        [py,'scripts/test_mmp_specification_1_2.py'],
         [py,'scripts/test_mmp_canonical_values.py'],
         [py,'scripts/test_mmp_extension_negotiation.py'],
         [py,'scripts/run_mmp_core_semantic_suite.py'],
