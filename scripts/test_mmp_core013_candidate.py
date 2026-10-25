@@ -52,6 +52,7 @@ def main():
         modeldoc["metamodel"].setdefault("extensions",{})["mmp_required_capabilities"]=m["required_capabilities"]
         modified2["canonical/metamodel.yaml"]=yaml.safe_dump(modeldoc).encode()
         m2=yaml.safe_load(modified2["manifest.yaml"])
+        m2["required_capabilities"]=m["required_capabilities"]
         for f in m2["files"]:
             if f["path"]=="canonical/metamodel.yaml":
                 f["sha256"]=hashlib.sha256(modified2["canonical/metamodel.yaml"]).hexdigest()
