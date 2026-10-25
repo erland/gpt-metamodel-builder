@@ -34,7 +34,7 @@ def inspect(path):
   assert status["status"]=="published_limited_scope" and status["first_project_release"]=="v1.4.0"
   historic=json.loads(z.read("conformance/mmp-1-1-limited-release-decision.json"))
   assert historic["decision"]=="conditional_no_go", "do not rewrite historic release decision"
-  assert "package format is 1.0.0" in readme and "full Core 1.1" in notes
+  assert "targets package format 1.0.0" in readme and "Core 1.1 certification" in notes
   old=json.loads(z.read("conformance/mmp-version-decision-v1.json"))
   assert old["stable_format"]=="1.0.0" # archived baseline, not new release status
   return {"files":len(names),"sha256":sha(path.read_bytes())}
