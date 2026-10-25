@@ -44,12 +44,16 @@ def main():
   assert restored.returncode==0,restored.stderr
   assert (output/"metamodel.yaml").read_bytes()==before
   imported=yaml.safe_load((output/"metamodel.yaml").read_text())
-  graph_vectors={"suite_version":"1.0.0","model":imported,
+  # The package includes legacy relationships without typed domains; the
+  # opt-in typed graph adapter is only defined for the candidate relation subset.
+  typed_ids={rel["id"] for rel in original["relationships"]}
+  graph_model={**imported,"relationships":[r for r in imported["relationships"] if r["id"] in typed_ids]}
+  graph_vectors={"suite_version":"1.0.0","model":graph_model,
                  "cases":fixture["cases"]}
   sys.path.insert(0,str(ROOT/"scripts"))
   from mmp_typed_instance_graph import validate_typed_graph
   for case in fixture["cases"]:
-   candidate=case.get("model",imported)
+   candidate=case.get("model",graph_model)
    try:
     verdict="reject" if validate_typed_graph(candidate,case["graph"]) else "accept"
    except ValueError as exc:
