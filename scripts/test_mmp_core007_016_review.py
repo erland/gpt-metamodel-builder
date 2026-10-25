@@ -20,7 +20,10 @@ ci=(ROOT/"scripts/run_ci.py").read_text()
 ts=(ROOT/".github/workflows/mmp-typescript.yml").read_text()
 for script in ["test_mmp_typed_graph_vectors.py","test_mmp_junction_package_profile.py","test_mmp_junction_profile_graph_package.py"]:
  assert script in ci,script
-for script in ["typed-graph-test.js","junction-profile-graph-test.js"]:
+for script in ["typed-graph-test.js","test_mmp_junction_profile_graph_package.py --typescript"]:
  assert script in ts,script
+# The Python package runner invokes the TS graph evaluator with package-extracted data.
+package_runner=(ROOT/"scripts/test_mmp_junction_profile_graph_package.py").read_text()
+assert "junction-profile-graph-test.js" in package_runner
 assert "mmp_1_0_0_unchanged" in (ROOT/"project-status.yaml").read_text()
 print("Post-PR76 CORE-007/016 review integrity PASS (NOT normative certification)")
