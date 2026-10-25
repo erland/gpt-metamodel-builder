@@ -35,6 +35,7 @@ def main() -> int:
         [py,'scripts/test_mmp_post_core016_review.py'],
         [py,'scripts/test_mmp_instance_cardinality.py'],
         [py,'scripts/test_mmp_instance_graph.py'],
+        [py,'scripts/test_mmp_typed_instance_graph.py'],
         [py,'scripts/test_mmp_relation_inheritance_package.py'],
         [py,'scripts/test_mmp_effective_pairs_package.py'],
         [py,'scripts/test_mmp_interop.py'],
