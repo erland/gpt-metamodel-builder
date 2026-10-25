@@ -444,3 +444,10 @@ Definition of done:
 - saknad code execution får aldrig ge falsk PASS för deterministiska gates,
 - faktisk Sparx EA-import får aldrig påstås verifierad utan en verklig EA-miljö,
 - full CI/releasekedja passerar.
+
+
+## Pågående arbetsområde – MMP 1.1 och komplex relationssemantik (2026-10-25)
+
+Det tidigare 19-stegsprojektet är slutfört; denna sektion avser ett separat, ej färdigställt formatspår. Se [MMP 1.1-kravplanen](mmp-1-1-archimate-gap-plan.md) för befintliga CORE-001–014, nya **CORE-015** (exakta relationskombinationer) och **CORE-016** (typade relationers ändpunkter), prioritering, spårbarhet och ArchiMate 3.2-acceptansfall.
+
+**Nuvarande gate:** PARTIAL / NO-GO för full MMP 1.1-konformitet. Nästa utvecklingssteg är design- och kompatibilitetsbeslut, inte release. Befintligt MMP 1.0.0-kontrakt och Specification Kit 1.1.0 ska inte förväxlas.

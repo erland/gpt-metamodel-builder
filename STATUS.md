@@ -30,3 +30,10 @@ Canonical `guidance.yaml` och export till Markdown, Confluence markup och PDF ä
 Den kanoniska motorn har i PR #8 byggt sex arkiv och passerat distributionsvalideringen i GitHub Actions. Domänregressionen har också passerat. En ny release-workflow använder versionslåst engine 1.6.31, oförändrade domäntester och SHA-256-verifiering. **Release-workflowen är ännu inte verifierad genom en verklig publicerad release.** Äldre byggskript ligger kvar för historik och för eventuell återstående funktionsinventering, men ska inte användas av release-workflowen.
 
 Custom GPT är avaktiverad. Fem peer-runtimepaket genereras: Chat, Plugin, Claude Projects, Claude Skills och OpenCode. Manuell Sparx EA-import är fortfarande en extern kontroll.
+
+
+## Pågående MMP 1.1-arbete – separat från avslutade 19 steg
+
+**Status: PARTIAL / NO-GO** för full MMP 1.1 Core-konformitet. Paketformat MMP 1.0.0 är fortfarande stabilt; MMP Specification Kit 1.1.0 är inte samma sak som färdigt MMP 1.1-format.
+
+Arbetsplan och kravspårbarhet finns i [docs/mmp-1-1-archimate-gap-plan.md](docs/mmp-1-1-archimate-gap-plan.md), inklusive nya CORE-015 (exakta relationskombinationer) och CORE-016 (typade ändpunkter). Nästa rekommenderade steg är versions-/profilbeslut och designkontrakt, inte 1.1-release. Den äldre statusen PASS gäller projektets ursprungliga 19 steg, **inte** dessa öppna MMP 1.1-krav.
