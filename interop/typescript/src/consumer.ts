@@ -313,9 +313,12 @@ export function consume(bytes:Uint8Array):Obj {
     ensure(JSON.stringify(manifest.required_capabilities)===JSON.stringify(capabilities),"CORE-013 capability mismatch");
     const supported={id:"mmp-pairwise-relationships",version:"1.0.0"};
     const typed={id:"mmp-typed-endpoints",version:"1.0.0"};
-    ensure(capabilities.every((c:Obj)=>(c.id===supported.id&&c.version===supported.version)||(c.id===typed.id&&c.version===typed.version)),"CORE-013 not_supported mandatory profile");
+    const typedPairs={id:"mmp-typed-pairs",version:"1.0.0"};
+    ensure(capabilities.every((c:Obj)=>(c.id===supported.id&&c.version===supported.version)||(c.id===typed.id&&c.version===typed.version)||(c.id===typedPairs.id&&c.version===typedPairs.version)),"CORE-013 not_supported mandatory profile");
     if((docs.metamodel.junctions??[]).length>0 || docs.metamodel.relationships.some((r:Obj)=>["source","target"].some(side=>r[side].typed_refs!==undefined)))
       ensure(capabilities.some((c:Obj)=>c.id===typed.id&&c.version===typed.version),"CORE-016 missing required capability");
+    if(docs.metamodel.relationships.some((r:Obj)=>r.allowed_typed_pairs!==undefined))
+      ensure(capabilities.some((c:Obj)=>c.id===typedPairs.id&&c.version===typedPairs.version),"CORE-016 typed pairs missing required capability");
     if(docs.metamodel.relationships.some((r:Obj)=>r.allowed_type_pairs!==undefined))
       ensure(capabilities.some((c:Obj)=>c.id===supported.id&&c.version===supported.version),"CORE-015 missing required capability");
   } else ensure(Array.isArray(capabilities) && capabilities.length===0,"CORE-013 not_supported in MMP 1.0");
@@ -336,6 +339,20 @@ export function consume(bytes:Uint8Array):Obj {
       seen.add(key);if(ref.kind==="element")legacy.add(ref.id);
     }
     ensure(legacy.size===new Set<string>(endpoint.types).size&&endpoint.types.every((id:string)=>legacy.has(id)),"CORE-016 typed endpoint legacy mismatch");
+  }
+  for(const relation of relations){
+    if(relation.allowed_typed_pairs===undefined)continue;
+    ensure(relation.allowed_type_pairs===undefined,"CORE-016 mixed pair profiles");
+    ensure(relation.source.typed_refs!==undefined&&relation.target.typed_refs!==undefined,"CORE-016 typed pair missing endpoint domain");
+    const domains=["source","target"].map(side=>new Set<string>(relation[side].typed_refs.map((ref:Obj)=>ref.kind+"\\u0000"+ref.id)));
+    const seen=new Set<string>();
+    for(const pair of relation.allowed_typed_pairs){
+      const refs=[pair.source,pair.target].map(ref=>ref.kind+"\\u0000"+ref.id);
+      ensure(refs.every((value,i)=>domains[i].has(value)),"CORE-016 typed pair outside endpoint domain");
+      const key=JSON.stringify(refs);
+      ensure(!seen.has(key),"CORE-016 duplicate typed pair");
+      seen.add(key);
+    }
   }
   const elemIds=ids(elements,"elements"),relIds=ids(relations,"relationships");
   ensure([...elemIds].every(id=>!relIds.has(id)),"Element / relationship ID collision");

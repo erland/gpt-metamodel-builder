@@ -20,7 +20,7 @@ with tempfile.TemporaryDirectory() as td:
     save()
     assert not validate(path).errors,validate(path).errors
     p=subprocess.run([sys.executable,str(ROOT/"scripts/export_mmp.py"),"--candidate-1-1","--model-dir",str(path),"--output",str(Path(td)/"out.zip")],capture_output=True,text=True)
-    assert p.returncode!=0 and "CORE-016 not_supported" in p.stderr,p.stderr
+    assert p.returncode!=0 and "CORE-016 requires explicit" in p.stderr,p.stderr
     assert not (Path(td)/"out.zip").exists()
     rel["allowed_typed_pairs"].append(dict(pair))
     save()
