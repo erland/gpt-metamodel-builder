@@ -73,6 +73,7 @@ def main() -> int:
         [py,'scripts/test_mmp_required_default_package.py'],
         [py,'scripts/test_mmp_11_candidate_release_gate.py','--report','reports/ci/mmp11-profile-gate.json'],
         [py,'scripts/test_mmp_11_limited_release_review.py'],
+        [py,'scripts/test_mmp_11_combined_profiles_package.py'],
         [py,'scripts/test_mmp_canonical_values.py'],
         [py,'scripts/test_mmp_extension_negotiation.py'],
         [py,'scripts/run_mmp_core_semantic_suite.py'],
