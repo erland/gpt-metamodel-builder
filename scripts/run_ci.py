@@ -70,6 +70,7 @@ def main() -> int:
         [py,'scripts/test_mmp_relation_inheritance.py'],
         [py,'scripts/test_mmp_required_policy.py'],
         [py,'scripts/test_mmp_required_default_presence.py'],
+        [py,'scripts/test_mmp_required_default_package.py'],
         [py,'scripts/test_mmp_canonical_values.py'],
         [py,'scripts/test_mmp_extension_negotiation.py'],
         [py,'scripts/run_mmp_core_semantic_suite.py'],
