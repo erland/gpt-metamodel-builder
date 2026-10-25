@@ -1,0 +1,52 @@
+name: Create release candidate tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release candidate tag, for example v1.4.0-rc.1'
+        required: true
+        default: 'v1.4.0-rc.1'
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  create-tag:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate input and prevent replacement
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-rc\.[1-9][0-9]*$ ]] || {
+            echo "::error::Only release candidate tags (vX.Y.Z-rc.N) are allowed."
+            exit 1
+          }
+          if gh api "repos/$REPO/git/ref/tags/$TAG" >/dev/null 2>&1; then
+            echo "::error::Tag $TAG already exists and will not be modified."
+            exit 1
+          fi
+      - name: Create tag at exact main commit
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          MAIN_SHA="$(gh api "repos/$REPO/git/ref/heads/main" --jq '.object.sha')"
+          [[ "$MAIN_SHA" == "$GITHUB_SHA" ]] || {
+            echo "::error::main moved after this workflow was dispatched. Restart on current main."
+            exit 1
+          }
+          gh api --method POST "repos/$REPO/git/refs" \
+            -f ref="refs/tags/$TAG" -f sha="$MAIN_SHA"
+          echo "Created $TAG at $MAIN_SHA"
+          echo "No release was published."
