@@ -18,7 +18,10 @@ def main():
    {"id":"mmp-typed-pairs","version":"1.0.0"}]
   # The fixture is a reduced graph-analysis contract; preserve names required
   # by the canonical schema and use valid source/target type domains.
-  # Keep the reference example intact: its viewpoints, styles, constraints and\n  # provenance refer to its existing types. Extend rather than replace it.\n  doc["elements"].extend({"id":e["id"],"name":e["id"].upper()} for e in original["elements"])\n  doc.setdefault("junctions",[]).extend({"id":j["id"],"name":"Junction "+j["id"]} for j in original["junctions"])
+  # Keep the reference example intact: its viewpoints and styles use old types.
+  # Extend rather than replace it.
+  doc["elements"].extend({"id":e["id"],"name":e["id"].upper()} for e in original["elements"])
+  doc.setdefault("junctions",[]).extend({"id":j["id"],"name":"Junction "+j["id"]} for j in original["junctions"])
   for rel in original["relationships"]:
    doc["relationships"].append({
     **rel,"name":rel["id"].upper(),
