@@ -29,6 +29,7 @@ def package(output:Path):
             "specification/mmp-v1.md":(ROOT/"docs/mmp-v1-contract.md").read_bytes(),
             "specification/implementation-guide.md":(ROOT/"mmp-kit/implementation-guide.md").read_bytes(),
             "specification/package-level-conformance.md":(ROOT/"docs/mmp-package-level-conformance.md").read_bytes(),
+            "specification/strict-core-package-profile.md":(ROOT/"docs/mmp-strict-core-package-profile.md").read_bytes(),
             "specification/conformance.md":(ROOT/"mmp-kit/conformance.md").read_bytes(),
             "specification/conformance-profiles-proposal.md":(ROOT/"docs/mmp-conformance-profiles-proposal.md").read_bytes(),
             "examples/mmp-consumer-conformance.json":(ROOT/"examples/mmp-consumer-conformance.json").read_bytes(),
