@@ -36,6 +36,7 @@ jobs:
       - run: python scripts/test_mmp_effective_properties.py
       - run: node interop/typescript/dist/effective-properties-test.js interop/effective-properties-v1.json
       - run: node interop/typescript/dist/cardinality-test.js interop/cardinality-v1.json
+      - run: node interop/typescript/dist/core007-instance-test.js interop/core007-instance-cardinality-v1.json
       - run: node interop/typescript/dist/default-values-test.js interop/default-values-v1.json
       - run: node interop/typescript/dist/relationship-test.js interop/relationship-semantics-v1.json
       - run: node interop/typescript/dist/version-extension-test.js interop/version-extension-v1.json
