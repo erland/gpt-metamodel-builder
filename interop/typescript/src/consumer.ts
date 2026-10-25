@@ -325,6 +325,30 @@ export function consume(bytes:Uint8Array):Obj {
     elements:elements.map((x:Obj)=>({id:x.id,name:x.name})),relationships:relations.map((x:Obj)=>({id:x.id,name:x.name})),
     property_count:props.property_definitions.length};
 }
+
+export function strictCoreCandidate(bytes:Uint8Array):Obj {
+  const base=consume(bytes);
+  const files=readArchive(bytes);
+  const model=parseYaml(files["canonical/metamodel.yaml"]);
+  const props=parseYaml(files["canonical/properties.yaml"]);
+  const diagnostics:string[]=[];
+  for(const relation of model.relationships)for(const end of ["source","target"]){
+    const value=relation[end].cardinality;
+    if(value!==undefined){
+      try{parseCardinality(value);}catch{diagnostics.push("invalid_endpoint_cardinality:"+relation.id+":"+end);}
+    }
+  }
+  for(const prop of props.property_definitions){
+    const value=prop.cardinality;
+    if(value!==undefined){
+      try{parseCardinality(value);}catch{diagnostics.push("invalid_property_cardinality:"+prop.id);continue;}
+    }
+    const outcome=requiredMinimumPolicy(prop.required??false,value??null);
+    if(outcome.status==="invalid")diagnostics.push("required_cardinality:"+prop.id+":"+outcome.reason);
+  }
+  return {status:diagnostics.length?"reject":"accept",diagnostics:diagnostics.sort(),effective_properties:base.effective_properties};
+}
+
 if(process.argv[1]?.endsWith("consumer.js")){
   try{console.log(JSON.stringify(consume(new Uint8Array(readFileSync(process.argv[2]))),null,2));}
   catch(e){console.error(String(e));process.exitCode=1;}

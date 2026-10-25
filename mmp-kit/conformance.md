@@ -69,3 +69,7 @@ The accompanying `conformance/mmp-1-1-readiness.json` and `specification/mmp-1-1
 ## Package-level semantic regression suite
 
 `conformance/package-semantic-manifest.json` lists 4 additional hashed MMP ZIP cases verified by both Python and TypeScript through their ordinary read-only consumers. This tests a **subset** of semantic package behavior; future strict-profile requirements are not silently applied to legacy 1.0.0 packages.
+
+## Explicit strict package candidate
+
+Package semantic fixtures declare both legacy `expected` and opt-in `strict_expected`. The strict subset validates cardinality intervals and required-with-maximum-zero independently in both reference consumers; no MMP 1.0.0 admission changes or full MMP 1.1 claims are made.
