@@ -18,5 +18,6 @@
     "null_counts_as_present": {
       "const": false
     }
-  }
+  },
+  "$id": "https://metamodel-builder.local/schemas/mmp-required-default-presence-profile.schema.json"
 }
