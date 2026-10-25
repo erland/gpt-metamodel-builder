@@ -312,11 +312,31 @@ export function consume(bytes:Uint8Array):Obj {
     ensure(Array.isArray(manifest.required_capabilities) && Array.isArray(capabilities), "Missing candidate capabilities");
     ensure(JSON.stringify(manifest.required_capabilities)===JSON.stringify(capabilities),"CORE-013 capability mismatch");
     const supported={id:"mmp-pairwise-relationships",version:"1.0.0"};
-    ensure(capabilities.every((c:Obj)=>c.id===supported.id&&c.version===supported.version),"CORE-013 not_supported mandatory profile");
+    const typed={id:"mmp-typed-endpoints",version:"1.0.0"};
+    ensure(capabilities.every((c:Obj)=>(c.id===supported.id&&c.version===supported.version)||(c.id===typed.id&&c.version===typed.version)),"CORE-013 not_supported mandatory profile");
+    if((docs.metamodel.junctions??[]).length>0 || docs.metamodel.relationships.some((r:Obj)=>["source","target"].some(side=>r[side].typed_refs!==undefined)))
+      ensure(capabilities.some((c:Obj)=>c.id===typed.id&&c.version===typed.version),"CORE-016 missing required capability");
     if(docs.metamodel.relationships.some((r:Obj)=>r.allowed_type_pairs!==undefined))
       ensure(capabilities.some((c:Obj)=>c.id===supported.id&&c.version===supported.version),"CORE-015 missing required capability");
   } else ensure(Array.isArray(capabilities) && capabilities.length===0,"CORE-013 not_supported in MMP 1.0");
+  if(manifest.package_format_version==="1.0.0")ensure(!(docs.metamodel.junctions??[]).length && !docs.metamodel.relationships.some((r:Obj)=>["source","target"].some(side=>r[side].typed_refs!==undefined)),"CORE-016 not_supported in MMP 1.0");
   const elements=docs.metamodel.elements,relations=docs.metamodel.relationships,props=docs.properties;
+  const junctions=docs.metamodel.junctions??[];
+  const junctionIds=ids(junctions,"junctions");
+  const typedNamespaces:Record<string,Set<string>>={element:ids(elements,"elements"),relationship:ids(relations,"relationships"),junction:junctionIds};
+  ensure([...junctionIds].every(id=>!typedNamespaces.element.has(id)&&!typedNamespaces.relationship.has(id)),"CORE-016 colliding junction ID");
+  for(const rel of relations)for(const side of ["source","target"]){
+    const endpoint=rel[side];
+    if(endpoint.typed_refs===undefined)continue;
+    const seen=new Set<string>(),legacy=new Set<string>();
+    for(const ref of endpoint.typed_refs){
+      ensure(typedNamespaces[ref.kind]?.has(ref.id),"CORE-016 unknown typed endpoint");
+      const key=ref.kind+"\\u0000"+ref.id;
+      ensure(!seen.has(key),"CORE-016 duplicate typed endpoint");
+      seen.add(key);if(ref.kind==="element")legacy.add(ref.id);
+    }
+    ensure(legacy.size===new Set<string>(endpoint.types).size&&endpoint.types.every((id:string)=>legacy.has(id)),"CORE-016 typed endpoint legacy mismatch");
+  }
   const elemIds=ids(elements,"elements"),relIds=ids(relations,"relationships");
   ensure([...elemIds].every(id=>!relIds.has(id)),"Element / relationship ID collision");
   graph(elements,elemIds);graph(relations,relIds);

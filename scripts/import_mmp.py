@@ -172,12 +172,21 @@ def validate_contents(files: dict[str, bytes], manifest: dict) -> dict:
         declared = required_capabilities(mm)
         if declared != manifest["required_capabilities"]:
             raise ValueError("CORE-013 critical capability mismatch between manifest and canonical model")
-        supported = [{"id": "mmp-pairwise-relationships", "version": "1.0.0"}]
+        supported = [{"id": "mmp-pairwise-relationships", "version": "1.0.0"},
+                     {"id": "mmp-typed-endpoints", "version": "1.0.0"}]
         if any(cap not in supported for cap in declared):
             raise ValueError("CORE-013 not_supported: unknown mandatory profile")
         has_pairs = any("allowed_type_pairs" in rel for rel in documents["metamodel"]["relationships"])
         if has_pairs and supported[0] not in declared:
             raise ValueError("CORE-015 missing required capability")
+        typed_model = documents["metamodel"]
+        has_typed = bool(typed_model.get("junctions")) or any(
+            "typed_refs" in rel.get(side, {}) for rel in typed_model["relationships"] for side in ("source", "target"))
+        if has_typed and supported[1] not in declared:
+            raise ValueError("CORE-016 missing required capability")
+    if manifest["package_format_version"] == "1.0.0" and (documents["metamodel"].get("junctions") or any(
+        "typed_refs" in rel.get(side, {}) for rel in documents["metamodel"]["relationships"] for side in ("source", "target"))):
+        raise ValueError("CORE-016 not_supported in MMP 1.0")
     # Canonical semantic checks must use the actual validator, not a replacement.
     from validate_semantics import validate as validate_semantics
     import tempfile
