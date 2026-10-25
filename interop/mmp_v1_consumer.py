@@ -478,6 +478,37 @@ def consume(source: Path):
             "rules": rules}
 
 
+
+def strict_core_candidate(source: Path):
+    """Explicit opt-in package-level candidate checks after legacy admission."""
+    base = consume(source)
+    files = read(source)
+    model = yaml.safe_load(files["canonical/metamodel.yaml"])
+    props = yaml.safe_load(files["canonical/properties.yaml"])
+    diagnostics = []
+    for relation in model["relationships"]:
+        for end in ("source", "target"):
+            value = relation[end].get("cardinality")
+            if value is not None:
+                try:
+                    parse_cardinality(value)
+                except ValueError:
+                    diagnostics.append(f"invalid_endpoint_cardinality:{relation['id']}:{end}")
+    for prop in props["property_definitions"]:
+        value = prop.get("cardinality")
+        if value is not None:
+            try:
+                parse_cardinality(value)
+            except ValueError:
+                diagnostics.append(f"invalid_property_cardinality:{prop['id']}")
+                continue
+        outcome = required_minimum_policy(prop.get("required", False), value)
+        if outcome["status"] == "invalid":
+            diagnostics.append(f"required_cardinality:{prop['id']}:{outcome['reason']}")
+    return {"status": "reject" if diagnostics else "accept", "diagnostics": sorted(diagnostics),
+            "effective_properties": base["effective_properties"]}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("package", type=Path)
