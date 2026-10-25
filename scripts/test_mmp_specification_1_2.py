@@ -10,7 +10,8 @@ def inspect(path):
   assert len(names)==len(set(names))
   required={"specification-kit.json","SHA256SUMS.txt","specification/mmp-1-1-limited-contract.md",
    "conformance/mmp-1-1-version-scope.json","schemas/mmp-manifest-1-1-candidate.schema.json",
-   "schemas/mmp-required-default-presence-profile.schema.json"}
+   "schemas/mmp-required-default-presence-profile.schema.json",
+   "specification/release-notes-1.2.0.md"}
   assert required<=set(names),required-set(names)
   inv={}
   for line in z.read("SHA256SUMS.txt").decode().splitlines():
@@ -23,6 +24,11 @@ def inspect(path):
   assert meta["specification_kit_version"]=="1.2.0"
   assert meta["package_format_version"]=="1.1.0"
   assert "no full Core" in meta["release_scope"], meta["release_scope"]
+  readme=z.read("README.md").decode()
+  notes=z.read("specification/release-notes-1.2.0.md").decode()
+  assert "Specification Kit 1.2.0" in readme and "package format 1.1.0" in readme
+  assert "candidate / NO-GO" in readme and "candidate / NO-GO" in notes
+  assert "format **1.0.0**" in readme and "full Core 1.1" in notes
   old=json.loads(z.read("conformance/mmp-version-decision-v1.json"))
   assert old["stable_format"]=="1.0.0" # archived baseline, not new release status
   return {"files":len(names),"sha256":sha(path.read_bytes())}
