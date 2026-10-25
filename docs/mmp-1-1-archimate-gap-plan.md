@@ -70,3 +70,7 @@ Acceptanskedja: importerad deklarativ representation → schema/semantik → MMP
 - `schemas/metamodel.schema.json`
 
 Inga av kraven ovan får märkas implementerade eller verifierade bara för att de dokumenteras i denna PR.
+
+## Kompletterande designbeslut
+
+Se [ADR: MMP 1.1 profilkontrakt och relationer](mmp-1-1-profile-relationship-adr.md). Vi behåller MMP 1.0.0 som stabilt paketformat; nya profiler kräver explicit fail-closed kapabilitetsförhandling. CORE-015/016 är designade men ännu inte implementerade eller verifierade. Nästa PR implementerar CORE-013:s paketbundna kritiska profilkrav först. Full 1.1-konformitet är fortsatt NO-GO.
