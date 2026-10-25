@@ -34,9 +34,10 @@ progress:
   - 18
   - 19
 state:
-  overall: pass
+  overall: warning
   blocking_issues: []
   warnings:
+  - MMP 1.1 är ett separat pågående arbetsområde (PARTIAL/NO-GO); ursprungliga 19 steg är klara men full 1.1-konformitet har inte styrkts.
   - MMP v1 har automatiserat verifierad export, import och paketering, men extern runtimeacceptans samt full avancerad semantisk täckning är fortfarande PARTIAL.
   - Constraint-validering v1 exekverar inte full OCL eller fri naturlig text.
   - Manuell importverifiering i Sparx Enterprise Architect är definierad som testfixture
@@ -62,9 +63,10 @@ resume:
   - docs/development-plan.md
   - STATUS.md
   - PROJECT.md
-  human_readable_status: Alla 19 steg är klara ur automatiserat projektperspektiv.
-    OpenAI Plugin är aktiv som equivalent_runtime_dependent peer runtime. Nästa externa
-    gate är fortsatt att upprepa den manuella EA-importen med den korrigerade MDG-filen.
+  human_readable_status: Ursprungliga 19 steg är avslutade. MMP 1.1 är ett separat
+    pågående arbetsområde med PARTIAL/NO-GO. Nästa åtgärd är att besluta om
+    versions-/profilkontrakt och design för CORE-015/016. Manuell Sparx EA-import
+    återstår fortfarande som extern gate för MDG.
 
 mmp_1_1_workstream:
   status: planning
