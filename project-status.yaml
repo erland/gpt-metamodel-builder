@@ -52,8 +52,8 @@ state:
     verification remains an explicit external release gate when EA is available.
   - "OpenAI Plugin är equivalent_runtime_dependent: full deterministisk parity kräver persistent writable workspace och kompatibel code execution från hosten."
 next_step:
-  recommended: core013-profile-enforcement-and-interop
-  title: Implement CORE-015 profile semantics and cross-language full package fixtures
+  recommended: core015-package-interop-and-core016-design
+  title: Implement CORE-015 full package interoperability
   reason: MMP 1.1-kandidatmanifest finns med kritisk deklaration och fail-closed kontroll. Nästa steg är profiler med verifierad semantik och fulla Python/TypeScript-fixtures utan förändring av 1.0.
 resume:
   supported: true
@@ -75,6 +75,6 @@ mmp_1_1_workstream:
   new_requirements:
   - CORE-015
   - CORE-016
-  next_action: add_supported_profile_semantics_and_cross_language_package_fixtures
+  next_action: implement_core015_package_aware_semantics_and_cross_language_tests
   mmp_1_0_0_unchanged: true
 

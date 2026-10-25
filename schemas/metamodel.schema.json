@@ -200,6 +200,27 @@
         },
         "target": {
           "$ref": "#/$defs/endpoint"
+        },
+        "allowed_type_pairs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source",
+              "target"
+            ],
+            "properties": {
+              "source": {
+                "$ref": "common-definitions.schema.json#/$defs/id"
+              },
+              "target": {
+                "$ref": "common-definitions.schema.json#/$defs/id"
+              }
+            }
+          }
         }
       }
     }

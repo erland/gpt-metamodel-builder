@@ -197,6 +197,25 @@ def validate(model_dir: Path) -> Report:
             for ref in item.get(side, {}).get("types", []) or []:
                 if ref not in element_ids:
                     report.error("unknown_endpoint_type", f"relationships[{i}].{side}.types", f"Unknown element type '{ref}'")
+    # CORE-015: declared pairwise rules are exact; legacy endpoint sets stay unchanged.
+    for i, item in enumerate(collections["relationships"]):
+        pairs = item.get("allowed_type_pairs")
+        if pairs is None:
+            continue
+        seen_pairs = set()
+        for j, pair in enumerate(pairs):
+            src, dst = pair["source"], pair["target"]
+            loc = f"relationships[{i}].allowed_type_pairs[{j}]"
+            if src not in element_ids:
+                report.error("unknown_pair_source", loc, f"Unknown pair source type '{src}'")
+            if dst not in element_ids:
+                report.error("unknown_pair_target", loc, f"Unknown pair target type '{dst}'")
+            if src not in item["source"]["types"] or dst not in item["target"]["types"]:
+                report.error("pair_outside_endpoints", loc, "Pair must be within declared endpoint type sets")
+            key = (src, dst)
+            if key in seen_pairs:
+                report.error("duplicate_allowed_pair", loc, f"Repeated pair {src} -> {dst}")
+            seen_pairs.add(key)
     find_cycles(rel_graph, "relationships.extends", report)
 
     # Property type and property set references.

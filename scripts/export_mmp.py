@@ -87,6 +87,11 @@ def export(model_dir: Path, output: Path, producer_version: str,
     model_dir = model_dir.resolve()
     contents = collect(model_dir, schema_dir.resolve())
     model = yaml.safe_load(contents["canonical/metamodel.yaml"])["metamodel"]
+    # CORE-015 is canonical-only until package consumers implement full pairwise semantics.
+    # Never silently export pairwise rules into either MMP 1.0 or experimental 1.1.
+    model_doc = yaml.safe_load(contents["canonical/metamodel.yaml"])
+    if any("allowed_type_pairs" in relation for relation in model_doc["relationships"]):
+        raise ValueError("CORE-015 not_supported: pairwise relationships need package consumer support")
     # MMP 1.0 consumers cannot negotiate critical semantics. Fail before packaging.
     from mmp_capability_policy import require_legacy_safe
     if not candidate_1_1:
