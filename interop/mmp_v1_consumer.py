@@ -425,6 +425,24 @@ def consume(source: Path):
         raise ValueError("CORE-016 not_supported in MMP 1.0")
     elements = docs["metamodel"]["elements"]
     relations = docs["metamodel"]["relationships"]
+    # Exact typed pairs are checked independently from the canonical validator.
+    for relation in relations:
+        if "allowed_typed_pairs" not in relation:
+            continue
+        if "allowed_type_pairs" in relation:
+            raise ValueError("CORE-016 mixed pair profiles")
+        domains = {
+            side: {(ref["kind"], ref["id"]) for ref in relation[side].get("typed_refs", [])}
+            for side in ("source", "target")
+        }
+        if any("typed_refs" not in relation[side] for side in ("source", "target")):
+            raise ValueError("CORE-016 typed pair missing endpoint domain")
+        seen_pairs = set()
+        for pair in relation["allowed_typed_pairs"]:
+            key = tuple((pair[side]["kind"], pair[side]["id"]) for side in ("source", "target"))
+            if key in seen_pairs or any(key[i] not in domains[side] for i, side in enumerate(("source", "target"))):
+                raise ValueError("CORE-016 invalid or duplicate typed pair")
+            seen_pairs.add(key)
     props = docs["properties"]
     junctions = docs["metamodel"].get("junctions", [])
     junction_ids = {x["id"] for x in junctions}
