@@ -136,6 +136,7 @@ skills:
     - schemas/guidance.schema.json
     - schemas/common-definitions.schema.json
     - schemas/mmp-manifest-v1.schema.json
+    - schemas/mmp-manifest-1-1-candidate.schema.json
     - templates/metamodel/guidance.yaml
   - id: kallanpassning
     name: Källanpassning
