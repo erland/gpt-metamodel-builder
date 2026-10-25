@@ -54,6 +54,7 @@ jobs:
       - run: node interop/typescript/dist/required-policy-test.js interop/required-policy-v1.json
       - run: node interop/typescript/dist/required-default-presence-test.js interop/required-default-presence-v1.json
       - run: python scripts/test_mmp_required_default_package.py --typescript
+      - run: python scripts/test_mmp_11_candidate_release_gate.py --typescript --report /tmp/mmp11-profile-gate.json
       - run: node interop/typescript/dist/canonical-value-test.js interop/canonical-values-v1.json
       - run: node interop/typescript/dist/extension-negotiation-test.js interop/extension-negotiation-v1.json
       - run: python scripts/run_mmp_core_semantic_suite.py --typescript --json-out /tmp/mmp-core-semantic-report.json
