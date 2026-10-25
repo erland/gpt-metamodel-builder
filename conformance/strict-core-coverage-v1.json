@@ -1,0 +1,83 @@
+{
+  "version": "0.1.0",
+  "profile": "strict-core-candidate",
+  "format": "1.0.0",
+  "overall": "partial",
+  "coverage": [
+    {
+      "requirements": [
+        "CORE-002",
+        "CORE-005"
+      ],
+      "check": "legacy-admission",
+      "status": "subset",
+      "evidence": ".github/workflows/mmp-typescript.yml"
+    },
+    {
+      "requirements": [
+        "CORE-007",
+        "CORE-008"
+      ],
+      "check": "cardinality-intervals-package",
+      "status": "subset",
+      "evidence": "scripts/test_mmp_strict_package_profile.py"
+    },
+    {
+      "requirements": [
+        "CORE-009"
+      ],
+      "check": "required-maximum-zero-package",
+      "status": "subset",
+      "evidence": "interop/typescript/src/strict-package-test.ts"
+    },
+    {
+      "requirements": [
+        "CORE-003",
+        "CORE-004"
+      ],
+      "check": "effective-properties-package",
+      "status": "subset",
+      "evidence": "scripts/test_mmp_package_semantics.py"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "CORE-001",
+      "gap": "Full identity/namespace strict package evidence"
+    },
+    {
+      "id": "CORE-006",
+      "gap": "Full role direction and navigation rules in strict package gate"
+    },
+    {
+      "id": "CORE-007",
+      "gap": "Instance-level endpoint counts and relation inheritance"
+    },
+    {
+      "id": "CORE-009",
+      "gap": "Default fulfillment and required consistency on full packages"
+    },
+    {
+      "id": "CORE-010",
+      "gap": "Default datatype/enum verification in strict package gate"
+    },
+    {
+      "id": "CORE-011",
+      "gap": "Canonical value semantics hooked to package data"
+    },
+    {
+      "id": "CORE-012",
+      "gap": "Executable rules intentionally not certified in Core"
+    },
+    {
+      "id": "CORE-013",
+      "gap": "Extensions bound to trusted package requirement declaration"
+    },
+    {
+      "id": "CORE-014",
+      "gap": "Complete version migration compatibility verification"
+    }
+  ],
+  "release_decision": "NO-GO",
+  "planned_next": "freeze candidate scope and review versioning, exclude unimplemented semantics instead of claiming certification"
+}
