@@ -18,14 +18,12 @@ def main():
    {"id":"mmp-typed-pairs","version":"1.0.0"}]
   # The fixture is a reduced graph-analysis contract; preserve names required
   # by the canonical schema and use valid source/target type domains.
-  doc["elements"]=[{"id":e["id"],"name":e["id"].upper()} for e in original["elements"]]
-  doc["junctions"]=[{"id":j["id"],"name":"Junction "+j["id"]} for j in original["junctions"]]
-  doc["relationships"]=[]
+  # Keep the reference example intact: its viewpoints, styles, constraints and\n  # provenance refer to its existing types. Extend rather than replace it.\n  doc["elements"].extend({"id":e["id"],"name":e["id"].upper()} for e in original["elements"])\n  doc.setdefault("junctions",[]).extend({"id":j["id"],"name":"Junction "+j["id"]} for j in original["junctions"])
   for rel in original["relationships"]:
    doc["relationships"].append({
     **rel,"name":rel["id"].upper(),
     "source":{**rel["source"],"types":["a","b"]},
-    "target":{**rel["target"],"types":["a","b"]}})
+    "target":{**rel["target"],"types":["b"]}})
   path.write_text(yaml.safe_dump(doc,sort_keys=False));before=path.read_bytes()
   package=work/"candidate.zip"
   result=run(sys.executable,ROOT/"scripts/export_mmp.py","--candidate-1-1","--model-dir",model,"--output",package)
