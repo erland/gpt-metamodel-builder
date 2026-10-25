@@ -26,6 +26,7 @@ def main() -> int:
         [py,'scripts/test_mmp_pairwise_foundation.py'],
         [py,'scripts/test_mmp_pairwise_candidate.py'],
         [py,'scripts/test_mmp_effective_pairs.py'],
+        [py,'scripts/test_mmp_effective_pairs_package.py'],
         [py,'scripts/test_mmp_interop.py'],
         [py,'scripts/test_mmp_consumer_security.py'],
         [py,'scripts/test_mmp_consumer_semantics.py'],

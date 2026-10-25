@@ -330,7 +330,37 @@ export function consume(bytes:Uint8Array):Obj {
   }
   for(const item of props.enumerations)ids(item.values,"enum values");
   for(const r of relations)for(const end of ["source","target"])for(const ref of r[end].types)ensure(elemIds.has(ref),"Unknown endpoint");
-  return {effective_properties:effectiveProperties(elements,relations,props.property_sets,props.property_definitions),package_format_version:manifest.package_format_version,metamodel:manifest.metamodel,
+  // CORE-015: pairwise subtype closure, computed without modifying canonical YAML.
+  const effectivePairs:Record<string,Array<{source:string,target:string}>>={};
+  const byId=new Map<string,Obj>(elements.map((x:Obj)=>[x.id,x]));
+  const ancestor=(id:string,visiting:Set<string>=new Set()):Set<string>=>{
+    ensure(byId.has(id),"Unknown element type in pair closure: "+id);
+    ensure(!visiting.has(id),"Element inheritance cycle");
+    const next=new Set(visiting);next.add(id);
+    const result=new Set<string>([id]);
+    for(const parent of byId.get(id)?.extends??[])for(const item of ancestor(parent,next))result.add(item);
+    return result;
+  };
+  const ancestry=new Map<string,Set<string>>(elements.map((x:Obj)=>[x.id,ancestor(x.id)]));
+  for(const rel of relations){
+    if(rel.allowed_type_pairs===undefined)continue;
+    const result=new Set<string>();
+    for(const pair of rel.allowed_type_pairs){
+      ensure(byId.has(pair.source)&&byId.has(pair.target),"Unknown pair endpoint");
+      ensure(rel.source.types.includes(pair.source)&&rel.target.types.includes(pair.target),"Pair outside declared endpoints");
+      for(const source of elements){
+        if(source.abstract===true||!ancestry.get(source.id)?.has(pair.source))continue;
+        for(const target of elements){
+          if(target.abstract!==true&&ancestry.get(target.id)?.has(pair.target))
+            result.add(source.id+"\\u0000"+target.id);
+        }
+      }
+    }
+    effectivePairs[rel.id]=[...result].sort().map(item=>{
+      const [source,target]=item.split("\\u0000");return {source,target};
+    });
+  }
+  return {effective_pairs:effectivePairs,effective_properties:effectiveProperties(elements,relations,props.property_sets,props.property_definitions),package_format_version:manifest.package_format_version,metamodel:manifest.metamodel,
     elements:elements.map((x:Obj)=>({id:x.id,name:x.name})),relationships:relations.map((x:Obj)=>({id:x.id,name:x.name})),
     property_count:props.property_definitions.length};
 }

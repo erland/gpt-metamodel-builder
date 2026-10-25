@@ -480,8 +480,39 @@ def consume(source: Path):
     rules = [{"id": c["id"], "language": c.get("language"),
               "evaluation": "not_supported" if c.get("language") not in known_languages else "not_supported"}
              for c in docs["constraints"].get("constraints", [])]
+    # CORE-015 candidate: independent normalized concrete subtype closure.
+    def candidate_effective_pairs(relation):
+        by_id = {item["id"]: item for item in elements}
+        def parents(ident, visiting):
+            if ident not in by_id:
+                raise ValueError("Unknown element type in pair closure: " + ident)
+            if ident in visiting:
+                raise ValueError("Element inheritance cycle")
+            result = {ident}
+            for parent in by_id[ident].get("extends", []) or []:
+                result.update(parents(parent, visiting | {ident}))
+            return result
+        ancestry = {ident: parents(ident, set()) for ident in by_id}
+        result = set()
+        for pair in relation["allowed_type_pairs"]:
+            src, dst = pair["source"], pair["target"]
+            if src not in by_id or dst not in by_id:
+                raise ValueError("Unknown pair endpoint")
+            if src not in relation["source"]["types"] or dst not in relation["target"]["types"]:
+                raise ValueError("Pair outside declared endpoints")
+            for sid, source in by_id.items():
+                if src not in ancestry[sid] or source.get("abstract", False):
+                    continue
+                for tid, target in by_id.items():
+                    if dst in ancestry[tid] and not target.get("abstract", False):
+                        result.add((sid, tid))
+        return [{"source": src, "target": dst} for src, dst in sorted(result)]
+    normalized_pairs = {
+        relation["id"]: candidate_effective_pairs(relation)
+        for relation in relations if "allowed_type_pairs" in relation
+    }
     effective = effective_properties(elements, relations, props["property_sets"], props["property_definitions"])
-    return {"effective_properties": effective, "package_format_version": m["package_format_version"], "metamodel": m["metamodel"],
+    return {"effective_pairs": normalized_pairs, "effective_properties": effective, "package_format_version": m["package_format_version"], "metamodel": m["metamodel"],
             "elements": [{"id": x["id"], "name": x["name"]} for x in elements],
             "relationships": [{"id": x["id"], "name": x["name"],
                                "source": x["source"]["types"], "target": x["target"]["types"]}
