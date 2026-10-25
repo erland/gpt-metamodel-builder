@@ -22,6 +22,8 @@ jobs:
       - run: npm run build
         working-directory: interop/typescript
       - run: node interop/typescript/dist/conformance.js /tmp/mmp-specification-1.0.0.zip
+      - run: python scripts/test_mmp_package_semantics.py /tmp/mmp-specification-1.0.0.zip
+      - run: node interop/typescript/dist/package-semantic-test.js /tmp/mmp-specification-1.0.0.zip
       - run: python scripts/test_mmp_effective_properties.py
       - run: node interop/typescript/dist/effective-properties-test.js interop/effective-properties-v1.json
       - run: node interop/typescript/dist/cardinality-test.js interop/cardinality-v1.json
