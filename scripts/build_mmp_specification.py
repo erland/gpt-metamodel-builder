@@ -34,6 +34,7 @@ def package(output:Path):
             "conformance/strict-core-coverage-v1.json":(ROOT/"conformance/strict-core-coverage-v1.json").read_bytes(),
             "conformance/mmp-version-decision-v1.json":(ROOT/"conformance/mmp-version-decision-v1.json").read_bytes(),
             "specification/version-compatibility-decision.md":(ROOT/"docs/mmp-version-compatibility-decision.md").read_bytes(),
+            "specification/release-acceptance.md":(ROOT/"docs/mmp-release-acceptance.md").read_bytes(),
             "specification/conformance.md":(ROOT/"mmp-kit/conformance.md").read_bytes(),
             "specification/conformance-profiles-proposal.md":(ROOT/"docs/mmp-conformance-profiles-proposal.md").read_bytes(),
             "examples/mmp-consumer-conformance.json":(ROOT/"examples/mmp-consumer-conformance.json").read_bytes(),
