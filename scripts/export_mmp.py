@@ -54,6 +54,10 @@ def collect(model_dir: Path, schema_dir: Path) -> dict[str, bytes]:
         result["documentation/junction-structure.json"] = profile.read_bytes()
         schema = schema_dir / "mmp-junction-structure-profile.schema.json"
         result["schemas/mmp-junction-structure-profile.schema.json"] = schema.read_bytes()
+    presence = model_dir / "profiles" / "required-default-presence.json"
+    if presence.is_file():
+        result["documentation/required-default-presence.json"] = presence.read_bytes()
+        result["schemas/mmp-required-default-presence-profile.schema.json"] = (schema_dir / "mmp-required-default-presence-profile.schema.json").read_bytes()
     # Canonical schemas must be closed over their local schema dependencies.
     queue = [p for p in result if p.startswith("schemas/")]
     visited = set()
@@ -139,6 +143,15 @@ def export(model_dir: Path, output: Path, producer_version: str,
         declared_types = {item["id"] for item in model_doc.get("junctions", [])}
         if set(profile["junction_operators"]) != declared_types:
             raise ValueError("CORE-016 junction profile type coverage mismatch")
+    presence_cap = {"id": "mmp-required-default-presence", "version": "0.1.0"}
+    presence_name = "documentation/required-default-presence.json"
+    presence_declared = presence_cap in model.get("extensions", {}).get("mmp_required_capabilities", [])
+    if presence_declared != (presence_name in contents):
+        raise ValueError("CORE-009 required/default profile capability/document mismatch")
+    if presence_declared:
+        if not candidate_1_1:
+            raise ValueError("CORE-009 not_supported in MMP 1.0")
+        Draft202012Validator(json.loads(contents["schemas/mmp-required-default-presence-profile.schema.json"])).validate(json.loads(contents[presence_name]))
     version = yaml.safe_load(contents["canonical/version.yaml"])["version"]["current"]
     namespace = model.get("namespace")
     if not isinstance(namespace, str) or not re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", namespace):

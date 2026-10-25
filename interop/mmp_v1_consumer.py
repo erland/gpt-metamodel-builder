@@ -406,7 +406,8 @@ def consume(source: Path):
         typed = {"id": "mmp-typed-endpoints", "version": "1.0.0"}
         typed_pairs = {"id": "mmp-typed-pairs", "version": "1.0.0"}
         junction_profile = {"id": "mmp-junction-structure", "version": "0.1.0"}
-        if any(cap not in (supported, typed, typed_pairs, junction_profile) for cap in capabilities):
+        presence_profile = {"id": "mmp-required-default-presence", "version": "0.1.0"}
+        if any(cap not in (supported, typed, typed_pairs, junction_profile, presence_profile) for cap in capabilities):
             raise ValueError("CORE-013 not_supported mandatory profile")
         profile_path = "documentation/junction-structure.json"
         if (junction_profile in capabilities) != (profile_path in files):
@@ -420,6 +421,16 @@ def consume(source: Path):
                     or any(x not in ("and", "or") for x in profile["junction_operators"].values())
                     or set(profile) != {"profile", "junction_operators"}):
                 raise ValueError("CORE-016 junction profile invalid")
+        presence_path = "documentation/required-default-presence.json"
+        if (presence_profile in capabilities) != (presence_path in files):
+            raise ValueError("CORE-009 required/default profile mismatch")
+        if presence_profile in capabilities:
+            policy = json.loads(files[presence_path])
+            if (not isinstance(policy, dict) or set(policy) != {"profile", "default_satisfies_required", "null_counts_as_present"}
+                    or policy["profile"] != "mmp-required-default-presence@0.1.0"
+                    or policy["default_satisfies_required"] is not False
+                    or policy["null_counts_as_present"] is not False):
+                raise ValueError("CORE-009 required/default profile invalid")
         has_pairs = any("allowed_type_pairs" in rel for rel in docs["metamodel"]["relationships"])
         if has_pairs and supported not in capabilities:
             raise ValueError("CORE-015 missing required capability")

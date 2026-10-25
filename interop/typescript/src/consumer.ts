@@ -315,7 +315,8 @@ export function consume(bytes:Uint8Array):Obj {
     const typed={id:"mmp-typed-endpoints",version:"1.0.0"};
     const typedPairs={id:"mmp-typed-pairs",version:"1.0.0"};
     const junctionProfile={id:"mmp-junction-structure",version:"0.1.0"};
-    ensure(capabilities.every((c:Obj)=>(c.id===supported.id&&c.version===supported.version)||(c.id===typed.id&&c.version===typed.version)||(c.id===typedPairs.id&&c.version===typedPairs.version)||(c.id===junctionProfile.id&&c.version===junctionProfile.version)),"CORE-013 not_supported mandatory profile");
+    const presenceProfile={id:"mmp-required-default-presence",version:"0.1.0"};
+    ensure(capabilities.every((c:Obj)=>(c.id===supported.id&&c.version===supported.version)||(c.id===typed.id&&c.version===typed.version)||(c.id===typedPairs.id&&c.version===typedPairs.version)||(c.id===junctionProfile.id&&c.version===junctionProfile.version)||(c.id===presenceProfile.id&&c.version===presenceProfile.version)),"CORE-013 not_supported mandatory profile");
     const profilePath="documentation/junction-structure.json";
     const declared=capabilities.some((c:Obj)=>c.id===junctionProfile.id&&c.version===junctionProfile.version);
     ensure(declared===Boolean(files[profilePath]),"CORE-016 junction profile capability/document mismatch");
@@ -328,6 +329,16 @@ export function consume(bytes:Uint8Array):Obj {
         Object.values(operators).every(v=>v==="and"||v==="or")&&
         Object.keys(profile).sort().join(",")==="junction_operators,profile",
         "CORE-016 junction profile invalid");
+    }
+    const presencePath="documentation/required-default-presence.json";
+    const presenceDeclared=capabilities.some((c:Obj)=>c.id===presenceProfile.id&&c.version===presenceProfile.version);
+    ensure(presenceDeclared===Boolean(files[presencePath]),"CORE-009 required/default profile mismatch");
+    if(presenceDeclared){
+      const policy=JSON.parse(decoder.decode(files[presencePath]));
+      ensure(policy.profile==="mmp-required-default-presence@0.1.0"&&
+        policy.default_satisfies_required===false&&policy.null_counts_as_present===false&&
+        Object.keys(policy).sort().join(",")==="default_satisfies_required,null_counts_as_present,profile",
+        "CORE-009 required/default profile invalid");
     }
     if((docs.metamodel.junctions??[]).length>0 || docs.metamodel.relationships.some((r:Obj)=>["source","target"].some(side=>r[side].typed_refs!==undefined)))
       ensure(capabilities.some((c:Obj)=>c.id===typed.id&&c.version===typed.version),"CORE-016 missing required capability");
