@@ -39,8 +39,9 @@ def main():
         inv=inventory(recovered)
         for group in SPEC["groups"]:
             prefix=group["id"]+"_"
-            assert len([ident for ident in inv["collections"]["elements"]["ids"]
-                        if ident.startswith(prefix)])==group["count"]
+            expected={prefix+str(i+1).zfill(2) for i in range(group["count"])}
+            assert expected <= set(inv["collections"]["elements"]["ids"])
+            assert len(expected)==group["count"]
         assert all(rule["id"] in inv["pairs"] for rule in SPEC["relationship_rules"])
         # Detect a same-count substitution: aggregate counts alone cannot catch it.
         tampered=copy.deepcopy(recovered)
