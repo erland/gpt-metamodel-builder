@@ -24,6 +24,7 @@ def main() -> int:
         [py,'scripts/test_mmp_import.py'],
         [py,'scripts/test_mmp_core013_candidate.py'],
         [py,'scripts/test_mmp_pairwise_foundation.py'],
+        [py,'scripts/test_mmp_pairwise_candidate.py'],
         [py,'scripts/test_mmp_interop.py'],
         [py,'scripts/test_mmp_consumer_security.py'],
         [py,'scripts/test_mmp_consumer_semantics.py'],
