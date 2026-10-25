@@ -73,3 +73,7 @@ The accompanying `conformance/mmp-1-1-readiness.json` and `specification/mmp-1-1
 ## Explicit strict package candidate
 
 Package semantic fixtures declare both legacy `expected` and opt-in `strict_expected`. The strict subset validates cardinality intervals and required-with-maximum-zero independently in both reference consumers; no MMP 1.0.0 admission changes or full MMP 1.1 claims are made.
+
+## Strict Core coverage gate (PR #45)
+
+`conformance/strict-core-coverage-v1.json` records explicit subset coverage, unverified requirements and a **NO-GO** decision for full MMP 1.1 Core conformance. A successful semantic helper/package run is not certification; see `specification/strict-core-coverage.md`.
