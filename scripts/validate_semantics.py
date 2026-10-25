@@ -138,6 +138,7 @@ def validate(model_dir: Path) -> Report:
     collections = {
         "elements": mm.get("elements", []),
         "relationships": mm.get("relationships", []),
+        "junctions": mm.get("junctions", []),
         "data_types": props.get("data_types", []),
         "enumerations": props.get("enumerations", []),
         "property_definitions": props.get("property_definitions", []),
@@ -156,6 +157,7 @@ def validate(model_dir: Path) -> Report:
     ids = {k: {x.get("id") for x in v} for k, v in collections.items()}
     element_ids = ids["elements"]
     relationship_ids = ids["relationships"]
+    junction_ids = ids["junctions"]
     property_ids = ids["property_definitions"]
     property_set_ids = ids["property_sets"]
     data_type_ids = ids["data_types"]
@@ -164,9 +166,9 @@ def validate(model_dir: Path) -> Report:
     source_ids = ids["sources"]
 
     # Avoid ambiguous model type identifiers.
-    overlap = element_ids & relationship_ids
+    overlap = (element_ids & relationship_ids) | (element_ids & junction_ids) | (relationship_ids & junction_ids)
     for ident in sorted(overlap):
-        report.error("ambiguous_type_id", "metamodel.yaml", f"Id '{ident}' is used by both an element and a relationship type")
+        report.error("ambiguous_type_id", "metamodel.yaml", f"Id '{ident}' is used in multiple endpoint type namespaces")
 
     # Inheritance and references.
     elem_graph: dict[str, list[str]] = {}
@@ -197,6 +199,29 @@ def validate(model_dir: Path) -> Report:
             for ref in item.get(side, {}).get("types", []) or []:
                 if ref not in element_ids:
                     report.error("unknown_endpoint_type", f"relationships[{i}].{side}.types", f"Unknown element type '{ref}'")
+    # CORE-016 opt-in typed endpoint references. Preserve legacy element-only types.
+    typed_namespaces = {"element": element_ids, "relationship": relationship_ids, "junction": junction_ids}
+    for i, relation in enumerate(collections["relationships"]):
+        for side in ("source", "target"):
+            endpoint = relation.get(side, {})
+            typed = endpoint.get("typed_refs")
+            if typed is None:
+                continue
+            seen = set()
+            element_refs = set()
+            for j, ref in enumerate(typed):
+                kind, ident = ref["kind"], ref["id"]
+                location = f"relationships[{i}].{side}.typed_refs[{j}]"
+                if ident not in typed_namespaces[kind]:
+                    report.error("unknown_typed_endpoint", location, f"Unknown {kind} type '{ident}'")
+                if (kind, ident) in seen:
+                    report.error("duplicate_typed_endpoint", location, f"Repeated {kind} endpoint '{ident}'")
+                seen.add((kind, ident))
+                if kind == "element":
+                    element_refs.add(ident)
+            if element_refs != set(endpoint.get("types", [])):
+                report.error("typed_endpoint_legacy_mismatch", f"relationships[{i}].{side}",
+                             "types must exactly match element entries of typed_refs")
     # CORE-015: declared pairwise rules are exact; legacy endpoint sets stay unchanged.
     for i, item in enumerate(collections["relationships"]):
         pairs = item.get("allowed_type_pairs")

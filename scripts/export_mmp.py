@@ -90,6 +90,12 @@ def export(model_dir: Path, output: Path, producer_version: str,
     # CORE-015 is canonical-only until package consumers implement full pairwise semantics.
     # Never silently export pairwise rules into either MMP 1.0 or experimental 1.1.
     model_doc = yaml.safe_load(contents["canonical/metamodel.yaml"])
+    # CORE-016 remains canonical-only: older consumers cannot enforce typed endpoints.
+    if model_doc.get("junctions") or any(
+        "typed_refs" in rel.get(side, {})
+        for rel in model_doc["relationships"] for side in ("source", "target")
+    ):
+        raise ValueError("CORE-016 not_supported: typed endpoints/junctions require a negotiated package profile")
     has_pairs = any("allowed_type_pairs" in relation for relation in model_doc["relationships"])
     if has_pairs and not candidate_1_1:
         raise ValueError("CORE-015 not_supported: pairwise relationships require MMP 1.1 candidate")
