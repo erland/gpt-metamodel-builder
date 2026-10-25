@@ -1,0 +1,61 @@
+{
+  "review_version": "1.0.0",
+  "date": "2026-10-25",
+  "target": "MMP 1.1.0 candidate",
+  "decision": "no_go",
+  "evidence_level": "source, registered CI and prior successful PR81 checks; not external certification",
+  "historical_baseline": "conformance/mmp-1-1-core007-016-review-20261025.json",
+  "legacy_mmp_1_0_unchanged": true,
+  "areas": [
+    {
+      "id": "CORE-015",
+      "status": "candidate_subset",
+      "implemented": [
+        "element-pair restrictions and conservative parent intersection",
+        "relationship inheritance and explicit multiple-parent narrowing",
+        "integrated package acceptance with CORE-016"
+      ],
+      "evidence": [
+        "scripts/mmp_effective_pairs.py",
+        "scripts/test_mmp_pair_inheritance.py",
+        "scripts/test_mmp_core015_core016_integration.py"
+      ],
+      "open": [
+        "normative subtype/inheritance contract across exact element and typed profile cases",
+        "broader instance-level inherited-element-pair acceptance",
+        "independent external implementation"
+      ]
+    },
+    {
+      "id": "CORE-016",
+      "status": "candidate_subset",
+      "implemented": [
+        "typed endpoints, junctions and exact typed pairs with mandatory capability negotiation",
+        "conservative inherited exact typed-pair intersection",
+        "real instance edge enforcement in Python and TS with shared fixtures",
+        "PR81 real MMP 1.1 candidate ZIP export, import, canonical byte roundtrip and Python/TS graph acceptance"
+      ],
+      "evidence": [
+        "scripts/mmp_effective_typed_pairs.py",
+        "scripts/mmp_typed_instance_graph.py",
+        "interop/core016-inherited-instance-graph-v1.json",
+        "interop/typescript/src/typed-graph-test.ts",
+        "scripts/test_mmp_inherited_pairs_full_package.py"
+      ],
+      "open": [
+        "MMP import validates structural typed contracts, not every possible instance graph",
+        "no implicit subtype expansion for typed pairs; needs normative decision",
+        "AND/OR activation and junction flow semantics unsupported",
+        "external independent package/runtime acceptance not established"
+      ]
+    }
+  ],
+  "cross_cutting_blockers": [
+    "CORE-007 normative instance population and specialization cardinality",
+    "CORE-009/011 required and canonical value policies",
+    "CORE-012 rules profile scope",
+    "independent external interoperability and normative release matrix"
+  ],
+  "next_decision": "define_core009_core011_value_required_semantics",
+  "no_go_rationale": "PR81 test success demonstrates an integrated candidate subset, not complete general normative MMP 1.1 compliance."
+}
