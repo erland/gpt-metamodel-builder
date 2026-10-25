@@ -313,9 +313,12 @@ export function consume(bytes:Uint8Array):Obj {
     ensure(JSON.stringify(manifest.required_capabilities)===JSON.stringify(capabilities),"CORE-013 capability mismatch");
     const supported={id:"mmp-pairwise-relationships",version:"1.0.0"};
     const typed={id:"mmp-typed-endpoints",version:"1.0.0"};
-    ensure(capabilities.every((c:Obj)=>(c.id===supported.id&&c.version===supported.version)||(c.id===typed.id&&c.version===typed.version)),"CORE-013 not_supported mandatory profile");
+    const typedPairs={id:"mmp-typed-pairs",version:"1.0.0"};
+    ensure(capabilities.every((c:Obj)=>(c.id===supported.id&&c.version===supported.version)||(c.id===typed.id&&c.version===typed.version)||(c.id===typedPairs.id&&c.version===typedPairs.version)),"CORE-013 not_supported mandatory profile");
     if((docs.metamodel.junctions??[]).length>0 || docs.metamodel.relationships.some((r:Obj)=>["source","target"].some(side=>r[side].typed_refs!==undefined)))
       ensure(capabilities.some((c:Obj)=>c.id===typed.id&&c.version===typed.version),"CORE-016 missing required capability");
+    if(docs.metamodel.relationships.some((r:Obj)=>r.allowed_typed_pairs!==undefined))
+      ensure(capabilities.some((c:Obj)=>c.id===typedPairs.id&&c.version===typedPairs.version),"CORE-016 typed pairs missing required capability");
     if(docs.metamodel.relationships.some((r:Obj)=>r.allowed_type_pairs!==undefined))
       ensure(capabilities.some((c:Obj)=>c.id===supported.id&&c.version===supported.version),"CORE-015 missing required capability");
   } else ensure(Array.isArray(capabilities) && capabilities.length===0,"CORE-013 not_supported in MMP 1.0");
