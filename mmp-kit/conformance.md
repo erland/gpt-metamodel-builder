@@ -57,3 +57,7 @@ The accompanying `conformance/mmp-1-1-readiness.json` and `specification/mmp-1-1
 ## Candidate canonical text values
 
 `conformance/canonical-values-v1.json` exercises text-level integer, decimal, date, UTC timestamp and restricted HTTP(S) URI canonicalization in both Python and TypeScript. This is a **limited opt-in proposal**, not full URI/number semantics and not MMP 1.0.0 import enforcement.
+
+## Proposed extension negotiation
+
+`conformance/extension-negotiation-v1.json` checks version-matched required and optional extensions across Python and TypeScript; this is a separate opt-in declaration, not 1.0.0 manifest semantics or trusted in-package authorization.
