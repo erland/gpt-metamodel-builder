@@ -6,8 +6,9 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
 BUILDER=ROOT/"scripts/build_mmp_specification.py"
+VERSION=json.loads((ROOT/"mmp-kit/version.json").read_text(encoding="utf-8"))
 REQUIRED={
- "README.md","SHA256SUMS.txt","specification/mmp-v1.md",
+ "README.md","SHA256SUMS.txt","specification/mmp-v1.md","specification-kit.json",
  "specification/version-compatibility-decision.md",
  "conformance/mmp-version-decision-v1.json",
  "conformance/strict-core-coverage-v1.json",
@@ -33,6 +34,8 @@ def verify(kit:Path):
         assert set(observed)==set(names)-{"SHA256SUMS.txt"},"Checksum inventory differs"
         for path,digest in observed.items():
             assert sha(archive.read(path))==digest, f"Hash mismatch {path}"
+        kit_meta=json.loads(archive.read("specification-kit.json"))
+        assert kit_meta==VERSION, "Kit metadata deviates from version manifest"
         decision=json.loads(archive.read("conformance/mmp-version-decision-v1.json"))
         assert decision["stable_format"]=="1.0.0"
         assert decision["full_core_1_1"]=="not_verified"
@@ -60,7 +63,7 @@ def main():
                 subprocess.run([sys.executable,str(BUILDER),"--output",str(path)],cwd=ROOT,check=True)
             assert paths[0].read_bytes()==paths[1].read_bytes(),"Build is not bit-reproducible"
             result=verify(paths[0])
-    result={"status":"pass","kit_version":"1.0.0","reproducible":not bool(args.kit),
+    result={"status":"pass","kit_version":VERSION["specification_kit_version"],"reproducible":not bool(args.kit),
             "mmp_1_1_core":"not_verified",**result}
     print(json.dumps(result,indent=2))
     if args.json_out:

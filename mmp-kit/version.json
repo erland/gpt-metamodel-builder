@@ -1,0 +1,6 @@
+{
+  "specification_kit_version": "1.1.0",
+  "package_format": "mmp",
+  "package_format_version": "1.0.0",
+  "release_scope": "MMP 1.0.0 stable; opt-in semantic profiles not normative"
+}
