@@ -1,0 +1,110 @@
+{
+  "suite_version": "0.1.0",
+  "kind": "semantic-helper-subset",
+  "baseline_note": "Separate from MMP 1.0.0 nine-package acceptance suite; no full Core certification",
+  "cases": [
+    {
+      "id": "effective-properties",
+      "vector": "interop/effective-properties-v1.json",
+      "python": "scripts/test_mmp_effective_properties.py",
+      "typescript": "interop/typescript/dist/effective-properties-test.js",
+      "requirements": [
+        "CORE-003",
+        "CORE-004"
+      ],
+      "scope": "helper-only"
+    },
+    {
+      "id": "cardinality",
+      "vector": "interop/cardinality-v1.json",
+      "python": "scripts/test_mmp_cardinality.py",
+      "typescript": "interop/typescript/dist/cardinality-test.js",
+      "requirements": [
+        "CORE-008",
+        "CORE-009"
+      ],
+      "scope": "helper-only"
+    },
+    {
+      "id": "defaults",
+      "vector": "interop/default-values-v1.json",
+      "python": "scripts/test_mmp_defaults.py",
+      "typescript": "interop/typescript/dist/default-values-test.js",
+      "requirements": [
+        "CORE-010",
+        "CORE-011"
+      ],
+      "scope": "helper-only"
+    },
+    {
+      "id": "relationship-roles",
+      "vector": "interop/relationship-semantics-v1.json",
+      "python": "scripts/test_mmp_relationship_semantics.py",
+      "typescript": "interop/typescript/dist/relationship-test.js",
+      "requirements": [
+        "CORE-006",
+        "CORE-007"
+      ],
+      "scope": "helper-only"
+    },
+    {
+      "id": "version-extensions",
+      "vector": "interop/version-extension-v1.json",
+      "python": "scripts/test_mmp_version_extensions.py",
+      "typescript": "interop/typescript/dist/version-extension-test.js",
+      "requirements": [
+        "CORE-013",
+        "CORE-014"
+      ],
+      "scope": "helper-only"
+    },
+    {
+      "id": "relation-inheritance",
+      "vector": "interop/relationship-inheritance-v1.json",
+      "python": "scripts/test_mmp_relation_inheritance.py",
+      "typescript": "interop/typescript/dist/relation-inheritance-test.js",
+      "requirements": [
+        "CORE-006",
+        "CORE-007"
+      ],
+      "scope": "helper-only"
+    },
+    {
+      "id": "required-minimum",
+      "vector": "interop/required-policy-v1.json",
+      "python": "scripts/test_mmp_required_policy.py",
+      "typescript": "interop/typescript/dist/required-policy-test.js",
+      "requirements": [
+        "CORE-009"
+      ],
+      "scope": "helper-only"
+    },
+    {
+      "id": "canonical-values",
+      "vector": "interop/canonical-values-v1.json",
+      "python": "scripts/test_mmp_canonical_values.py",
+      "typescript": "interop/typescript/dist/canonical-value-test.js",
+      "requirements": [
+        "CORE-011"
+      ],
+      "scope": "helper-only"
+    },
+    {
+      "id": "extension-negotiation",
+      "vector": "interop/extension-negotiation-v1.json",
+      "python": "scripts/test_mmp_extension_negotiation.py",
+      "typescript": "interop/typescript/dist/extension-negotiation-test.js",
+      "requirements": [
+        "CORE-013"
+      ],
+      "scope": "helper-only"
+    }
+  ],
+  "untested": [
+    "CORE-001",
+    "CORE-002",
+    "CORE-005",
+    "CORE-012"
+  ],
+  "release_claim": "not_ready"
+}

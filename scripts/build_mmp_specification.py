@@ -44,6 +44,8 @@ def package(output:Path):
             "conformance/required-policy-v1.json":(ROOT/"interop/required-policy-v1.json").read_bytes(),
             "conformance/canonical-values-v1.json":(ROOT/"interop/canonical-values-v1.json").read_bytes(),
             "conformance/extension-negotiation-v1.json":(ROOT/"interop/extension-negotiation-v1.json").read_bytes(),
+            "conformance/core-semantic-suite-v1.json":(ROOT/"conformance/core-semantic-suite-v1.json").read_bytes(),
+            "conformance/run_core_semantic_suite.py":(ROOT/"scripts/run_mmp_core_semantic_suite.py").read_bytes(),
             "specification/extension-negotiation-proposal.md":(ROOT/"docs/mmp-extension-negotiation.md").read_bytes(),
             "specification/canonical-values-policy.md":(ROOT/"docs/mmp-canonical-values-policy.md").read_bytes(),
             "specification/required-minimum-policy.md":(ROOT/"docs/mmp-required-minimum-policy.md").read_bytes(),
