@@ -51,7 +51,7 @@ function graphResult(model:Obj,graph:Obj):string{
           if(type!==ref.id)continue;
           const card=endpoint.cardinality;
           if(typeof card!=="string")return "not_supported";
-          const m=/^(0|[1-9][0-9]*)(?:\\.\\.(0|[1-9][0-9]*|\\*))?$|^(\\*)$/.exec(card);
+          const m=/^(0|[1-9][0-9]*)(?:\.\.(0|[1-9][0-9]*|\*))?$|^(\*)$/.exec(card);
           if(!m)return "error";
           const min=m[3]?0:Number(m[1]);
           const max=m[3]||m[2]==="*"?null:Number(m[2]??m[1]);
