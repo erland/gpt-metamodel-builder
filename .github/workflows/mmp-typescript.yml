@@ -16,17 +16,18 @@ jobs:
         with:
           node-version: '22'
       - run: python -m pip install PyYAML jsonschema
-      - run: python scripts/build_mmp_specification.py --output /tmp/mmp-specification-kit-1.1.0.zip
-      - run: python scripts/test_mmp_release_kit.py --kit /tmp/mmp-specification-kit-1.1.0.zip --json-out /tmp/mmp-release-report.json
+      - run: echo "MMP_KIT_PATH=/tmp/$(python scripts/build_mmp_specification.py --print-filename)" >> "$GITHUB_ENV"
+      - run: python scripts/build_mmp_specification.py --output "$MMP_KIT_PATH"
+      - run: python scripts/test_mmp_release_kit.py --kit "$MMP_KIT_PATH" --json-out /tmp/mmp-release-report.json
       - run: npm install --no-audit --no-fund
         working-directory: interop/typescript
       - run: npm run build
         working-directory: interop/typescript
-      - run: node interop/typescript/dist/conformance.js /tmp/mmp-specification-kit-1.1.0.zip
-      - run: python scripts/test_mmp_package_semantics.py /tmp/mmp-specification-kit-1.1.0.zip
-      - run: node interop/typescript/dist/package-semantic-test.js /tmp/mmp-specification-kit-1.1.0.zip
-      - run: python scripts/test_mmp_strict_package_profile.py /tmp/mmp-specification-kit-1.1.0.zip
-      - run: node interop/typescript/dist/strict-package-test.js /tmp/mmp-specification-kit-1.1.0.zip
+      - run: node interop/typescript/dist/conformance.js "$MMP_KIT_PATH"
+      - run: python scripts/test_mmp_package_semantics.py "$MMP_KIT_PATH"
+      - run: node interop/typescript/dist/package-semantic-test.js "$MMP_KIT_PATH"
+      - run: python scripts/test_mmp_strict_package_profile.py "$MMP_KIT_PATH"
+      - run: node interop/typescript/dist/strict-package-test.js "$MMP_KIT_PATH"
       - run: python scripts/test_mmp_effective_properties.py
       - run: node interop/typescript/dist/effective-properties-test.js interop/effective-properties-v1.json
       - run: node interop/typescript/dist/cardinality-test.js interop/cardinality-v1.json
