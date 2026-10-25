@@ -241,6 +241,35 @@ def validate(model_dir: Path) -> Report:
             if key in seen_pairs:
                 report.error("duplicate_allowed_pair", loc, f"Repeated pair {src} -> {dst}")
             seen_pairs.add(key)
+    # CORE-016 typed pair contracts are exact; never infer them from legacy pairs.
+    for i, item in enumerate(collections["relationships"]):
+        typed_pairs = item.get("allowed_typed_pairs")
+        if typed_pairs is None:
+            continue
+        declared = {}
+        for side in ("source", "target"):
+            endpoint = item[side]
+            declared[side] = {(ref["kind"], ref["id"]) for ref in endpoint.get("typed_refs", [])}
+            if "typed_refs" not in endpoint:
+                report.error("typed_pair_missing_endpoint", f"relationships[{i}].{side}",
+                             "allowed_typed_pairs requires typed_refs on both endpoints")
+        seen_pairs = set()
+        for j, pair in enumerate(typed_pairs):
+            key = tuple((pair[side]["kind"], pair[side]["id"]) for side in ("source", "target"))
+            location = f"relationships[{i}].allowed_typed_pairs[{j}]"
+            if key in seen_pairs:
+                report.error("duplicate_allowed_typed_pair", location, "Duplicate exact typed pair")
+            seen_pairs.add(key)
+            for side, typed in zip(("source", "target"), key):
+                if typed not in declared[side]:
+                    report.error("typed_pair_outside_endpoints", location,
+                                 f"{side} pair reference is absent from typed_refs")
+                if typed[1] not in typed_namespaces[typed[0]]:
+                    report.error("unknown_typed_pair_endpoint", location,
+                                 f"Unknown {side} {typed[0]} type '{typed[1]}'")
+        if item.get("allowed_type_pairs") is not None:
+            report.error("mixed_pair_profiles", f"relationships[{i}]",
+                         "Legacy element-only and typed exact pair rules cannot coexist on one relation")
     find_cycles(rel_graph, "relationships.extends", report)
 
     # Property type and property set references.
