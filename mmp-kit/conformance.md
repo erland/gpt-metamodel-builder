@@ -77,3 +77,7 @@ Package semantic fixtures declare both legacy `expected` and opt-in `strict_expe
 ## Strict Core coverage gate (PR #45)
 
 `conformance/strict-core-coverage-v1.json` records explicit subset coverage, unverified requirements and a **NO-GO** decision for full MMP 1.1 Core conformance. A successful semantic helper/package run is not certification; see `specification/strict-core-coverage.md`.
+
+## MMP release scope decision
+
+`conformance/mmp-version-decision-v1.json` and `specification/version-compatibility-decision.md` freeze MMP **1.0.0** as the stable release candidate. Strict Core and other semantic profiles are opt-in, non-normative proposals; **NO-GO** for a full MMP 1.1.0 release or conformance claim.
