@@ -65,3 +65,7 @@ The accompanying `conformance/mmp-1-1-readiness.json` and `specification/mmp-1-1
 ## Traced Core semantic subset suite
 
 `conformance/core-semantic-suite-v1.json` maps independent Python/TypeScript helper golden-vector tests to CORE-001–014. The source-tree runner `scripts/run_mmp_core_semantic_suite.py --typescript --json-out report.json` produces a per-language, per-case and per-requirement machine-readable report. The kit contains a copy of the runner as reference; executing it requires the source tree and built TypeScript implementation. This remains a **subset helper suite** and explicitly states `full_core_conformance: not_verified`, even if all tests pass. Nine MMP 1.0.0 ZIP cases remain a separate acceptance baseline.
+
+## Package-level semantic regression suite
+
+`conformance/package-semantic-manifest.json` lists 4 additional hashed MMP ZIP cases verified by both Python and TypeScript through their ordinary read-only consumers. This tests a **subset** of semantic package behavior; future strict-profile requirements are not silently applied to legacy 1.0.0 packages.
