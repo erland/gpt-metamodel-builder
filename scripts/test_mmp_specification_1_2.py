@@ -27,7 +27,13 @@ def inspect(path):
   readme=z.read("README.md").decode()
   notes=z.read("specification/release-notes-1.2.0.md").decode()
   assert "Specification Kit 1.2.0" in readme and "package format 1.1.0" in readme
-  assert "first distributed in project release **v1.4.0**" in readme\n  assert "first published with project release **v1.4.0**" in notes\n  assert "historical candidate decisions" in readme\n  status=json.loads(z.read("conformance/release-status-1.2.0.json"))\n  assert status["status"]=="published_limited_scope" and status["first_project_release"]=="v1.4.0"\n  historic=json.loads(z.read("conformance/mmp-1-1-limited-release-decision.json"))\n  assert historic["decision"]=="conditional_no_go", "do not rewrite historic release decision"
+  assert "first distributed in project release **v1.4.0**" in readme
+  assert "first published with project release **v1.4.0**" in notes
+  assert "historical candidate decisions" in readme
+  status=json.loads(z.read("conformance/release-status-1.2.0.json"))
+  assert status["status"]=="published_limited_scope" and status["first_project_release"]=="v1.4.0"
+  historic=json.loads(z.read("conformance/mmp-1-1-limited-release-decision.json"))
+  assert historic["decision"]=="conditional_no_go", "do not rewrite historic release decision"
   assert "package format is 1.0.0" in readme and "full Core 1.1" in notes
   old=json.loads(z.read("conformance/mmp-version-decision-v1.json"))
   assert old["stable_format"]=="1.0.0" # archived baseline, not new release status
