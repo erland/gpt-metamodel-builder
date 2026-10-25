@@ -1,0 +1,54 @@
+{
+  "contract_revision": "1.0.0",
+  "status": "approved_scope_proposed_for_release_no_go",
+  "package_format": "mmp",
+  "target_package_format_version": "1.1.0",
+  "previous_package_format_version": "1.0.0",
+  "existing_specification_kit_version": "1.1.0",
+  "next_specification_kit_version": "1.2.0",
+  "kit_version_status": "proposed_reserve_not_built",
+  "negotiation": "mandatory capabilities in manifest and canonical metamodel must match; unsupported mandatory version is rejected, with package integrity verified before semantic acceptance",
+  "guaranteed_scope": [
+    "seven canonical entrypoints and checksummed package inventory",
+    "explicit structural element and relationship declarations",
+    "typed endpoint categories and exact typed pair constraints in declared capability profile",
+    "junction operator profile metadata only",
+    "required/default presence policy only when its versioned capability is required",
+    "preservation of 1.0.0 parsing and acceptance behavior"
+  ],
+  "supported_capabilities": [
+    {
+      "id": "mmp-pairwise-relationships",
+      "version": "1.0.0"
+    },
+    {
+      "id": "mmp-typed-endpoints",
+      "version": "1.0.0"
+    },
+    {
+      "id": "mmp-typed-pairs",
+      "version": "1.0.0"
+    },
+    {
+      "id": "mmp-junction-structure",
+      "version": "0.1.0"
+    },
+    {
+      "id": "mmp-required-default-presence",
+      "version": "0.1.0"
+    }
+  ],
+  "excluded_semantics": [
+    "full general instance graph validation",
+    "implicit subtype expansion for exact typed pairs",
+    "AND/OR behavioral activation",
+    "automated relationship derivation and rules execution",
+    "universal datatype or URI canonicalization"
+  ],
+  "release_gate": "NO_GO_pending_artifact_and_docs",
+  "evidence": {
+    "combined": "scripts/test_mmp_11_combined_profiles_package.py",
+    "candidate": "scripts/test_mmp_11_candidate_release_gate.py",
+    "kit_metadata": "mmp-kit/version.json"
+  }
+}
