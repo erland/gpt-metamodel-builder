@@ -342,12 +342,25 @@ export function consume(bytes:Uint8Array):Obj {
     return result;
   };
   const ancestry=new Map<string,Set<string>>(elements.map((x:Obj)=>[x.id,ancestor(x.id)]));
-  for(const rel of relations){
-    if(rel.allowed_type_pairs===undefined)continue;
+  const relById=new Map<string,Obj>(relations.map((r:Obj)=>[r.id,r]));
+  const pairConstraints=(id:string,visiting:Set<string>=new Set()):Array<Array<{source:string,target:string}>>=>{
+    ensure(relById.has(id),"Unknown relationship parent: "+id);
+    ensure(!visiting.has(id),"Relationship inheritance cycle: "+id);
+    const rel=relById.get(id)!;
+    const next=new Set(visiting);next.add(id);
+    const parts:Array<Array<{source:string,target:string}>>=[];
+    for(const parent of rel.extends??[]){
+      const inherited=pairConstraints(parent,next);
+      ensure(inherited.length>0,"CORE-015 not_supported inherited parent lacks pairwise contract: "+parent);
+      parts.push(...inherited);
+    }
+    if(rel.allowed_type_pairs!==undefined)parts.push(rel.allowed_type_pairs);
+    return parts;
+  };
+  const expand=(pairs:Array<{source:string,target:string}>):Set<string>=>{
     const result=new Set<string>();
-    for(const pair of rel.allowed_type_pairs){
+    for(const pair of pairs){
       ensure(byId.has(pair.source)&&byId.has(pair.target),"Unknown pair endpoint");
-      ensure(rel.source.types.includes(pair.source)&&rel.target.types.includes(pair.target),"Pair outside declared endpoints");
       for(const source of elements){
         if(source.abstract===true||!ancestry.get(source.id)?.has(pair.source))continue;
         for(const target of elements){
@@ -356,7 +369,27 @@ export function consume(bytes:Uint8Array):Obj {
         }
       }
     }
-    effectivePairs[rel.id]=[...result].sort().map(item=>{
+    return result;
+  };
+  const hasPairwise=(id:string,visiting:Set<string>=new Set()):boolean=>{
+    ensure(relById.has(id)&&!visiting.has(id),"Unknown/cyclic inherited relationship");
+    const rel=relById.get(id)!;
+    return rel.allowed_type_pairs!==undefined || (rel.extends??[]).some((p:string)=>hasPairwise(p,new Set([...visiting,id])));
+  };
+  for(const rel of relations){
+    if(!hasPairwise(rel.id))continue;
+    const constraints=pairConstraints(rel.id);
+    ensure(constraints.length>0,"Pairwise constraints missing");
+    const results=constraints.map(expand);
+    const intersection=[...results[0]].filter(key=>results.every(set=>set.has(key)));
+    ensure(intersection.length>0,"CORE-015 empty effective pair intersection: "+rel.id);
+    const allowed=intersection.filter(key=>{
+      const [source,target]=key.split("\\u0000");
+      return rel.source.types.some((t:string)=>ancestry.get(source)?.has(t))
+        && rel.target.types.some((t:string)=>ancestry.get(target)?.has(t));
+    });
+    ensure(allowed.length>0,"CORE-015 no effective pairs within child endpoint types: "+rel.id);
+    effectivePairs[rel.id]=allowed.sort().map(item=>{
       const [source,target]=item.split("\\u0000");return {source,target};
     });
   }
