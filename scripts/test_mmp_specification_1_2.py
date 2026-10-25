@@ -11,7 +11,7 @@ def inspect(path):
   required={"specification-kit.json","SHA256SUMS.txt","specification/mmp-1-1-limited-contract.md",
    "conformance/mmp-1-1-version-scope.json","schemas/mmp-manifest-1-1-candidate.schema.json",
    "schemas/mmp-required-default-presence-profile.schema.json",
-   "specification/release-notes-1.2.0.md"}
+   "specification/release-notes-1.2.0.md","conformance/release-status-1.2.0.json"}
   assert required<=set(names),required-set(names)
   inv={}
   for line in z.read("SHA256SUMS.txt").decode().splitlines():
@@ -27,7 +27,7 @@ def inspect(path):
   readme=z.read("README.md").decode()
   notes=z.read("specification/release-notes-1.2.0.md").decode()
   assert "Specification Kit 1.2.0" in readme and "package format 1.1.0" in readme
-  assert "candidate / NO-GO" in readme and "candidate / NO-GO" in notes
+  assert "first distributed in project release **v1.4.0**" in readme\n  assert "first published with project release **v1.4.0**" in notes\n  assert "historical candidate decisions" in readme\n  status=json.loads(z.read("conformance/release-status-1.2.0.json"))\n  assert status["status"]=="published_limited_scope" and status["first_project_release"]=="v1.4.0"\n  historic=json.loads(z.read("conformance/mmp-1-1-limited-release-decision.json"))\n  assert historic["decision"]=="conditional_no_go", "do not rewrite historic release decision"
   assert "package format is 1.0.0" in readme and "full Core 1.1" in notes
   old=json.loads(z.read("conformance/mmp-version-decision-v1.json"))
   assert old["stable_format"]=="1.0.0" # archived baseline, not new release status
@@ -40,5 +40,5 @@ def main():
   assert a.read_bytes()==b.read_bytes(),"non-reproducible candidate kit"
   info=inspect(a)
   print(json.dumps({"status":"pass","kit_version":"1.2.0","format_version":"1.1.0",
-   "reproducible":True,"release_status":"candidate_no_go",**info},indent=2))
+   "reproducible":True,"release_status":"published_limited_scope",**info},indent=2))
 if __name__=="__main__":main()
