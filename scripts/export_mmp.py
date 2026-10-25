@@ -48,6 +48,12 @@ def collect(model_dir: Path, schema_dir: Path) -> dict[str, bytes]:
         if not file.is_file():
             raise ValueError(f"Missing offline schema: {file}")
         result[f"schemas/{file.name}"] = file.read_bytes()
+    # Optional candidate profile is a separate, checksummed package document.
+    profile = model_dir / "profiles" / "junction-structure.json"
+    if profile.is_file():
+        result["documentation/junction-structure.json"] = profile.read_bytes()
+        schema = schema_dir / "mmp-junction-structure-profile.schema.json"
+        result["schemas/mmp-junction-structure-profile.schema.json"] = schema.read_bytes()
     # Canonical schemas must be closed over their local schema dependencies.
     queue = [p for p in result if p.startswith("schemas/")]
     visited = set()
@@ -119,6 +125,20 @@ def export(model_dir: Path, output: Path, producer_version: str,
         required = model.setdefault("extensions", {}).get("mmp_required_capabilities", [])
         if {"id": "mmp-pairwise-relationships", "version": "1.0.0"} not in required:
             raise ValueError("CORE-015 requires explicit mmp-pairwise-relationships@1.0.0 capability")
+    junction_cap = {"id": "mmp-junction-structure", "version": "0.1.0"}
+    declared = junction_cap in model.get("extensions", {}).get("mmp_required_capabilities", [])
+    profile_file = "documentation/junction-structure.json"
+    if declared != (profile_file in contents):
+        raise ValueError("CORE-016 junction profile requires matching mandatory capability and profile document")
+    if declared:
+        if not candidate_1_1:
+            raise ValueError("CORE-016 junction profile not_supported in MMP 1.0")
+        profile = json.loads(contents[profile_file])
+        schema = json.loads(contents["schemas/mmp-junction-structure-profile.schema.json"])
+        Draft202012Validator(schema).validate(profile)
+        declared_types = {item["id"] for item in model_doc.get("junctions", [])}
+        if set(profile["junction_operators"]) != declared_types:
+            raise ValueError("CORE-016 junction profile type coverage mismatch")
     version = yaml.safe_load(contents["canonical/version.yaml"])["version"]["current"]
     namespace = model.get("namespace")
     if not isinstance(namespace, str) or not re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", namespace):
@@ -138,8 +158,8 @@ def export(model_dir: Path, output: Path, producer_version: str,
     if "canonical/guidance.yaml" in contents:
         entries["guidance"] = "canonical/guidance.yaml"
     files = [
-        {"path": path, "role": "schema" if path.startswith("schemas/") else "canonical",
-         "media_type": "application/schema+json" if path.startswith("schemas/") else "application/yaml",
+        {"path": path, "role": "schema" if path.startswith("schemas/") else "documentation" if path.startswith("documentation/") else "canonical",
+         "media_type": "application/schema+json" if path.startswith("schemas/") else "application/json" if path.startswith("documentation/") else "application/yaml",
          "sha256": hashlib.sha256(data).hexdigest()}
         for path, data in sorted(contents.items())
     ]
