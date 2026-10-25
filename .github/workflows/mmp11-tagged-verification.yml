@@ -1,0 +1,55 @@
+name: MMP 1.1 tagged candidate verification
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-tagged-kit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Require an exact release tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REF" == refs/tags/* ]] || { echo "Select an existing tag when dispatching this verification."; exit 1; }
+          test "$(git rev-parse "refs/tags/${GITHUB_REF#refs/tags/}^{commit}")" = "$(git rev-parse HEAD)"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install PyYAML jsonschema reportlab
+      - run: npm ci --no-audit --no-fund
+        working-directory: interop/typescript
+      - run: npm run build
+        working-directory: interop/typescript
+      - name: Run baseline and project regression gates
+        run: python scripts/run_ci.py --project-root . --reports-dir /tmp/mmp11-ci
+      - name: Build selected candidate artifact and digest
+        shell: bash
+        run: |
+          mkdir -p dist
+          python scripts/build_mmp_specification_1_2.py --output dist/mmp-specification-kit-1.2.0.zip
+          (cd dist && sha256sum mmp-specification-kit-1.2.0.zip > mmp-specification-kit-1.2.0.zip.sha256)
+      - name: Run source and artifact release gates
+        run: |
+          python scripts/verify_mmp_11_release_artifact.py \
+            --kit dist/mmp-specification-kit-1.2.0.zip \
+            --sha256-file dist/mmp-specification-kit-1.2.0.zip.sha256 \
+            --typescript --report /tmp/mmp11-release-evidence.json
+      - name: Preserve release-verification evidence without publishing
+        uses: actions/upload-artifact@v4
+        with:
+          name: mmp-1-1-verification-${{ github.sha }}
+          path: |
+            dist/mmp-specification-kit-1.2.0.zip
+            dist/mmp-specification-kit-1.2.0.zip.sha256
+            /tmp/mmp11-release-evidence.json
+          if-no-files-found: error
