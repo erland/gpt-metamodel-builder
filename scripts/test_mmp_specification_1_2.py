@@ -22,7 +22,7 @@ def inspect(path):
   meta=json.loads(z.read("specification-kit.json"))
   assert meta["specification_kit_version"]=="1.2.0"
   assert meta["package_format_version"]=="1.1.0"
-  assert "Full Core" in meta["release_scope"]
+  assert "no full Core" in meta["release_scope"], meta["release_scope"]
   old=json.loads(z.read("conformance/mmp-version-decision-v1.json"))
   assert old["stable_format"]=="1.0.0" # archived baseline, not new release status
   return {"files":len(names),"sha256":sha(path.read_bytes())}
