@@ -1,0 +1,47 @@
+{
+  "decision_version": "1.0.0",
+  "stable_format": "1.0.0",
+  "next_format_version": "deferred",
+  "status": "approved_for_release-candidate-review",
+  "full_core_1_1": "not_verified",
+  "rules": [
+    {
+      "id": "FMT-001",
+      "classification": "stable",
+      "statement": "MMP 1.0.0 entrypoints, schemas, archive inventory, identifiers and manifest contract remain unchanged"
+    },
+    {
+      "id": "FMT-002",
+      "classification": "stable",
+      "statement": "1.0.0 consumer acceptance cannot be silently narrowed by candidate strict semantics"
+    },
+    {
+      "id": "FMT-003",
+      "classification": "opt_in",
+      "statement": "Strict Core candidate cardinality and required policies are selected explicitly, not implied by package_format_version 1.0.0"
+    },
+    {
+      "id": "FMT-004",
+      "classification": "opt_in",
+      "statement": "Datatype canonicalization, relation inheritance and extension negotiation are proposals with subset tests"
+    },
+    {
+      "id": "FMT-005",
+      "classification": "deferred",
+      "statement": "Do not publish package_format_version 1.1.0 or claim full mmp-core support until normative and package conformance criteria pass"
+    },
+    {
+      "id": "FMT-006",
+      "classification": "deferred",
+      "statement": "Changes to existing field meaning, new required declarations or critical extension flags require explicit version compatibility review"
+    }
+  ],
+  "optional_profiles": [
+    "strict-core-candidate",
+    "mmp-rules",
+    "mmp-notation",
+    "mmp-viewpoints"
+  ],
+  "release_target": "MMP Specification Kit 1.0.0 with candidate profiles labeled non-normative",
+  "release_gate": "NO-GO for MMP 1.1.0"
+}
