@@ -124,6 +124,7 @@ skills:
     - scripts/validate_workspace.py
     - scripts/export_mmp.py
     - scripts/import_mmp.py
+    - scripts/mmp_capability_policy.py
     assets:
     - schemas/metamodel.schema.json
     - schemas/properties.schema.json
