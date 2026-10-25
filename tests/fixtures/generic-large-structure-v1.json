@@ -1,0 +1,86 @@
+{
+  "suite_version": "0.1.0",
+  "scope": "internal-structural-stress-fixture",
+  "provenance": "synthetic, not a normative representation of an external language",
+  "groups": [
+    {
+      "id": "business",
+      "count": 7,
+      "kind": "behavior"
+    },
+    {
+      "id": "application",
+      "count": 7,
+      "kind": "artifact"
+    },
+    {
+      "id": "technology",
+      "count": 7,
+      "kind": "structure"
+    },
+    {
+      "id": "strategy",
+      "count": 7,
+      "kind": "motivation"
+    },
+    {
+      "id": "motivation",
+      "count": 7,
+      "kind": "motivation"
+    },
+    {
+      "id": "delivery",
+      "count": 7,
+      "kind": "behavior"
+    },
+    {
+      "id": "physical",
+      "count": 7,
+      "kind": "structure"
+    }
+  ],
+  "junctions": [
+    "merge_node",
+    "split_node"
+  ],
+  "relationship_rules": [
+    {
+      "id": "association_edge",
+      "source": "*",
+      "target": "*"
+    },
+    {
+      "id": "composition_edge",
+      "source": "business",
+      "target": "business"
+    },
+    {
+      "id": "assignment_edge",
+      "source": "business",
+      "target": "application"
+    },
+    {
+      "id": "serving_edge",
+      "source": "application",
+      "target": "business"
+    },
+    {
+      "id": "realization_edge",
+      "source": "technology",
+      "target": "application"
+    },
+    {
+      "id": "flow_edge",
+      "source": "*",
+      "target": "*"
+    },
+    {
+      "id": "influence_edge",
+      "source": "motivation",
+      "target": "strategy"
+    }
+  ],
+  "expected_generated_elements": 49,
+  "expected_new_relationships": 7,
+  "expected_generated_pairs": 5047
+}
