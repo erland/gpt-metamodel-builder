@@ -161,6 +161,9 @@ def validate_contents(files: dict[str, bytes], manifest: dict) -> dict:
         raise ValueError("Metamodel identity/version mismatch")
     if mm.get("namespace") != ident["namespace"]:
         raise ValueError("Metamodel namespace mismatch")
+    # Legacy-safe CORE-013 gate: never silently import unsupported critical semantics.
+    from mmp_capability_policy import require_legacy_safe
+    require_legacy_safe(mm)
     # Canonical semantic checks must use the actual validator, not a replacement.
     from validate_semantics import validate as validate_semantics
     import tempfile

@@ -52,9 +52,9 @@ state:
     verification remains an explicit external release gate when EA is available.
   - "OpenAI Plugin är equivalent_runtime_dependent: full deterministisk parity kräver persistent writable workspace och kompatibel code execution från hosten."
 next_step:
-  recommended: mmp-1-1-profile-contract-implementation
-  title: Implement packet-bound critical capability negotiation
-  reason: Profilstrategi och CORE-015/016 målsemantik finns i ADR; implementera paketbunden kritisk kapabilitetsförhandling och verifiera i Python/TypeScript innan relationsregler tillämpas.
+  recommended: core013-package-bound-profile-negotiation
+  title: Complete critical capability negotiation in full MMP consumers
+  reason: Konservativ export/import-grind är införd. Full CORE-013 kräver paketbundet wire-kontrakt, Python/TypeScript-paritet och migrerings- och äldre paketregressioner.
 resume:
   supported: true
   required_files:
@@ -75,5 +75,6 @@ mmp_1_1_workstream:
   new_requirements:
   - CORE-015
   - CORE-016
-  next_action: implement_packet_bound_critical_capability_negotiation
+  next_action: implement_versioned_wire_capability_negotiation_and_migration_tests
   mmp_1_0_0_unchanged: true
+
