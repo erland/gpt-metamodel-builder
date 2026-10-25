@@ -1,0 +1,52 @@
+{
+  "version": "1.0.0",
+  "review_scope": "limited declarative MMP 1.1 package format release",
+  "decision": "conditional_no_go",
+  "assessed_merge_commit": "4898ce5b8a225815b62b917c4f17c39d3ec6e193",
+  "evidence_type": "repository, registered executable tests and successful PR90 CI (not independent conformance)",
+  "candidate_profile_gate": {
+    "path": "scripts/test_mmp_11_candidate_release_gate.py",
+    "profiles": 7,
+    "prior_workflows": [
+      "CI",
+      "MMP TypeScript interoperability",
+      "GPT Byggaren engine 1.6.33 preflight"
+    ],
+    "pr90_result": "passed"
+  },
+  "stable_guarantees_to_freeze": [
+    "package_format_version=1.1.0 and explicit capabilities are versioned and fail closed",
+    "published scope includes declared type/relationship/junction structure and only explicitly negotiated semantics",
+    "legacy package_format_version=1.0.0 remains independently accepted unchanged"
+  ],
+  "release_blockers": [
+    {
+      "id": "RELEASE-01",
+      "criterion": "normative 1.1.0 scope and final specification-kit vs package format version mapping",
+      "status": "open"
+    },
+    {
+      "id": "RELEASE-02",
+      "criterion": "one combined representative package requiring multiple capabilities simultaneously, including absence and unknown-version negatives, tested against both consumers",
+      "status": "open"
+    },
+    {
+      "id": "RELEASE-03",
+      "criterion": "release-tag reproducible build and SHA256 acceptance for actual 1.1 candidate distribution",
+      "status": "open"
+    },
+    {
+      "id": "RELEASE-04",
+      "criterion": "refresh stale project status and release docs; publish precise unsupported semantics",
+      "status": "open"
+    }
+  ],
+  "deferred_nonblocking": [
+    "full instance population/cardinality",
+    "full datatype normalization",
+    "junction behavioral activation and relation derivation",
+    "rules evaluation and external independent certification"
+  ],
+  "go_condition": "all release blockers closed and checks green at release tag",
+  "note": "No full CORE-001..016 certification claim"
+}
