@@ -52,7 +52,7 @@ def main():
   sys.path.insert(0,str(ROOT/"interop"))
   ok,errors=verify(package,"--typescript" in sys.argv);assert ok,errors
   with zipfile.ZipFile(package) as z:
-   manifest=json.loads(z.read("manifest.json"))
+   manifest=yaml.safe_load(z.read("manifest.yaml"))
    assert manifest["required_capabilities"]==capabilities
    assert set(("documentation/junction-structure.json",
       "documentation/required-default-presence.json")).issubset(z.namelist())
