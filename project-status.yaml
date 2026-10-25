@@ -51,9 +51,9 @@ state:
     verification remains an explicit external release gate when EA is available.
   - "OpenAI Plugin är equivalent_runtime_dependent: full deterministisk parity kräver persistent writable workspace och kompatibel code execution från hosten."
 next_step:
-  recommended: mmp-v1-release-acceptance
-  title: Release and independently accept MMP v1
-  reason: MMP v1:s export, import, oberoende referenskonsument och byggda Plugin-/Claude Skills-/Engine-arkiv är verifierade i CI. Efter ny publicerad release återstår funktionellt acceptanstest i installerad runtime enligt docs/mmp-v1-release-checklist.md.
+  recommended: mmp-1-1-contract-design
+  title: Decide MMP 1.1 profile and relation contracts
+  reason: MMP 1.1 är PARTIAL/NO-GO; fastställ profil/version, kritiska extensions samt CORE-015/016 innan implementation och full konformitetsprövning.
 resume:
   supported: true
   required_files:
@@ -65,3 +65,13 @@ resume:
   human_readable_status: Alla 19 steg är klara ur automatiserat projektperspektiv.
     OpenAI Plugin är aktiv som equivalent_runtime_dependent peer runtime. Nästa externa
     gate är fortsatt att upprepa den manuella EA-importen med den korrigerade MDG-filen.
+
+mmp_1_1_workstream:
+  status: planning
+  conformance: partial_no_go
+  plan: docs/mmp-1-1-archimate-gap-plan.md
+  new_requirements:
+  - CORE-015
+  - CORE-016
+  next_action: decide_version_profile_contract_and_schema_design
+  mmp_1_0_0_unchanged: true
