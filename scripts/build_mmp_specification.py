@@ -30,6 +30,8 @@ def package(output:Path):
             "specification/implementation-guide.md":(ROOT/"mmp-kit/implementation-guide.md").read_bytes(),
             "specification/package-level-conformance.md":(ROOT/"docs/mmp-package-level-conformance.md").read_bytes(),
             "specification/strict-core-package-profile.md":(ROOT/"docs/mmp-strict-core-package-profile.md").read_bytes(),
+            "specification/strict-core-coverage.md":(ROOT/"docs/mmp-strict-core-coverage.md").read_bytes(),
+            "conformance/strict-core-coverage-v1.json":(ROOT/"conformance/strict-core-coverage-v1.json").read_bytes(),
             "specification/conformance.md":(ROOT/"mmp-kit/conformance.md").read_bytes(),
             "specification/conformance-profiles-proposal.md":(ROOT/"docs/mmp-conformance-profiles-proposal.md").read_bytes(),
             "examples/mmp-consumer-conformance.json":(ROOT/"examples/mmp-consumer-conformance.json").read_bytes(),
