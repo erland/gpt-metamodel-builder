@@ -52,9 +52,9 @@ state:
     verification remains an explicit external release gate when EA is available.
   - "OpenAI Plugin är equivalent_runtime_dependent: full deterministisk parity kräver persistent writable workspace och kompatibel code execution från hosten."
 next_step:
-  recommended: mmp-1-1-contract-design
-  title: Decide MMP 1.1 profile and relation contracts
-  reason: MMP 1.1 är PARTIAL/NO-GO; fastställ profil/version, kritiska extensions samt CORE-015/016 innan implementation och full konformitetsprövning.
+  recommended: mmp-1-1-profile-contract-implementation
+  title: Implement packet-bound critical capability negotiation
+  reason: Profilstrategi och CORE-015/016 målsemantik finns i ADR; implementera paketbunden kritisk kapabilitetsförhandling och verifiera i Python/TypeScript innan relationsregler tillämpas.
 resume:
   supported: true
   required_files:
@@ -69,11 +69,11 @@ resume:
     återstår fortfarande som extern gate för MDG.
 
 mmp_1_1_workstream:
-  status: planning
+  status: design_decided_implementation_pending
   conformance: partial_no_go
   plan: docs/mmp-1-1-archimate-gap-plan.md
   new_requirements:
   - CORE-015
   - CORE-016
-  next_action: decide_version_profile_contract_and_schema_design
+  next_action: implement_packet_bound_critical_capability_negotiation
   mmp_1_0_0_unchanged: true
