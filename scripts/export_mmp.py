@@ -92,8 +92,11 @@ def export(model_dir: Path, output: Path, producer_version: str,
     model_doc = yaml.safe_load(contents["canonical/metamodel.yaml"])
     # CORE-016 remains canonical-only: older consumers cannot enforce typed endpoints.
     # Typed exact pairs need their own negotiated semantics; block until consumers support them.
-    if any("allowed_typed_pairs" in rel for rel in model_doc["relationships"]):
-        raise ValueError("CORE-016 not_supported: typed exact pairs require consumer contract")
+    has_typed_pairs = any("allowed_typed_pairs" in rel for rel in model_doc["relationships"])
+    if has_typed_pairs and not candidate_1_1:
+        raise ValueError("CORE-016 not_supported: typed exact pairs require MMP 1.1 candidate")
+    if has_typed_pairs and {"id": "mmp-typed-pairs", "version": "1.0.0"} not in model.get("extensions", {}).get("mmp_required_capabilities", []):
+        raise ValueError("CORE-016 requires explicit mmp-typed-pairs@1.0.0 capability")
     has_typed = bool(model_doc.get("junctions")) or any(
         "typed_refs" in rel.get(side, {})
         for rel in model_doc["relationships"] for side in ("source", "target")
