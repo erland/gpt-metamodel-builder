@@ -24,7 +24,8 @@ def build(output:Path):
   entries["schemas/mmp-required-default-presence-profile.schema.json"]=(ROOT/"schemas/mmp-required-default-presence-profile.schema.json").read_bytes()
   entries["reference-implementation/mmp_1_1_combined_acceptance.py"]=(ROOT/"scripts/test_mmp_11_combined_profiles_package.py").read_bytes()
   entries["conformance/required-default-presence-v1.json"]=(ROOT/"interop/required-default-presence-v1.json").read_bytes()
-  entries["README.md"]+=b"\n\nNOTICE: This 1.2.0 kit includes experimental MMP 1.1 declared-profile contracts. Full Core 1.1 conformance is NOT claimed. Earlier specification documents describe the 1.0 baseline.\n"
+  entries["README.md"]=(ROOT/"mmp-kit/README-1.2.0.md").read_bytes()
+  entries["specification/release-notes-1.2.0.md"]=(ROOT/"docs/mmp-11-kit-12-release-notes.md").read_bytes()
   entries["SHA256SUMS.txt"]="".join(f"{hashlib.sha256(v).hexdigest()}  {k}\n" for k,v in sorted(entries.items())).encode()
   if output.exists():raise FileExistsError(output)
   output.parent.mkdir(parents=True,exist_ok=True)
