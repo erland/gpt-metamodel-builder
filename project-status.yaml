@@ -52,8 +52,8 @@ state:
     verification remains an explicit external release gate when EA is available.
   - "OpenAI Plugin är equivalent_runtime_dependent: full deterministisk parity kräver persistent writable workspace och kompatibel code execution från hosten."
 next_step:
-  recommended: core016-typed-pairwise-consumer-profile
-  title: Complete CORE-015 inheritance semantics and CORE-016 endpoint design
+  recommended: core007-instance-cardinality-strict-candidate
+  title: Define and test strict instance-level endpoint cardinality (CORE-007)
   reason: MMP 1.1-kandidatmanifest finns med kritisk deklaration och fail-closed kontroll. Nästa steg är profiler med verifierad semantik och fulla Python/TypeScript-fixtures utan förändring av 1.0.
 resume:
   supported: true
@@ -75,6 +75,6 @@ mmp_1_1_workstream:
   new_requirements:
   - CORE-015
   - CORE-016
-  next_action: implement_typed_pair_consumer_interoperability_and_profile_negotiation
+  next_action: implement_core007_opt_in_instance_cardinality_fixtures
   mmp_1_0_0_unchanged: true
 
