@@ -1,0 +1,37 @@
+{
+  "version": "0.1.0",
+  "status": "proposed_release_freeze_not_published",
+  "target": "MMP package format 1.1.0 candidate",
+  "legacy_package_format": "1.0.0",
+  "compatibility_principle": "later consumers MUST interpret package under its declared version and negotiated required profiles; stricter optional semantics never silently alter older packages",
+  "policies": [
+    {
+      "id": "CORE-009",
+      "status": "freeze_candidate",
+      "source": "docs/mmp-required-minimum-policy.md",
+      "contract": "required:true yields effective minimum max(declared_min,1); required:false does not relax positive min; explicit max below effective min invalid only when profile is required",
+      "deferred": "whether a default satisfies required remains undecided and MUST NOT be assumed"
+    },
+    {
+      "id": "CORE-011",
+      "status": "freeze_limited_profile",
+      "source": "docs/mmp-canonical-values-policy.md",
+      "contract": "integer safe range, textual arbitrary-precision decimal normalization, calendar date, UTC whole-second datetime, HTTP(S)-only limited URI normalization",
+      "deferred": "unsupported URI schemes, date fractions and other formats are not generally canonicalized; not_supported outside declared profile"
+    },
+    {
+      "id": "CORE-015/016",
+      "status": "freeze_candidate",
+      "source": "scripts/mmp_effective_typed_pairs.py",
+      "contract": "exact typed {kind,id} pair membership; multiple inherited parent restrictions intersect; no implicit subtype expansion; unknown or unsupported typed contracts fail closed",
+      "deferred": "normative subtype expansion and behavioral junction rules require a new negotiated profile"
+    }
+  ],
+  "release_gates": [
+    "explicit package/profile versions and fail-closed negotiation",
+    "end-to-end positive, negative and unknown-profile package vectors in Python and TypeScript",
+    "MMP 1.0 existing acceptance remains unchanged",
+    "conformance scope and unsupported behaviors published before GO"
+  ],
+  "release_decision": "NO_GO_until_gates_pass"
+}
