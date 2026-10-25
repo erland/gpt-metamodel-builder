@@ -18,14 +18,14 @@ Välj den väg som passar användningen:
 Validera först canonical modell enligt dess scheman och semantiska regler. Modellen måste ha en **stabil URI-namnrymd** i `metamodel.yaml`.
 
 ```bash
-python scripts/export_mmp.py --model-dir /path/to/model --output model.mmp.zip --producer-version <PRODUCENTVERSION>
+python scripts/export_mmp.py --model-dir /path/to/model --output model.mmp.zip --producer-version "$PRODUCENTVERSION"
 python scripts/import_mmp.py inspect model.mmp.zip
 python scripts/import_mmp.py validate model.mmp.zip
 python scripts/import_mmp.py import model.mmp.zip --output /path/to/new-model
 python interop/mmp_v1_consumer.py model.mmp.zip
 ```
 
-Byt `<PRODUCENTVERSION>` till den faktiska versionen av Metamodel Builder som producerar paketet. Importören skriver aldrig över en befintlig destination. Exportören stöder även katalogformat med `--directory`.
+Sätt miljövariabeln `PRODUCENTVERSION` till den faktiska versionen av Metamodel Builder som producerar paketet innan kommandot körs. Importören skriver aldrig över en befintlig destination. Exportören stöder även katalogformat med `--directory`.
 
 ## Grundprinciper och funktioner
 
