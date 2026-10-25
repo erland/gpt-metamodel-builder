@@ -28,7 +28,7 @@ def inspect(path):
   notes=z.read("specification/release-notes-1.2.0.md").decode()
   assert "Specification Kit 1.2.0" in readme and "package format 1.1.0" in readme
   assert "candidate / NO-GO" in readme and "candidate / NO-GO" in notes
-  assert "format **1.0.0**" in readme and "full Core 1.1" in notes
+  assert "package format is 1.0.0" in readme and "full Core 1.1" in notes
   old=json.loads(z.read("conformance/mmp-version-decision-v1.json"))
   assert old["stable_format"]=="1.0.0" # archived baseline, not new release status
   return {"files":len(names),"sha256":sha(path.read_bytes())}
