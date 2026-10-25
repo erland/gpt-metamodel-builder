@@ -143,7 +143,7 @@ const path=process.argv[2];
 if(!path)throw Error("Missing vectors path");
 const suite=JSON.parse(readFileSync(path,"utf8"));
 for(const c of suite.cases){
- const actual=graphResult(suite.model,c.graph);
+ const actual=graphResult(c.model??suite.model,c.graph);
  if(actual!==c.expected)throw Error(c.id+": expected "+c.expected+" got "+actual);
 }
 console.log("CORE-007/016 TypeScript typed graph vectors PASS");
