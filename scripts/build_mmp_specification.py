@@ -5,6 +5,7 @@ import argparse, hashlib, json, os, shutil, subprocess, sys, tempfile, zipfile
 from pathlib import Path
 import yaml
 from mmp_conformance_fixtures import bundle as conformance_bundle
+from mmp_package_semantic_fixtures import create as semantic_packages
 
 ROOT=Path(__file__).resolve().parents[1]
 FORMAT_VERSION="1.0.0"
@@ -27,6 +28,7 @@ def package(output:Path):
             "README.md":(ROOT/"mmp-kit/README.md").read_bytes(),
             "specification/mmp-v1.md":(ROOT/"docs/mmp-v1-contract.md").read_bytes(),
             "specification/implementation-guide.md":(ROOT/"mmp-kit/implementation-guide.md").read_bytes(),
+            "specification/package-level-conformance.md":(ROOT/"docs/mmp-package-level-conformance.md").read_bytes(),
             "specification/conformance.md":(ROOT/"mmp-kit/conformance.md").read_bytes(),
             "specification/conformance-profiles-proposal.md":(ROOT/"docs/mmp-conformance-profiles-proposal.md").read_bytes(),
             "examples/mmp-consumer-conformance.json":(ROOT/"examples/mmp-consumer-conformance.json").read_bytes(),
@@ -55,6 +57,7 @@ def package(output:Path):
             "specification/cardinality-semantics-proposal.md":(ROOT/"docs/mmp-cardinality-semantics.md").read_bytes(),
         }
         entries.update(conformance_bundle(example.read_bytes()))
+        entries.update(semantic_packages(example.read_bytes()))
         entries["conformance/run_suite.py"]=(ROOT/"scripts/mmp_conformance_runner.py").read_bytes()
         for name in SCHEMAS:
             filename=name+".schema.json"
