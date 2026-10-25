@@ -1,0 +1,1458 @@
+{
+  "suite_version": "1.0.0",
+  "profile": "core016-exact-inherited-pairs-candidate",
+  "semantics": "exact typed key intersection, no subtype expansion",
+  "cases": [
+    {
+      "id": "multiple-parent-intersection",
+      "expected": "accept",
+      "relationship": "child",
+      "model": {
+        "elements": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "j"
+          }
+        ],
+        "relationships": [
+          {
+            "id": "p1",
+            "extends": [],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              },
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "b"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              }
+            ]
+          },
+          {
+            "id": "p2",
+            "extends": [],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              },
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "element",
+                  "id": "b"
+                }
+              }
+            ]
+          },
+          {
+            "id": "child",
+            "extends": [
+              "p1",
+              "p2"
+            ],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            }
+          }
+        ]
+      },
+      "pairs": [
+        {
+          "source": {
+            "kind": "element",
+            "id": "a"
+          },
+          "target": {
+            "kind": "junction",
+            "id": "j"
+          }
+        }
+      ]
+    },
+    {
+      "id": "child-narrows",
+      "expected": "accept",
+      "relationship": "child",
+      "model": {
+        "elements": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "j"
+          }
+        ],
+        "relationships": [
+          {
+            "id": "p1",
+            "extends": [],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              },
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "b"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              }
+            ]
+          },
+          {
+            "id": "p2",
+            "extends": [],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              },
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "element",
+                  "id": "b"
+                }
+              }
+            ]
+          },
+          {
+            "id": "child",
+            "extends": [
+              "p1",
+              "p2"
+            ],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "pairs": [
+        {
+          "source": {
+            "kind": "element",
+            "id": "a"
+          },
+          "target": {
+            "kind": "junction",
+            "id": "j"
+          }
+        }
+      ]
+    },
+    {
+      "id": "empty-intersection",
+      "expected": "error",
+      "relationship": "child",
+      "model": {
+        "elements": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "j"
+          }
+        ],
+        "relationships": [
+          {
+            "id": "p1",
+            "extends": [],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              },
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "b"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              }
+            ]
+          },
+          {
+            "id": "p2",
+            "extends": [],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "b"
+                },
+                "target": {
+                  "kind": "element",
+                  "id": "a"
+                }
+              }
+            ]
+          },
+          {
+            "id": "child",
+            "extends": [
+              "p1",
+              "p2"
+            ],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "parent-undeclared",
+      "expected": "not_supported",
+      "relationship": "child",
+      "model": {
+        "elements": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "j"
+          }
+        ],
+        "relationships": [
+          {
+            "id": "p1",
+            "extends": [],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              },
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "b"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              }
+            ]
+          },
+          {
+            "id": "p2",
+            "extends": [],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            }
+          },
+          {
+            "id": "child",
+            "extends": [
+              "p1",
+              "p2"
+            ],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "inheritance-cycle",
+      "expected": "error",
+      "relationship": "child",
+      "model": {
+        "elements": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "j"
+          }
+        ],
+        "relationships": [
+          {
+            "id": "p1",
+            "extends": [
+              "child"
+            ],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              },
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "b"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              }
+            ]
+          },
+          {
+            "id": "p2",
+            "extends": [],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              },
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "element",
+                  "id": "b"
+                }
+              }
+            ]
+          },
+          {
+            "id": "child",
+            "extends": [
+              "p1",
+              "p2"
+            ],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "domain-exclusion",
+      "expected": "error",
+      "relationship": "child",
+      "model": {
+        "elements": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "j"
+          }
+        ],
+        "relationships": [
+          {
+            "id": "p1",
+            "extends": [],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              },
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "b"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              }
+            ]
+          },
+          {
+            "id": "p2",
+            "extends": [],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              },
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "element",
+                  "id": "b"
+                }
+              }
+            ]
+          },
+          {
+            "id": "child",
+            "extends": [
+              "p1",
+              "p2"
+            ],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "b"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "unknown-parent",
+      "expected": "error",
+      "relationship": "child",
+      "model": {
+        "elements": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "j"
+          }
+        ],
+        "relationships": [
+          {
+            "id": "p1",
+            "extends": [],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              },
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "b"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              }
+            ]
+          },
+          {
+            "id": "p2",
+            "extends": [],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              },
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "element",
+                  "id": "b"
+                }
+              }
+            ]
+          },
+          {
+            "id": "child",
+            "extends": [
+              "missing"
+            ],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "unknown-typed-ref",
+      "expected": "error",
+      "relationship": "child",
+      "model": {
+        "elements": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "j"
+          }
+        ],
+        "relationships": [
+          {
+            "id": "p1",
+            "extends": [],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "missing"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              }
+            ]
+          },
+          {
+            "id": "p2",
+            "extends": [],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              },
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "element",
+                  "id": "b"
+                }
+              }
+            ]
+          },
+          {
+            "id": "child",
+            "extends": [
+              "p1",
+              "p2"
+            ],
+            "source": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            },
+            "target": {
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                },
+                {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              ],
+              "types": []
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
