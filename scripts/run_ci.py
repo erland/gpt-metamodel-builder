@@ -47,6 +47,7 @@ def main() -> int:
         [py,'scripts/test_mmp_generic_large_fixture.py'],
         [py,'scripts/test_mmp_generic_loss_audit.py'],
         [py,'scripts/test_mmp_generic_advanced_structure.py'],
+        [py,'scripts/test_mmp_generic_expressiveness_review.py'],
         [py,'scripts/test_mmp_junction_structure.py'],
         [py,'scripts/test_mmp_junction_profile_boundary.py'],
         [py,'scripts/test_mmp_junction_package_profile.py'],
