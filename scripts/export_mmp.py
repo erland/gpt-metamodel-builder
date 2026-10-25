@@ -87,6 +87,9 @@ def export(model_dir: Path, output: Path, producer_version: str,
     model_dir = model_dir.resolve()
     contents = collect(model_dir, schema_dir.resolve())
     model = yaml.safe_load(contents["canonical/metamodel.yaml"])["metamodel"]
+    # MMP 1.0 consumers cannot negotiate critical semantics. Fail before packaging.
+    from mmp_capability_policy import require_legacy_safe
+    require_legacy_safe(model)
     version = yaml.safe_load(contents["canonical/version.yaml"])["version"]["current"]
     namespace = model.get("namespace")
     if not isinstance(namespace, str) or not re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", namespace):
