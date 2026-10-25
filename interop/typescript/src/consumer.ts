@@ -340,6 +340,20 @@ export function consume(bytes:Uint8Array):Obj {
     }
     ensure(legacy.size===new Set<string>(endpoint.types).size&&endpoint.types.every((id:string)=>legacy.has(id)),"CORE-016 typed endpoint legacy mismatch");
   }
+  for(const relation of relations){
+    if(relation.allowed_typed_pairs===undefined)continue;
+    ensure(relation.allowed_type_pairs===undefined,"CORE-016 mixed pair profiles");
+    ensure(relation.source.typed_refs!==undefined&&relation.target.typed_refs!==undefined,"CORE-016 typed pair missing endpoint domain");
+    const domains=["source","target"].map(side=>new Set<string>(relation[side].typed_refs.map((ref:Obj)=>ref.kind+"\\u0000"+ref.id)));
+    const seen=new Set<string>();
+    for(const pair of relation.allowed_typed_pairs){
+      const refs=[pair.source,pair.target].map(ref=>ref.kind+"\\u0000"+ref.id);
+      ensure(refs.every((value,i)=>domains[i].has(value)),"CORE-016 typed pair outside endpoint domain");
+      const key=JSON.stringify(refs);
+      ensure(!seen.has(key),"CORE-016 duplicate typed pair");
+      seen.add(key);
+    }
+  }
   const elemIds=ids(elements,"elements"),relIds=ids(relations,"relationships");
   ensure([...elemIds].every(id=>!relIds.has(id)),"Element / relationship ID collision");
   graph(elements,elemIds);graph(relations,relIds);
