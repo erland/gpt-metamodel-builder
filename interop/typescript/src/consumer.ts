@@ -311,7 +311,10 @@ export function consume(bytes:Uint8Array):Obj {
   if(manifest.package_format_version==="1.1.0"){
     ensure(Array.isArray(manifest.required_capabilities) && Array.isArray(capabilities), "Missing candidate capabilities");
     ensure(JSON.stringify(manifest.required_capabilities)===JSON.stringify(capabilities),"CORE-013 capability mismatch");
-    ensure(capabilities.length===0,"CORE-013 not_supported mandatory profile");
+    const supported={id:"mmp-pairwise-relationships",version:"1.0.0"};
+    ensure(capabilities.every((c:Obj)=>c.id===supported.id&&c.version===supported.version),"CORE-013 not_supported mandatory profile");
+    if(docs.metamodel.relationships.some((r:Obj)=>r.allowed_type_pairs!==undefined))
+      ensure(capabilities.some((c:Obj)=>c.id===supported.id&&c.version===supported.version),"CORE-015 missing required capability");
   } else ensure(Array.isArray(capabilities) && capabilities.length===0,"CORE-013 not_supported in MMP 1.0");
   const elements=docs.metamodel.elements,relations=docs.metamodel.relationships,props=docs.properties;
   const elemIds=ids(elements,"elements"),relIds=ids(relations,"relationships");

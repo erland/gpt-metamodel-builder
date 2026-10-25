@@ -49,10 +49,11 @@ def main():
         assert x.returncode!=0 and "mismatch" in x.stderr,x.stderr
         modified2=dict(content)
         modeldoc=yaml.safe_load(modified2["canonical/metamodel.yaml"])
-        modeldoc["metamodel"].setdefault("extensions",{})["mmp_required_capabilities"]=m["required_capabilities"]
+        unsupported_capabilities=[{"id":"example-unsupported-profile","version":"1.0.0"}]
+        modeldoc["metamodel"].setdefault("extensions",{})["mmp_required_capabilities"]=unsupported_capabilities
         modified2["canonical/metamodel.yaml"]=yaml.safe_dump(modeldoc).encode()
         m2=yaml.safe_load(modified2["manifest.yaml"])
-        m2["required_capabilities"]=m["required_capabilities"]
+        m2["required_capabilities"]=unsupported_capabilities
         for f in m2["files"]:
             if f["path"]=="canonical/metamodel.yaml":
                 f["sha256"]=hashlib.sha256(modified2["canonical/metamodel.yaml"]).hexdigest()
