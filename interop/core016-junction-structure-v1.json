@@ -170,8 +170,8 @@
       }
     },
     {
-      "id": "unknown-operator",
-      "expected": "not_supported",
+      "id": "unknown-junction-type",
+      "expected": "error",
       "graph": {
         "complete": true,
         "junctions": [
