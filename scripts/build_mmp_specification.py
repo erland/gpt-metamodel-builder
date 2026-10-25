@@ -83,6 +83,6 @@ def package(output:Path):
         return output
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("--output",type=Path,required=True);args=ap.parse_args()
+    ap=argparse.ArgumentParser();ap.add_argument("--output",type=Path,default=Path(f"mmp-specification-kit-{KIT_VERSION}.zip"));args=ap.parse_args()
     print(package(args.output))
 if __name__=="__main__":main()
