@@ -1,0 +1,484 @@
+{
+  "suite_version": "1.0.0",
+  "model": {
+    "elements": [
+      {
+        "id": "a"
+      },
+      {
+        "id": "b"
+      }
+    ],
+    "junctions": [
+      {
+        "id": "j"
+      }
+    ],
+    "relationships": [
+      {
+        "id": "p1",
+        "source": {
+          "types": [],
+          "typed_refs": [
+            {
+              "kind": "element",
+              "id": "a"
+            },
+            {
+              "kind": "element",
+              "id": "b"
+            }
+          ],
+          "cardinality": "0..*"
+        },
+        "target": {
+          "types": [],
+          "typed_refs": [
+            {
+              "kind": "junction",
+              "id": "j"
+            },
+            {
+              "kind": "element",
+              "id": "b"
+            }
+          ],
+          "cardinality": "0..*"
+        },
+        "allowed_typed_pairs": [
+          {
+            "source": {
+              "kind": "element",
+              "id": "a"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "j"
+            }
+          },
+          {
+            "source": {
+              "kind": "element",
+              "id": "b"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "j"
+            }
+          }
+        ]
+      },
+      {
+        "id": "p2",
+        "source": {
+          "types": [],
+          "typed_refs": [
+            {
+              "kind": "element",
+              "id": "a"
+            },
+            {
+              "kind": "element",
+              "id": "b"
+            }
+          ],
+          "cardinality": "0..*"
+        },
+        "target": {
+          "types": [],
+          "typed_refs": [
+            {
+              "kind": "junction",
+              "id": "j"
+            },
+            {
+              "kind": "element",
+              "id": "b"
+            }
+          ],
+          "cardinality": "0..*"
+        },
+        "allowed_typed_pairs": [
+          {
+            "source": {
+              "kind": "element",
+              "id": "a"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "j"
+            }
+          },
+          {
+            "source": {
+              "kind": "element",
+              "id": "a"
+            },
+            "target": {
+              "kind": "element",
+              "id": "b"
+            }
+          }
+        ]
+      },
+      {
+        "id": "child",
+        "source": {
+          "types": [],
+          "typed_refs": [
+            {
+              "kind": "element",
+              "id": "a"
+            },
+            {
+              "kind": "element",
+              "id": "b"
+            }
+          ],
+          "cardinality": "0..*"
+        },
+        "target": {
+          "types": [],
+          "typed_refs": [
+            {
+              "kind": "junction",
+              "id": "j"
+            },
+            {
+              "kind": "element",
+              "id": "b"
+            }
+          ],
+          "cardinality": "0..*"
+        },
+        "extends": [
+          "p1",
+          "p2"
+        ]
+      }
+    ]
+  },
+  "cases": [
+    {
+      "id": "inherited-allowed",
+      "graph": {
+        "complete": true,
+        "instances": [
+          {
+            "id": "one",
+            "type": "a"
+          },
+          {
+            "id": "two",
+            "type": "b"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "junction1",
+            "type": "j"
+          }
+        ],
+        "edges": [
+          {
+            "id": "edge1",
+            "relationship": "child",
+            "source": {
+              "kind": "element",
+              "id": "one"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "junction1"
+            }
+          }
+        ]
+      },
+      "expected": "accept"
+    },
+    {
+      "id": "inherited-source-disallowed",
+      "graph": {
+        "complete": true,
+        "instances": [
+          {
+            "id": "one",
+            "type": "a"
+          },
+          {
+            "id": "two",
+            "type": "b"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "junction1",
+            "type": "j"
+          }
+        ],
+        "edges": [
+          {
+            "id": "edge1",
+            "relationship": "child",
+            "source": {
+              "kind": "element",
+              "id": "two"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "junction1"
+            }
+          }
+        ]
+      },
+      "expected": "error"
+    },
+    {
+      "id": "inherited-target-disallowed",
+      "graph": {
+        "complete": true,
+        "instances": [
+          {
+            "id": "one",
+            "type": "a"
+          },
+          {
+            "id": "two",
+            "type": "b"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "junction1",
+            "type": "j"
+          }
+        ],
+        "edges": [
+          {
+            "id": "edge1",
+            "relationship": "child",
+            "source": {
+              "kind": "element",
+              "id": "one"
+            },
+            "target": {
+              "kind": "element",
+              "id": "two"
+            }
+          }
+        ]
+      },
+      "expected": "error"
+    },
+    {
+      "id": "incomplete",
+      "graph": {
+        "complete": false,
+        "instances": [
+          {
+            "id": "one",
+            "type": "a"
+          },
+          {
+            "id": "two",
+            "type": "b"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "junction1",
+            "type": "j"
+          }
+        ],
+        "edges": [
+          {
+            "id": "edge1",
+            "relationship": "child",
+            "source": {
+              "kind": "element",
+              "id": "one"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "junction1"
+            }
+          }
+        ]
+      },
+      "expected": "not_supported"
+    },
+    {
+      "id": "parent-no-contract",
+      "model": {
+        "elements": [
+          {
+            "id": "a"
+          },
+          {
+            "id": "b"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "j"
+          }
+        ],
+        "relationships": [
+          {
+            "id": "p1",
+            "source": {
+              "types": [],
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                }
+              ],
+              "cardinality": "0..*"
+            },
+            "target": {
+              "types": [],
+              "typed_refs": [
+                {
+                  "kind": "junction",
+                  "id": "j"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                }
+              ],
+              "cardinality": "0..*"
+            },
+            "allowed_typed_pairs": [
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "a"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              },
+              {
+                "source": {
+                  "kind": "element",
+                  "id": "b"
+                },
+                "target": {
+                  "kind": "junction",
+                  "id": "j"
+                }
+              }
+            ]
+          },
+          {
+            "id": "p2",
+            "source": {
+              "types": [],
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                }
+              ],
+              "cardinality": "0..*"
+            },
+            "target": {
+              "types": [],
+              "typed_refs": [
+                {
+                  "kind": "junction",
+                  "id": "j"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                }
+              ],
+              "cardinality": "0..*"
+            }
+          },
+          {
+            "id": "child",
+            "source": {
+              "types": [],
+              "typed_refs": [
+                {
+                  "kind": "element",
+                  "id": "a"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                }
+              ],
+              "cardinality": "0..*"
+            },
+            "target": {
+              "types": [],
+              "typed_refs": [
+                {
+                  "kind": "junction",
+                  "id": "j"
+                },
+                {
+                  "kind": "element",
+                  "id": "b"
+                }
+              ],
+              "cardinality": "0..*"
+            },
+            "extends": [
+              "p1",
+              "p2"
+            ]
+          }
+        ]
+      },
+      "graph": {
+        "complete": true,
+        "instances": [
+          {
+            "id": "one",
+            "type": "a"
+          },
+          {
+            "id": "two",
+            "type": "b"
+          }
+        ],
+        "junctions": [
+          {
+            "id": "junction1",
+            "type": "j"
+          }
+        ],
+        "edges": [
+          {
+            "id": "edge1",
+            "relationship": "child",
+            "source": {
+              "kind": "element",
+              "id": "one"
+            },
+            "target": {
+              "kind": "junction",
+              "id": "junction1"
+            }
+          }
+        ]
+      },
+      "expected": "not_supported"
+    }
+  ]
+}

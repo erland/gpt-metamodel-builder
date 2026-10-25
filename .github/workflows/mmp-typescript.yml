@@ -31,6 +31,7 @@ jobs:
       - run: python scripts/test_mmp_junction_package_profile.py --typescript
       - run: python scripts/test_mmp_junction_profile_graph_package.py --typescript
       - run: node interop/typescript/dist/typed-graph-test.js interop/core007-typed-graph-v1.json
+      - run: node interop/typescript/dist/typed-graph-test.js interop/core016-inherited-instance-graph-v1.json
       - run: node interop/typescript/dist/inherited-typed-pairs-test.js interop/core016-inherited-typed-pairs-v1.json
       - run: node interop/typescript/dist/junction-structure-test.js interop/core016-junction-structure-v1.json
       - run: python scripts/test_mmp_core015_core016_integration.py --typescript
