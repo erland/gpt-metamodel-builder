@@ -83,10 +83,12 @@ def load_manifest(files: dict[str, bytes]) -> dict:
     if "manifest.yaml" not in files:
         raise ValueError("manifest.yaml missing")
     manifest = yaml.safe_load(files["manifest.yaml"])
-    schema = json.loads((SCHEMAS / "mmp-manifest-v1.schema.json").read_text(encoding="utf-8"))
-    Draft202012Validator(schema, format_checker=FormatChecker()).validate(manifest)
-    if manifest["package_format_version"] != "1.0.0":
+    format_version = manifest.get("package_format_version") if isinstance(manifest, dict) else None
+    if format_version not in ("1.0.0", "1.1.0"):
         raise ValueError("Unsupported MMP minor or major version")
+    schema_file = "mmp-manifest-1-1-candidate.schema.json" if format_version == "1.1.0" else "mmp-manifest-v1.schema.json"
+    schema = json.loads((SCHEMAS / schema_file).read_text(encoding="utf-8"))
+    Draft202012Validator(schema, format_checker=FormatChecker()).validate(manifest)
     entries = manifest["entrypoints"]
     for key in REQUIRED:
         if key not in entries:
@@ -163,7 +165,15 @@ def validate_contents(files: dict[str, bytes], manifest: dict) -> dict:
         raise ValueError("Metamodel namespace mismatch")
     # Legacy-safe CORE-013 gate: never silently import unsupported critical semantics.
     from mmp_capability_policy import require_legacy_safe
-    require_legacy_safe(mm)
+    if manifest["package_format_version"] == "1.0.0":
+        require_legacy_safe(mm)
+    else:
+        from mmp_capability_policy import required_capabilities
+        declared = required_capabilities(mm)
+        if declared != manifest["required_capabilities"]:
+            raise ValueError("CORE-013 critical capability mismatch between manifest and canonical model")
+        if declared:
+            raise ValueError("CORE-013 not_supported: candidate 1.1 mandatory profiles are not implemented")
     # Canonical semantic checks must use the actual validator, not a replacement.
     from validate_semantics import validate as validate_semantics
     import tempfile

@@ -83,13 +83,17 @@ def collect(model_dir: Path, schema_dir: Path) -> dict[str, bytes]:
 
 def export(model_dir: Path, output: Path, producer_version: str,
            *, schema_dir: Path = SCHEMAS, as_directory: bool = False,
-           skip_validation: bool = False) -> Path:
+           skip_validation: bool = False, candidate_1_1: bool = False) -> Path:
     model_dir = model_dir.resolve()
     contents = collect(model_dir, schema_dir.resolve())
     model = yaml.safe_load(contents["canonical/metamodel.yaml"])["metamodel"]
     # MMP 1.0 consumers cannot negotiate critical semantics. Fail before packaging.
     from mmp_capability_policy import require_legacy_safe
-    require_legacy_safe(model)
+    if not candidate_1_1:
+        require_legacy_safe(model)
+    else:
+        from mmp_capability_policy import required_capabilities
+        required_capabilities(model)
     version = yaml.safe_load(contents["canonical/version.yaml"])["version"]["current"]
     namespace = model.get("namespace")
     if not isinstance(namespace, str) or not re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", namespace):
@@ -115,17 +119,20 @@ def export(model_dir: Path, output: Path, producer_version: str,
         for path, data in sorted(contents.items())
     ]
     manifest = {
-        "package_format": "mmp", "package_format_version": "1.0.0",
+        "package_format": "mmp", "package_format_version": "1.1.0" if candidate_1_1 else "1.0.0",
         "metamodel": {key: model[key] for key in ("id", "name", "version", "namespace")},
         "producer": {"name": "Metamodel Builder", "version": producer_version},
         "generated_at": timestamp(), "entrypoints": entries, "files": files,
     }
+    if candidate_1_1:
+        manifest["required_capabilities"] = required_capabilities(model)
     if not skip_validation:
         manifest["validation"] = {
             "structural": "passed", "semantic": "passed",
             "validator": "metamodel-builder", "validator_version": producer_version,
         }
-    schema = json.loads((SCHEMAS / "mmp-manifest-v1.schema.json").read_text(encoding="utf-8"))
+    manifest_schema_name = "mmp-manifest-1-1-candidate.schema.json" if candidate_1_1 else "mmp-manifest-v1.schema.json"
+    schema = json.loads((SCHEMAS / manifest_schema_name).read_text(encoding="utf-8"))
     Draft202012Validator(schema, format_checker=FormatChecker()).validate(manifest)
     payload = yaml.safe_dump(manifest, sort_keys=False, allow_unicode=True).encode("utf-8")
     contents["manifest.yaml"] = payload
@@ -157,8 +164,9 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--producer-version", default="dev")
     parser.add_argument("--directory", action="store_true")
+    parser.add_argument("--candidate-1-1", action="store_true", help="Experimental opt-in 1.1 manifest, not a released MMP format")
     args = parser.parse_args()
-    print(export(args.model_dir, args.output, args.producer_version, as_directory=args.directory))
+    print(export(args.model_dir, args.output, args.producer_version, as_directory=args.directory, candidate_1_1=args.candidate_1_1))
     return 0
 
 

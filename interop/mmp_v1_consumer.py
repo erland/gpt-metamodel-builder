@@ -350,7 +350,7 @@ def effective_properties(elements, relationships, property_sets, property_defini
 def consume(source: Path):
     files = read(source)
     m = yaml.safe_load(files["manifest.yaml"])
-    if m.get("package_format") != "mmp" or m.get("package_format_version") != "1.0.0":
+    if m.get("package_format") != "mmp" or m.get("package_format_version") not in ("1.0.0", "1.1.0"):
         raise ValueError("Unsupported MMP format")
     if not isinstance(m, dict) or not isinstance(m.get("files"), list) or not isinstance(m.get("entrypoints"), dict):
         raise ValueError("Invalid MMP manifest structure")
@@ -397,6 +397,15 @@ def consume(source: Path):
         Draft202012Validator(schema, registry=registry, format_checker=FormatChecker()).validate(doc)
         docs[key] = doc
     meta = docs["metamodel"]["metamodel"]
+    if m["package_format_version"] == "1.1.0":
+        # Independent candidate preflight: do not rely on the exporter or imported policy module.
+        capabilities = meta.get("extensions", {}).get("mmp_required_capabilities", [])
+        if not isinstance(capabilities, list) or capabilities != m.get("required_capabilities"):
+            raise ValueError("CORE-013 candidate profile mismatch")
+        if capabilities:
+            raise ValueError("CORE-013 not_supported mandatory profile")
+    elif meta.get("extensions", {}).get("mmp_required_capabilities"):
+        raise ValueError("CORE-013 not_supported in MMP 1.0")
     if (meta["id"], meta["version"], meta.get("namespace")) != (
         m["metamodel"]["id"], m["metamodel"]["version"], m["metamodel"]["namespace"]
     ) or docs["version"]["version"]["current"] != meta["version"]:

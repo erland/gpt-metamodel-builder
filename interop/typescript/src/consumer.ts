@@ -280,7 +280,7 @@ export function consume(bytes:Uint8Array):Obj {
   const files=readArchive(bytes);
   ensure(files["manifest.yaml"],"Missing manifest");
   const manifest=parseYaml(files["manifest.yaml"]);
-  ensure(manifest.package_format==="mmp" && manifest.package_format_version==="1.0.0","Unsupported MMP format");
+  ensure(manifest.package_format==="mmp" && ["1.0.0","1.1.0"].includes(manifest.package_format_version),"Unsupported MMP format");
   ensure(Array.isArray(manifest.files)&&manifest.entrypoints&&manifest.metamodel,"Malformed manifest");
   const listed=new Set<string>();
   for(const entry of manifest.files){ensure(typeof entry.path==="string"&&validPath(entry.path)&&!listed.has(entry.path),"Invalid/duplicate manifest path");
@@ -307,6 +307,12 @@ export function consume(bytes:Uint8Array):Obj {
   const meta=docs.metamodel.metamodel;
   ensure(meta.id===manifest.metamodel.id && meta.version===manifest.metamodel.version && meta.namespace===manifest.metamodel.namespace
     && docs.version.version.current===meta.version,"Metamodel identity mismatch");
+  const capabilities=meta.extensions?.mmp_required_capabilities??[];
+  if(manifest.package_format_version==="1.1.0"){
+    ensure(Array.isArray(manifest.required_capabilities) && Array.isArray(capabilities), "Missing candidate capabilities");
+    ensure(JSON.stringify(manifest.required_capabilities)===JSON.stringify(capabilities),"CORE-013 capability mismatch");
+    ensure(capabilities.length===0,"CORE-013 not_supported mandatory profile");
+  } else ensure(Array.isArray(capabilities) && capabilities.length===0,"CORE-013 not_supported in MMP 1.0");
   const elements=docs.metamodel.elements,relations=docs.metamodel.relationships,props=docs.properties;
   const elemIds=ids(elements,"elements"),relIds=ids(relations,"relationships");
   ensure([...elemIds].every(id=>!relIds.has(id)),"Element / relationship ID collision");
