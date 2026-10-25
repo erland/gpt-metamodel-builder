@@ -29,6 +29,7 @@ jobs:
       - run: python scripts/test_mmp_typed_endpoints_package.py --typescript
       - run: python scripts/test_mmp_typed_pair_package.py --typescript
       - run: node interop/typescript/dist/typed-graph-test.js interop/core007-typed-graph-v1.json
+      - run: node interop/typescript/dist/junction-structure-test.js interop/core016-junction-structure-v1.json
       - run: python scripts/test_mmp_core015_core016_integration.py --typescript
       - run: python scripts/test_mmp_package_semantics.py "$MMP_KIT_PATH"
       - run: node interop/typescript/dist/package-semantic-test.js "$MMP_KIT_PATH"
