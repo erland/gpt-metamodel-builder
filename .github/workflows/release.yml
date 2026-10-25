@@ -74,14 +74,21 @@ jobs:
           python scripts/test_runtime_archive_parity.py --dist dist
           python scripts/test_mmp_distribution_archives.py --dist dist
           python scripts/test_mmp_skill_direct_execution.py --dist dist
-          MMP_KIT_NAME="$(python scripts/build_mmp_specification.py --print-filename)"
+          # Preserve the historical 1.1.0 kit (MMP format 1.0.0).
+          LEGACY_KIT_NAME="$(python scripts/build_mmp_specification.py --print-filename)"
+          python scripts/build_mmp_specification.py --output "dist/$LEGACY_KIT_NAME"
+          python scripts/test_mmp_specification_kit.py --archive "dist/$LEGACY_KIT_NAME"
+          python scripts/test_mmp_release_kit.py --kit "dist/$LEGACY_KIT_NAME"
+          (cd dist && sha256sum "$LEGACY_KIT_NAME" >> SHA256SUMS.txt)
+          sha256sum "dist/$LEGACY_KIT_NAME" > "dist/$LEGACY_KIT_NAME.sha256"
+          # Publish the separate new kit only after its actual artifact passes.
+          MMP_KIT_NAME="$(python scripts/build_mmp_specification_1_2.py --print-filename)"
           MMP_KIT_PATH="dist/$MMP_KIT_NAME"
-          echo "MMP_KIT_PATH=$MMP_KIT_PATH" >> "$GITHUB_ENV"
-          python scripts/build_mmp_specification.py --output "$MMP_KIT_PATH"
-          python scripts/test_mmp_specification_kit.py --archive "$MMP_KIT_PATH"
-          python scripts/test_mmp_release_kit.py --kit "$MMP_KIT_PATH"
+          python scripts/build_mmp_specification_1_2.py --output "$MMP_KIT_PATH"
+          (cd dist && sha256sum "$MMP_KIT_NAME" > "$MMP_KIT_NAME.sha256")
+          python scripts/verify_mmp_11_release_artifact.py --kit "$MMP_KIT_PATH" --sha256-file "$MMP_KIT_PATH.sha256" --report "$RUNNER_TEMP/mmp11-release-evidence.json"
           (cd dist && sha256sum "$MMP_KIT_NAME" >> SHA256SUMS.txt)
-          sha256sum "$MMP_KIT_PATH" > "$MMP_KIT_PATH.sha256"
+          echo "MMP_KIT_PATH=$MMP_KIT_PATH" >> "$GITHUB_ENV"
           python - <<'PY'
           import shutil, subprocess, sys, tempfile
           from pathlib import Path
