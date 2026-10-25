@@ -26,7 +26,8 @@
       "cardinality": "0..*",
       "present": true,
       "default_defined": true,
-      "expected": "satisfied"
+      "expected": "satisfied",
+      "value": "x"
     },
     {
       "id": "required_present_null",
