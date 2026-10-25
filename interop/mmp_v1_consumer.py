@@ -423,6 +423,28 @@ def consume(source: Path):
     elements = docs["metamodel"]["elements"]
     relations = docs["metamodel"]["relationships"]
     props = docs["properties"]
+    junctions = docs["metamodel"].get("junctions", [])
+    junction_ids = {x["id"] for x in junctions}
+    element_ids_for_typed = {x["id"] for x in elements}
+    relation_ids_for_typed = {x["id"] for x in relations}
+    if len(junction_ids) != len(junctions) or junction_ids & (element_ids_for_typed | relation_ids_for_typed):
+        raise ValueError("CORE-016 duplicate or colliding junction ID")
+    namespaces = {"element": element_ids_for_typed, "relationship": relation_ids_for_typed, "junction": junction_ids}
+    for relation in relations:
+        for side in ("source", "target"):
+            endpoint = relation[side]
+            if "typed_refs" not in endpoint:
+                continue
+            refs = endpoint["typed_refs"]
+            seen = set()
+            for ref in refs:
+                key = (ref["kind"], ref["id"])
+                if ref["kind"] not in namespaces or ref["id"] not in namespaces[ref["kind"]] or key in seen:
+                    raise ValueError("CORE-016 unknown or duplicate typed endpoint")
+                seen.add(key)
+            if {ref["id"] for ref in refs if ref["kind"] == "element"} != set(endpoint["types"]):
+                raise ValueError("CORE-016 typed endpoint legacy mismatch")
+
     ids = {x["id"] for x in elements}
     for r in relations:
         for end in ("source", "target"):
