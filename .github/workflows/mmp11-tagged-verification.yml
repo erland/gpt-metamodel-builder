@@ -30,7 +30,9 @@ jobs:
         working-directory: interop/typescript
       - run: npm run build
         working-directory: interop/typescript
-      - name: Run baseline and project regression gates\n        run: python scripts/run_ci.py --project-root . --reports-dir /tmp/mmp11-ci\n      - name: Build selected candidate artifact and digest
+      - name: Run baseline and project regression gates
+        run: python scripts/run_ci.py --project-root . --reports-dir /tmp/mmp11-ci
+      - name: Build selected candidate artifact and digest
         shell: bash
         run: |
           mkdir -p dist
@@ -38,7 +40,6 @@ jobs:
           (cd dist && sha256sum mmp-specification-kit-1.2.0.zip > mmp-specification-kit-1.2.0.zip.sha256)
       - name: Run source and artifact release gates
         run: |
-          python scripts/run_ci.py --project-root . --reports-dir /tmp/mmp11-ci
           python scripts/verify_mmp_11_release_artifact.py \
             --kit dist/mmp-specification-kit-1.2.0.zip \
             --sha256-file dist/mmp-specification-kit-1.2.0.zip.sha256 \
