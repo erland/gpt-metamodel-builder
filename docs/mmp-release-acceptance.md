@@ -1,4 +1,4 @@
-# MMP Specification Kit 1.0.0 – slutligt acceptansunderlag
+# MMP Specification Kit 1.1.0 – slutligt acceptansunderlag
 
 Detta dokument beskriver **acceptansgrinden inför release**. Det är inte ett påstående att en GitHub-release redan har publicerats eller att det finns full MMP 1.1 Core-konformitet.
 
@@ -18,6 +18,6 @@ Paketformatet förblir **1.0.0**; framtida Strict Core-regler och övriga semant
 
 ## Acceptansbeslut
 
-En grön körning visar att specifikationspaketet är reproducerbart, integritetskontrollerat och fungerar med de två referenskonsumenternas testade delmängder. Den godkänner **releasekandidaten till MMP Specification Kit 1.0.0** med beskrivna begränsningar, inte en oberoende tredjepartscertifiering.
+Versionerna är separata: **Specification Kit 1.1.0** innehåller **MMP-format 1.0.0**. Använd `python scripts/build_mmp_specification.py` för standardfilen `mmp-specification-kit-1.1.0.zip`. Paketets `specification-kit.json` beskriver båda versionerna och den utökade filinventeringen ingår i `SHA256SUMS.txt`. Vid publicering använd en unik kit-releaseversion och ersätt inte en befintlig äldre kit-ZIP.\n\nEn grön körning visar att specifikationspaketet är reproducerbart, integritetskontrollerat och fungerar med de två referenskonsumenternas testade delmängder. Den godkänner **releasekandidaten till MMP Specification Kit 1.1.0** med beskrivna begränsningar, inte en oberoende tredjepartscertifiering.
 
 När PR är mergad kan en separat tagg/release publiceras med den byggda ZIP-filen och dess SHA-256. En release skapas inte automatiskt av denna PR.
