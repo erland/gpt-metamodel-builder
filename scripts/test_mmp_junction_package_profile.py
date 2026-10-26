@@ -37,7 +37,7 @@ def main():
    assert ts.returncode==0,ts.stderr
   assert file.read_bytes()==before
   output=root/"legacy.zip"
-  rejected=run(sys.executable,ROOT/"scripts/export_mmp.py","--model-dir",model,"--output",output)
+  rejected=run(sys.executable,ROOT/"scripts/export_mmp.py","--legacy-1-0","--model-dir",model,"--output",output)
   assert rejected.returncode!=0 and not output.exists()
   profile.unlink()
   rejected=run(*cmd)
