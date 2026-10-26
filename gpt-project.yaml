@@ -127,6 +127,7 @@ skills:
     - scripts/import_mmp.py
     - scripts/migrate_mmp.py
     - scripts/plan_mmp_upgrade.py
+    - scripts/apply_mmp_upgrade.py
     - scripts/mmp_capability_policy.py
     - scripts/mmp_effective_pairs.py
     assets:
