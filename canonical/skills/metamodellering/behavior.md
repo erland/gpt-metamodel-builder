@@ -33,3 +33,8 @@ När användaren vill skapa, ändra, validera eller versionsjämföra en verktyg
 - Redovisa tillagd `guidance.yaml` separat när äldre paket saknade den frivilliga filen.
 - Skapa en maskinläsbar migrationsrapport. Markera inte användarvalda utökningar som automatiskt migrerade.
 - Erbjud separat semantisk uppgradering av typade par, ändpunkter och junction-regler med explicit användarbeslut och validering. Härled aldrig sådan semantik automatiskt från bara ett 1.0-paket.
+
+## Granskningsplan för semantisk MMP 1.1-uppgradering
+- Kör `scripts/plan_mmp_upgrade.py` efter validerad import eller formatmigrering och leverera dess JSON-plan som beslutsunderlag.
+- Visa befintliga source/target-domäner endast som underlag. Markera varje föreslagen relationsförfining som `pending_user_decision` och tillämpa inga förslag automatiskt.
+- Be användaren välja `defer`, `keep_existing` eller `specify_explicit_rules` per relation. En godkänd plan ska ligga till grund för en separat, kontrollerad modelländring och efterföljande schema- och semantikvalidering.
