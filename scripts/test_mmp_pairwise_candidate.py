@@ -17,7 +17,7 @@ def main():
         data["metamodel"].setdefault("extensions",{})["mmp_required_capabilities"]=[cap]
         file.write_text(yaml.safe_dump(data,sort_keys=False))
         original=file.read_bytes()
-        p=run("export_mmp.py","--model-dir",src,"--output",root/"legacy.zip")
+        p=run("export_mmp.py","--legacy-1-0","--model-dir",src,"--output",root/"legacy.zip")
         assert p.returncode!=0 and not (root/"legacy.zip").exists(),p.stderr
         p=run("export_mmp.py","--candidate-1-1","--model-dir",src,"--output",root/"pairs.zip")
         assert p.returncode==0,p.stderr
