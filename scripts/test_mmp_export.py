@@ -20,7 +20,7 @@ SCHEMA = json.loads((ROOT / "schemas/mmp-manifest-v1.schema.json").read_text())
 
 
 def cmd(*args, env=None):
-    return subprocess.run([sys.executable, str(EXPORT), *map(str, args)],
+    return subprocess.run([sys.executable, str(EXPORT), "--legacy-1-0", *map(str, args)],
                           text=True, capture_output=True, cwd=ROOT, env=env)
 
 

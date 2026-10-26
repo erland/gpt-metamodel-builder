@@ -34,7 +34,7 @@ def main():
   with zipfile.ZipFile(package) as z:
    assert json.loads(z.read("documentation/required-default-presence.json"))==policy
   legacy=work/"legacy.zip"
-  assert run(sys.executable,ROOT/"scripts/export_mmp.py","--model-dir",model,"--output",legacy).returncode!=0
+  assert run(sys.executable,ROOT/"scripts/export_mmp.py","--legacy-1-0","--model-dir",model,"--output",legacy).returncode!=0
   # Absent profile document must not be silently accepted.
   profile.unlink()
   result=run(*cmd);assert result.returncode!=0 and "required/default" in result.stderr

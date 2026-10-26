@@ -93,7 +93,7 @@ def collect(model_dir: Path, schema_dir: Path) -> dict[str, bytes]:
 
 def export(model_dir: Path, output: Path, producer_version: str,
            *, schema_dir: Path = SCHEMAS, as_directory: bool = False,
-           skip_validation: bool = False, candidate_1_1: bool = False) -> Path:
+           skip_validation: bool = False, candidate_1_1: bool = True) -> Path:
     model_dir = model_dir.resolve()
     contents = collect(model_dir, schema_dir.resolve())
     model = yaml.safe_load(contents["canonical/metamodel.yaml"])["metamodel"]
@@ -222,9 +222,10 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--producer-version", default="dev")
     parser.add_argument("--directory", action="store_true")
-    parser.add_argument("--candidate-1-1", action="store_true", help="Experimental opt-in 1.1 manifest, not a released MMP format")
+    parser.add_argument("--candidate-1-1", action="store_true", help="Deprecated compatibility alias: MMP 1.1 is now the default")
+    parser.add_argument("--legacy-1-0", action="store_true", help="Explicitly export older MMP 1.0 for legacy consumers")
     args = parser.parse_args()
-    print(export(args.model_dir, args.output, args.producer_version, as_directory=args.directory, candidate_1_1=args.candidate_1_1))
+    print(export(args.model_dir, args.output, args.producer_version, as_directory=args.directory, candidate_1_1=not args.legacy_1_0))
     return 0
 
 

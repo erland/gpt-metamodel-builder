@@ -59,7 +59,7 @@ def main():
         assert check.returncode==0,check.stderr
         assert (imported/"metamodel.yaml").read_bytes()==before
         # Old-format export remains blocked if semantics would be lost.
-        old=cmd(sys.executable,ROOT/"scripts/export_mmp.py","--model-dir",src,"--output",work/"legacy.zip")
+        old=cmd(sys.executable,ROOT/"scripts/export_mmp.py","--legacy-1-0","--model-dir",src,"--output",work/"legacy.zip")
         assert old.returncode!=0 and not (work/"legacy.zip").exists()
     print("CORE-015 relation-inheritance package parity PASS")
 if __name__=="__main__":main()

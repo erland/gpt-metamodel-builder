@@ -18,7 +18,7 @@ def main():
         mm.write_text(yaml.safe_dump(obj,sort_keys=False))
         original=mm.read_bytes()
         legacy=base/"legacy.zip"
-        a=run("export_mmp.py","--model-dir",model,"--output",legacy)
+        a=run("export_mmp.py","--legacy-1-0","--model-dir",model,"--output",legacy)
         assert a.returncode==0,a.stderr
         assert yaml.safe_load(zipfile.ZipFile(legacy).read("manifest.yaml"))["package_format_version"]=="1.0.0"
         assert run("import_mmp.py","validate",legacy).returncode==0

@@ -75,7 +75,7 @@ def main():
   assert len([e for e in parsed["elements"] if e["id"] in ids])==len(ids)
   assert path.read_bytes()==before
   legacy=work/"legacy.zip"
-  old=run(sys.executable,ROOT/"scripts/export_mmp.py",
+  old=run(sys.executable,ROOT/"scripts/export_mmp.py","--legacy-1-0",
           "--model-dir",source,"--output",legacy)
   assert old.returncode!=0 and not legacy.exists(),"MMP 1.0 downgrade wrongly permitted"
  print("Generic large structural fixture candidate package PASS")

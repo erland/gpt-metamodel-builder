@@ -20,7 +20,7 @@ def main():
   rel["allowed_typed_pairs"]=[{"source":{"kind":"junction","id":"core016_junction"},"target":{"kind":"relationship","id":rel["id"]}}]
   file.write_text(yaml.safe_dump(data,sort_keys=False));original=file.read_bytes()
   package=work/"candidate.zip"
-  old=run(sys.executable,ROOT/"scripts/export_mmp.py","--model-dir",model,"--output",work/"old.zip")
+  old=run(sys.executable,ROOT/"scripts/export_mmp.py","--legacy-1-0","--model-dir",model,"--output",work/"old.zip")
   assert old.returncode!=0 and not (work/"old.zip").exists(),old.stderr
   new=run(sys.executable,ROOT/"scripts/export_mmp.py","--candidate-1-1","--model-dir",model,"--output",package)
   assert new.returncode==0,new.stderr

@@ -79,6 +79,6 @@ def main():
   file.write_text(yaml.safe_dump(d,sort_keys=False))
   assert run(*cmd).returncode!=0
   legacy=w/"legacy.zip"
-  assert run(sys.executable,ROOT/"scripts/export_mmp.py","--model-dir",m,"--output",legacy).returncode!=0
+  assert run(sys.executable,ROOT/"scripts/export_mmp.py","--legacy-1-0","--model-dir",m,"--output",legacy).returncode!=0
  print("Combined mandatory candidate-profile package PASS")
 if __name__=="__main__":main()

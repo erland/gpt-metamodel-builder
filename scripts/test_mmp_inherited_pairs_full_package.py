@@ -64,7 +64,7 @@ def main():
    ts=run("node",ROOT/"interop/typescript/dist/typed-graph-test.js",vectors)
    assert ts.returncode==0,ts.stderr
   legacy=work/"legacy.zip"
-  old=run(sys.executable,ROOT/"scripts/export_mmp.py","--model-dir",model,"--output",legacy)
+  old=run(sys.executable,ROOT/"scripts/export_mmp.py","--legacy-1-0","--model-dir",model,"--output",legacy)
   assert old.returncode!=0 and not legacy.exists()
   assert path.read_bytes()==before
  print("CORE-016 inherited typed pairs full candidate package PASS")
