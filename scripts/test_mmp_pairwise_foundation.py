@@ -16,7 +16,7 @@ with tempfile.TemporaryDirectory() as tmp:
     p.write_text(yaml.safe_dump(data,sort_keys=False))
     report=validate(d)
     assert not report.errors,report.errors
-    exported=subprocess.run([sys.executable,str(ROOT/"scripts/export_mmp.py"),"--model-dir",str(d),"--output",str(Path(tmp)/"blocked.zip")],capture_output=True,text=True)
+    exported=subprocess.run([sys.executable,str(ROOT/"scripts/export_mmp.py"),"--legacy-1-0","--model-dir",str(d),"--output",str(Path(tmp)/"blocked.zip")],capture_output=True,text=True)
     assert exported.returncode and "CORE-015 not_supported" in exported.stderr,exported.stderr
     assert not (Path(tmp)/"blocked.zip").exists()
     rel["allowed_type_pairs"].append({"source":src,"target":dst})
