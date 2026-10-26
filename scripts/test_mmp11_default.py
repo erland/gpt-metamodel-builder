@@ -5,6 +5,7 @@ import subprocess
 import sys
 import tempfile
 import zipfile
+import shutil
 
 import yaml
 
@@ -14,10 +15,16 @@ MODEL = ROOT / "examples/architecture-lite"
 
 def main():
     with tempfile.TemporaryDirectory() as temp:
+        source = Path(temp) / "model"
+        shutil.copytree(MODEL, source)
+        model_file = source / "metamodel.yaml"
+        model = yaml.safe_load(model_file.read_text())
+        model["metamodel"]["namespace"] = "https://example.org/metamodels/archlite"
+        model_file.write_text(yaml.safe_dump(model, sort_keys=False))
         for args, expected in (([], "1.1.0"), (["--legacy-1-0"], "1.0.0")):
             target = Path(temp) / f"{expected}.zip"
             result = subprocess.run(
-                [sys.executable, str(EXPORT), "--model-dir", str(MODEL),
+                [sys.executable, str(EXPORT), "--model-dir", str(source),
                  "--output", str(target), *args],
                 capture_output=True, text=True, cwd=ROOT,
             )
