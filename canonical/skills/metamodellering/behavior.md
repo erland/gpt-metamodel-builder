@@ -28,18 +28,15 @@ När användaren vill skapa, ändra, validera eller versionsjämföra en verktyg
 - Kör paketerade skript direkt där de kan exekveras; begär versionsmatchad Engine ZIP enbart som reservväg.
 
 ## Migrering från MMP 1.0 till 1.1
-- Känn igen MMP 1.0 och erbjud förlustfri formatmigrering med `scripts/migrate_mmp.py`.
-- Validera källa och mål, återimportera och jämför originalets canonical-filer byte för byte. Behåll originalfilen orörd och skriv aldrig över befintliga mål.
-- Redovisa tillagd `guidance.yaml` separat när äldre paket saknade den frivilliga filen.
-- Skapa en maskinläsbar migrationsrapport. Markera inte användarvalda utökningar som automatiskt migrerade.
-- Erbjud separat semantisk uppgradering av typade par, ändpunkter och junction-regler med explicit användarbeslut och validering. Härled aldrig sådan semantik automatiskt från bara ett 1.0-paket.
+- Tolka en begäran om migrering som **format- och datamigrering**, inte som en begäran att förändra metamodellens semantik.
+- Känn igen MMP 1.0 och utför normalfallet automatiskt med `scripts/migrate_mmp.py`: validera källa, importera befintliga canonical-data, paketera i MMP 1.1, validera, återimportera och jämför originalets canonical-filer byte för byte.
+- Kräv inte granskningsplan, godkännande av relationspar, typade ändpunkter, junctions eller andra frivilliga MMP 1.1-funktioner. Bevara frånvarande valfria uppgifter som frånvarande; skapa inte nya regler.
+- Behåll originalpaketet orört och skriv inte över befintliga mål. Generera en kort migrationsrapport med bevarad information, valideringsresultat och eventuella faktiska avvikelser. Redovisa tillagd `guidance.yaml` separat om den saknades.
+- Hantera tekniskt säkra formatanpassningar utan att belasta användaren med frågor. Fråga enbart om migreringen är blockerad av faktisk tvetydighet, informationsförlust eller ett nödvändigt verksamhetsbeslut som inte går att avgöra från källan.
+- Om migreringen inte går att genomföra förlustfritt: stoppa utan partiellt slutpaket, beskriv exakt vilka uppgifter som inte kan bevaras och efterfråga endast de beslut som behövs för att lösa blockeraren.
+- Redovisa PASS först efter verkligt genomförd validering och återimport. Ett lyckat byte av paketformat innebär inte att modellens regler har utökats.
 
-## Granskningsplan för semantisk MMP 1.1-uppgradering
-- Kör `scripts/plan_mmp_upgrade.py` efter validerad import eller formatmigrering och leverera dess JSON-plan som beslutsunderlag.
-- Visa befintliga source/target-domäner endast som underlag. Markera varje föreslagen relationsförfining som `pending_user_decision` och tillämpa inga förslag automatiskt.
-- Be användaren välja `defer`, `keep_existing` eller `specify_explicit_rules` per relation. En godkänd plan ska ligga till grund för en separat, kontrollerad modelländring och efterföljande schema- och semantikvalidering.
-
-## Tillämpa godkänd MMP 1.1-uppgradering
-- Utgå från en granskningsplan som är bunden till exakt originalpaket med SHA-256. Använd `scripts/apply_mmp_upgrade.py` först när användaren explicit godkänt varje relationsbeslut.
-- Inledningsvis kan verktyget endast tillämpa explicit listade `allowed_type_pairs` tillsammans med dokumenterad evidens; andra 1.1-funktioner kräver separat arbetsflöde.
-- Kräva ny fullständig validering, återimport och semantisk diff i rapport; bevara original och stoppa om målfiler redan finns.
+## Frivillig vidareutveckling av en metamodell
+- `scripts/plan_mmp_upgrade.py` och `scripts/apply_mmp_upgrade.py` är **separata, uttryckligen begärda modelleringsfunktioner**. Kör eller erbjud dem inte som ett obligatoriskt eller automatiskt nästa steg efter MMP-migrering.
+- Om användaren ber om fler uttryckliga tillåtna relationspar, typade ändpunkter eller junction-regler kan en granskad modelländring göras med evidens och användargodkännande.
+- Tillämpa inte nya semantiska begränsningar bara för att MMP 1.1 kan uttrycka dem; sådana regler kan ändra modellens innebörd.

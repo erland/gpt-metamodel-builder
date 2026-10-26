@@ -40,6 +40,9 @@ def main():
         result = json.loads(report.read_text())
         assert result["status"] == "pass"
         assert result["semantic_enrichment_performed"] is False
+        assert result["mode"] == "lossless_format_only"
+        assert result["validation"] == {"source": "pass", "target": "pass", "target_reimport": "pass"}
+        assert "decisions" not in result and "review_required" not in result
         assert result["canonical_files_preserved"] >= 7
         assert original_bytes == old.read_bytes()
         with zipfile.ZipFile(new) as archive:
