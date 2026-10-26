@@ -11,6 +11,7 @@ import sys
 import zipfile
 import yaml
 from jsonschema import Draft202012Validator, FormatChecker
+from fast_jsonschema import FastDraft202012Validator
 from referencing import Registry, Resource
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -152,7 +153,7 @@ def validate_contents(files: dict[str, bytes], manifest: dict) -> dict:
                     references(item)
         references(schema)
         doc = yaml.safe_load(files[path])
-        errors = list(Draft202012Validator(schema, registry=registry, format_checker=FormatChecker()).iter_errors(doc))
+        errors = list(FastDraft202012Validator(schema, registry=registry, format_checker=FormatChecker()).iter_errors(doc))
         if errors:
             raise ValueError(f"{key}: schema error: {errors[0].message}")
         documents[key] = doc

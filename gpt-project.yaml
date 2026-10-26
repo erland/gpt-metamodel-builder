@@ -119,6 +119,7 @@ skills:
     - docs/semantic-validation-v1.md
     scripts:
     - scripts/validate_canonical_schema.py
+    - scripts/fast_jsonschema.py
     - scripts/validate_semantics.py
     - scripts/diff_metamodel.py
     - scripts/validate_workspace.py
