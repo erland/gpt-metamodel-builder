@@ -18,6 +18,7 @@ def main() -> int:
     commands = [
         [py,'scripts/validate_project.py'],
         [py,'scripts/validate_model_robustness.py','--project-root','.'],
+        [py,'scripts/test_safe_yaml.py'],
         [py,'scripts/validate_canonical_schema.py'],
         [py,'scripts/test_mmp_manifest_contract.py'],
         [py,'scripts/test_mmp_export.py'],

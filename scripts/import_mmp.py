@@ -10,6 +10,7 @@ import stat
 import sys
 import zipfile
 import yaml
+from safe_yaml import safe_load
 from jsonschema import Draft202012Validator, FormatChecker
 from fast_jsonschema import FastDraft202012Validator
 from referencing import Registry, Resource
@@ -83,7 +84,7 @@ def read_package(source: Path) -> dict[str, bytes]:
 def load_manifest(files: dict[str, bytes]) -> dict:
     if "manifest.yaml" not in files:
         raise ValueError("manifest.yaml missing")
-    manifest = yaml.safe_load(files["manifest.yaml"])
+    manifest = safe_load(files["manifest.yaml"])
     format_version = manifest.get("package_format_version") if isinstance(manifest, dict) else None
     if format_version not in ("1.0.0", "1.1.0"):
         raise ValueError("Unsupported MMP minor or major version")
@@ -152,7 +153,7 @@ def validate_contents(files: dict[str, bytes], manifest: dict) -> dict:
                 for item in value:
                     references(item)
         references(schema)
-        doc = yaml.safe_load(files[path])
+        doc = safe_load(files[path])
         errors = list(FastDraft202012Validator(schema, registry=registry, format_checker=FormatChecker()).iter_errors(doc))
         if errors:
             raise ValueError(f"{key}: schema error: {errors[0].message}")
