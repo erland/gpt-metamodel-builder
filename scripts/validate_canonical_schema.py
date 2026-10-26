@@ -12,7 +12,7 @@ MAPPING={
  'metamodel.yaml':'metamodel.schema.json','properties.yaml':'properties.schema.json','constraints.yaml':'constraints.schema.json',
  'viewpoints.yaml':'viewpoints.schema.json','guidance.yaml':'guidance.schema.json','notation.yaml':'notation.schema.json','provenance.yaml':'provenance.schema.json','version.yaml':'version.schema.json'}
 
-def load_yaml(p): return yaml.safe_load(p.read_text(encoding='utf-8'))
+def load_yaml(p): return safe_load(p.read_text(encoding='utf-8'))
 def load_json(p): return json.loads(p.read_text(encoding='utf-8'))
 
 def validator(schema_name):
