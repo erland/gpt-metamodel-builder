@@ -15,6 +15,7 @@ import tempfile
 import zipfile
 
 import yaml
+from safe_yaml import safe_load
 from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -96,10 +97,10 @@ def export(model_dir: Path, output: Path, producer_version: str,
            skip_validation: bool = False, candidate_1_1: bool = True) -> Path:
     model_dir = model_dir.resolve()
     contents = collect(model_dir, schema_dir.resolve())
-    model = yaml.safe_load(contents["canonical/metamodel.yaml"])["metamodel"]
+    model_doc = safe_load(contents["canonical/metamodel.yaml"])
+    model = model_doc["metamodel"]
     # CORE-015 is canonical-only until package consumers implement full pairwise semantics.
     # Never silently export pairwise rules into either MMP 1.0 or experimental 1.1.
-    model_doc = yaml.safe_load(contents["canonical/metamodel.yaml"])
     # CORE-016 remains canonical-only: older consumers cannot enforce typed endpoints.
     # Typed exact pairs need their own negotiated semantics; block until consumers support them.
     has_typed_pairs = any("allowed_typed_pairs" in rel for rel in model_doc["relationships"])
@@ -152,7 +153,7 @@ def export(model_dir: Path, output: Path, producer_version: str,
         if not candidate_1_1:
             raise ValueError("CORE-009 not_supported in MMP 1.0")
         Draft202012Validator(json.loads(contents["schemas/mmp-required-default-presence-profile.schema.json"])).validate(json.loads(contents[presence_name]))
-    version = yaml.safe_load(contents["canonical/version.yaml"])["version"]["current"]
+    version = safe_load(contents["canonical/version.yaml"])["version"]["current"]
     namespace = model.get("namespace")
     if not isinstance(namespace, str) or not re.match(r"^[a-zA-Z][a-zA-Z0-9+.-]*:", namespace):
         raise ValueError("MMP requires an explicitly approved, stable URI namespace in canonical metamodel.yaml")
