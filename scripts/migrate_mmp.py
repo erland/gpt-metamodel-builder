@@ -46,7 +46,9 @@ def migrate(source: Path, destination: Path, report_path: Path, producer_version
         export(model, candidate, producer_version, candidate_1_1=True)
         verified = import_execute(candidate, "validate")
         after = _canonical(candidate)
-        if before != after:
+        changed = [name for name, payload in before.items() if after.get(name) != payload]
+        added = sorted(set(after) - set(before))
+        if changed or any(name != "canonical/guidance.yaml" for name in added):
             raise ValueError("Canonical payload changed during migration; no output written")
         with tempfile.TemporaryDirectory() as tmp2:
             restored = Path(tmp2) / "restored"
@@ -60,7 +62,9 @@ def migrate(source: Path, destination: Path, report_path: Path, producer_version
             "mode": "lossless_format_only",
             "source_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
             "canonical_files_preserved": len(before),
-            "canonical_payload_byte_identical": True,
+            "canonical_payload_byte_identical": not added,
+            "canonical_files_added": added,
+            "added_guidance_is_template": bool(added),
             "semantic_enrichment_performed": False,
             "target_required_capabilities": [],
             "new_optional_features": [
