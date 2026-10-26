@@ -2,6 +2,7 @@
 import argparse
 from pathlib import Path
 import json, sys, yaml
+from safe_yaml import safe_load
 from jsonschema import FormatChecker
 from fast_jsonschema import FastDraft202012Validator
 from referencing import Registry, Resource
