@@ -111,11 +111,11 @@ Standardexporten använder MMP 1.1. MMP 1.0 kräver flaggan `--legacy-1-0`. För
 python scripts/migrate_mmp.py old.mmp.zip --output new.mmp.zip --report migration.json
 ```
 
-Kommandot kontrollerar manifest, SHA-256, källans scheman och semantik, bygger en MMP 1.1-fil samt validerar och återimporterar den. Det vägrar skriva över befintliga filer och skapar en JSON-rapport. Originalets canonical-filer bevaras byte-för-byte; om äldre paket saknar valfri `guidance.yaml` anges eventuell tillagd mallfil separat i rapporten. Kommandot hittar **inte på** nya MMP 1.1-relationer, typade ändpunkter eller junction-regler. Sådana ändringar måste göras som en separat, avsiktlig semantisk uppgradering.
+Detta är hela normalflödet; inga extra godkännanden av nya semantiska regler krävs. Kommandot kontrollerar manifest, SHA-256, källans scheman och semantik, bygger en MMP 1.1-fil samt validerar och återimporterar den. Det vägrar skriva över befintliga filer och skapar en JSON-rapport. Originalets canonical-filer bevaras byte-för-byte; om äldre paket saknar valfri `guidance.yaml` anges eventuell tillagd mallfil separat i rapporten. Kommandot hittar **inte på** nya MMP 1.1-relationer, typade ändpunkter eller junction-regler. Sådana ändringar ingår **inte** i migrering, men kan beställas separat som modellutveckling.
 
-### Granskningsplan för semantisk uppgradering
+### Frivillig vidareutveckling av metamodellen (inte en del av migreringen)
 
-Efter MMP 1.0 → 1.1-formatmigrering (eller på ett befintligt validerat MMP 1.1-paket) kan du ta fram en **icke-mutativ** plan över möjliga fortsatta modelleringsbeslut:
+MMP-migreringen är färdig när det befintliga datat är överfört, verifierat och rapporterat. **Användaren behöver inte granska eller godkänna nya regler för att migrera.** Endast om man uttryckligen vill vidareutveckla en metamodell (oavsett om den nyligen migrerats) kan man begära en **icke-mutativ** plan för nya modelleringsbeslut:
 
 ```bash
 python scripts/plan_mmp_upgrade.py new.mmp.zip --output semantic-upgrade-plan.json
@@ -123,7 +123,7 @@ python scripts/plan_mmp_upgrade.py new.mmp.zip --output semantic-upgrade-plan.js
 
 Planen inventerar relationer, visar befintliga source/target-domäner och skapar beslutspunkter med status `pending_user_decision`. Det **inför inte** automatiskt tillåtna relationspar, typade ändpunkter eller junction-regler. Besluten dokumenteras innan någon modelländring genomförs.
 
-### Tillämpa en godkänd semantisk uppgraderingsplan
+### Tillämpa en uttryckligen beställd modellförändring
 
 Redigera `decisions` i `semantic-upgrade-plan.json` med explicit beslut per relation: `defer`, `keep_existing` eller `specify_explicit_rules`. För det sistnämnda anger du en icke-tom `allowed_type_pairs`-lista med `source` och `target`, samt `evidence` med spårbart beslutsunderlag. Planen innehåller `source_sha256` som förhindrar användning på fel paket.
 
