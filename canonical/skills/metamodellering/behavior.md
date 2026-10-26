@@ -38,3 +38,8 @@ När användaren vill skapa, ändra, validera eller versionsjämföra en verktyg
 - Kör `scripts/plan_mmp_upgrade.py` efter validerad import eller formatmigrering och leverera dess JSON-plan som beslutsunderlag.
 - Visa befintliga source/target-domäner endast som underlag. Markera varje föreslagen relationsförfining som `pending_user_decision` och tillämpa inga förslag automatiskt.
 - Be användaren välja `defer`, `keep_existing` eller `specify_explicit_rules` per relation. En godkänd plan ska ligga till grund för en separat, kontrollerad modelländring och efterföljande schema- och semantikvalidering.
+
+## Tillämpa godkänd MMP 1.1-uppgradering
+- Utgå från en granskningsplan som är bunden till exakt originalpaket med SHA-256. Använd `scripts/apply_mmp_upgrade.py` först när användaren explicit godkänt varje relationsbeslut.
+- Inledningsvis kan verktyget endast tillämpa explicit listade `allowed_type_pairs` tillsammans med dokumenterad evidens; andra 1.1-funktioner kräver separat arbetsflöde.
+- Kräva ny fullständig validering, återimport och semantisk diff i rapport; bevara original och stoppa om målfiler redan finns.
