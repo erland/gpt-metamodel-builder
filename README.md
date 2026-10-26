@@ -122,3 +122,13 @@ python scripts/plan_mmp_upgrade.py new.mmp.zip --output semantic-upgrade-plan.js
 ```
 
 Planen inventerar relationer, visar befintliga source/target-domäner och skapar beslutspunkter med status `pending_user_decision`. Det **inför inte** automatiskt tillåtna relationspar, typade ändpunkter eller junction-regler. Besluten dokumenteras innan någon modelländring genomförs.
+
+### Tillämpa en godkänd semantisk uppgraderingsplan
+
+Redigera `decisions` i `semantic-upgrade-plan.json` med explicit beslut per relation: `defer`, `keep_existing` eller `specify_explicit_rules`. För det sistnämnda anger du en icke-tom `allowed_type_pairs`-lista med `source` och `target`, samt `evidence` med spårbart beslutsunderlag. Planen innehåller `source_sha256` som förhindrar användning på fel paket.
+
+```bash
+python scripts/apply_mmp_upgrade.py new.mmp.zip --decisions semantic-upgrade-plan.json --output approved.mmp.zip --report upgrade-audit.json
+```
+
+Första tillämpningsversionen stödjer enbart explicita elementtypspar. Utökningar med typade ändpunkter och junction-regler måste granskas separat. Originalet skrivs inte över; den nya modellen valideras och återimporteras före leverans.
