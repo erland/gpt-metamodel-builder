@@ -110,7 +110,7 @@ def main():
         # Reject loss of critical semantics when attempting legacy export.
         old = work / "old.zip"
         rejected = run(sys.executable, ROOT / "scripts/export_mmp.py",
-                       "--model-dir", model, "--output", old)
+                       "--legacy-1-0", "--model-dir", model, "--output", old)
         assert rejected.returncode != 0 and not old.exists(), rejected.stderr
 
         # Each critical capability must be explicit, not assumed from other features.
