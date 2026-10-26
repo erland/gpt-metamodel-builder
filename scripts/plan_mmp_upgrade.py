@@ -6,6 +6,7 @@ Only explicit user-approved decisions can be applied by a separate future step.
 """
 from __future__ import annotations
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import yaml
@@ -52,6 +53,8 @@ def plan(source: Path) -> dict:
     return {
         "plan_format": "mmp-semantic-upgrade-plan",
         "plan_version": "1.0.0",
+        "source_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+        "decisions": [{"relationship_id": item["relationship_id"], "choice": "defer"} for item in proposals],
         "source_package_format": verified["package_format_version"],
         "target_package_format": "1.1.0",
         "source_metamodel": manifest["metamodel"],  # metadata, not source transformation
