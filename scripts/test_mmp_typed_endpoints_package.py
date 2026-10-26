@@ -20,7 +20,7 @@ def main():
         f.write_text(yaml.safe_dump(data,sort_keys=False))
         original=f.read_bytes()
         output=base/"typed.zip"
-        fail=run(sys.executable,ROOT/"scripts/export_mmp.py","--model-dir",model,"--output",base/"legacy.zip")
+        fail=run(sys.executable,ROOT/"scripts/export_mmp.py","--legacy-1-0","--model-dir",model,"--output",base/"legacy.zip")
         assert fail.returncode!=0 and "CORE-016" in fail.stderr,fail.stderr
         assert not (base/"legacy.zip").exists()
         p=run(sys.executable,ROOT/"scripts/export_mmp.py","--candidate-1-1","--model-dir",model,"--output",output)
