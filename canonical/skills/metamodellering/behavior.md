@@ -26,3 +26,10 @@ När användaren vill skapa, ändra, validera eller versionsjämföra en verktyg
 - Kontrollera ZIP-säkerhet, manifest, SHA-256 och medföljande JSON Schemas innan canonical semantik verifieras.
 - Skriv aldrig över existerande projekt; importera i en ny användarvald katalog och behåll originalpaketet oförändrat.
 - Kör paketerade skript direkt där de kan exekveras; begär versionsmatchad Engine ZIP enbart som reservväg.
+
+## Migrering från MMP 1.0 till 1.1
+- Känn igen MMP 1.0 och erbjud förlustfri formatmigrering med `scripts/migrate_mmp.py`.
+- Validera källa och mål, återimportera och jämför originalets canonical-filer byte för byte. Behåll originalfilen orörd och skriv aldrig över befintliga mål.
+- Redovisa tillagd `guidance.yaml` separat när äldre paket saknade den frivilliga filen.
+- Skapa en maskinläsbar migrationsrapport. Markera inte användarvalda utökningar som automatiskt migrerade.
+- Erbjud separat semantisk uppgradering av typade par, ändpunkter och junction-regler med explicit användarbeslut och validering. Härled aldrig sådan semantik automatiskt från bara ett 1.0-paket.

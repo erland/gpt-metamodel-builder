@@ -2,7 +2,7 @@
 
 Metamodel Builder är ett GPT-projekt för att **skapa, underhålla, validera och distribuera verktygsneutrala metamodeller**. Modellen lagras i canonical YAML och kan användas som underlag för dokumentation, utbytespaket och verktygsspecifika projektioner. Sparx Enterprise Architect MDG Technology är den första fullständiga målplattformen.
 
-Projektets generella utbytesformat är **Metamodel Exchange Package (MMP)**. Formatversionen är **1.0.0**, medan det utökade **MMP Specification Kit** har en separat version, **1.1.0**. MMP är ett projektspecifikt format, inte en extern standard.
+Projektets generella utbytesformat är **Metamodel Exchange Package (MMP)**. Nya exporter använder **MMP 1.1.0** som standard; **MMP 1.0.0** stöds fortsatt vid uttryckligt kompatibilitetsval. **MMP Specification Kit** har en separat versionsnumrering. MMP är ett projektspecifikt format, inte en extern standard.
 
 ## Kom igång
 
@@ -56,9 +56,9 @@ OpenAI Plugin är en skills-first `equivalent_runtime_dependent` peer runtime. F
 
 ## MMP – generellt metamodellutbyte
 
-**MMP-format 1.0.0** är ett deklarativt, verktygsneutralt utbytesformat för **metamodeller**. Paketet består av sju obligatoriska canonical YAML-resurser, valfri `guidance.yaml`, lokala JSON Schemas samt manifest med SHA-256-kontrollsummor. Det innehåller **inte** modellinstanser, Sparx-konfiguration, exekverbar kod eller Engine ZIP.
+**MMP-format 1.0.0** är det äldre deklarativa, verktygsneutrala utbytesformatet för **metamodeller**. Paketet består av sju obligatoriska canonical YAML-resurser, valfri `guidance.yaml`, lokala JSON Schemas samt manifest med SHA-256-kontrollsummor. Det innehåller **inte** modellinstanser, Sparx-konfiguration, exekverbar kod eller Engine ZIP.
 
-**MMP Specification Kit 1.1.0** är en **enda separat distributions-ZIP**, `mmp-specification-kit-1.1.0.zip`, med formatkontrakt, schemas, exempelpaket, referenskonsument, testfall och dokumentation. Kit-versionen beskriver utgåvan av materialet och ändrar **inte** MMP-formatversionen. Versionskällan är `mmp-kit/version.json`.
+**MMP Specification Kit 1.1.0** är en **enda separat distributions-ZIP**, `mmp-specification-kit-1.1.0.zip`, med formatkontrakt, schemas, exempelpaket, referenskonsument, testfall och dokumentation. Kit-versionen beskriver utgåvan av materialet och är **inte samma sak** som MMP-paketets formatversion. Versionskällan är `mmp-kit/version.json`.
 
 Frivilliga kandidater som **Strict Core**, kanonisk värdesemantik och extensionförhandling är ännu inte fullständigt normativa eller verifierade som MMP Core 1.1.0. De förändrar inte implicit valideringen av MMP 1.0.0.
 
@@ -102,3 +102,13 @@ Integritetsunderlag finns i `DELIVERY-MANIFEST.json` och `SHA256SUMS.txt`. En se
 
 ---
 Metamodel Builder utvecklas för att en canonical metamodell ska kunna **återanvändas i flera verktyg** utan att bindas till en enskild modelleringsplattform.
+
+## Migrering av befintliga MMP 1.0-paket
+
+Standardexporten använder MMP 1.1. MMP 1.0 kräver flaggan `--legacy-1-0`. För att konvertera ett befintligt validerat paket utan att ändra den ursprungliga canonical-semantiken:
+
+```bash
+python scripts/migrate_mmp.py old.mmp.zip --output new.mmp.zip --report migration.json
+```
+
+Kommandot kontrollerar manifest, SHA-256, källans scheman och semantik, bygger en MMP 1.1-fil samt validerar och återimporterar den. Det vägrar skriva över befintliga filer och skapar en JSON-rapport. Originalets canonical-filer bevaras byte-för-byte; om äldre paket saknar valfri `guidance.yaml` anges eventuell tillagd mallfil separat i rapporten. Kommandot hittar **inte på** nya MMP 1.1-relationer, typade ändpunkter eller junction-regler. Sådana ändringar måste göras som en separat, avsiktlig semantisk uppgradering.

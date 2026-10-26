@@ -22,6 +22,7 @@ def main() -> int:
         [py,'scripts/test_mmp_manifest_contract.py'],
         [py,'scripts/test_mmp_export.py'],
         [py,'scripts/test_mmp_import.py'],
+        [py,'scripts/test_mmp_migration.py'],
         [py,'scripts/test_mmp_core013_candidate.py'],
         [py,'scripts/test_mmp_pairwise_foundation.py'],
         [py,'scripts/test_mmp_pairwise_candidate.py'],
