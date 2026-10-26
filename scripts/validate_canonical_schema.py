@@ -2,7 +2,8 @@
 import argparse
 from pathlib import Path
 import json, sys, yaml
-from jsonschema import Draft202012Validator, FormatChecker
+from jsonschema import FormatChecker
+from fast_jsonschema import FastDraft202012Validator
 from referencing import Registry, Resource
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -18,7 +19,7 @@ def validator(schema_name):
     schema=load_json(SCHEMAS/schema_name)
     common=load_json(SCHEMAS/'common-definitions.schema.json')
     registry=Registry().with_resource(common['$id'], Resource.from_contents(common))
-    return Draft202012Validator(schema,registry=registry,format_checker=FormatChecker())
+    return FastDraft202012Validator(schema,registry=registry,format_checker=FormatChecker())
 
 def validate_package(directory):
     errors=[]
