@@ -112,3 +112,13 @@ python scripts/migrate_mmp.py old.mmp.zip --output new.mmp.zip --report migratio
 ```
 
 Kommandot kontrollerar manifest, SHA-256, källans scheman och semantik, bygger en MMP 1.1-fil samt validerar och återimporterar den. Det vägrar skriva över befintliga filer och skapar en JSON-rapport. Originalets canonical-filer bevaras byte-för-byte; om äldre paket saknar valfri `guidance.yaml` anges eventuell tillagd mallfil separat i rapporten. Kommandot hittar **inte på** nya MMP 1.1-relationer, typade ändpunkter eller junction-regler. Sådana ändringar måste göras som en separat, avsiktlig semantisk uppgradering.
+
+### Granskningsplan för semantisk uppgradering
+
+Efter MMP 1.0 → 1.1-formatmigrering (eller på ett befintligt validerat MMP 1.1-paket) kan du ta fram en **icke-mutativ** plan över möjliga fortsatta modelleringsbeslut:
+
+```bash
+python scripts/plan_mmp_upgrade.py new.mmp.zip --output semantic-upgrade-plan.json
+```
+
+Planen inventerar relationer, visar befintliga source/target-domäner och skapar beslutspunkter med status `pending_user_decision`. Det **inför inte** automatiskt tillåtna relationspar, typade ändpunkter eller junction-regler. Besluten dokumenteras innan någon modelländring genomförs.
