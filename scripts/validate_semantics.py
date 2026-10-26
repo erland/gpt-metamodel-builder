@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 import yaml
+from safe_yaml import safe_load
 
 FILES = [
     "metamodel.yaml",
@@ -24,7 +25,7 @@ FILES = [
 
 
 def load_yaml(path: Path) -> dict[str, Any]:
-    data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    data = safe_load(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
         raise ValueError(f"{path}: expected YAML mapping")
     return data
